@@ -1,11 +1,10 @@
 class World {
   character = new Character();
   enemies = [
-    new Golem(100, 100),
-    new Golem(120, 100),
-    new Golem(140, 100),
-    new Golem(160, 100),
-    new Robot(300, 300),
+    new Golem(Math.random() * 300 + 200, 360),
+    new Golem(Math.random() * 300 + 200, 360),
+    new Golem(Math.random() * 300 + 200, 360),
+    new Robot(520, 310),
   ];
   ctx;
   canvas;
@@ -13,14 +12,20 @@ class World {
   constructor(canvas) {
     this.canvas = canvas;
     this.ctx = canvas.getContext("2d");
-    this.character.img.onload = () => this.draw();
-    //   this.enemies.forEach((enemy) => this.enemy.img.draw); noch nicht ganz!
+    //  this.character.img.onload = () => this.draw();
     this.draw();
   }
 
   draw() {
     this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
     this.drawObject(this.character);
+    this.enemies.forEach((enemy) => {
+      this.drawObject(enemy);
+    });
+    requestAnimationFrame(() => this.draw());
+    // Alternative Schreibweise:
+    // let self = this;
+    // requestAnimationFrame(function() { self.draw() });
   }
 
   drawObject(object) {

@@ -1,10 +1,11 @@
 class Golem extends MovableObject {
-  height = 160;
-  width = 160;
+  height = 120;
+  width = 120;
 
-  constructor() {
+  constructor(x, y) {
     super().loadImage("./img/golem/Idle/0_Golem_Idle_000.png");
-    this.x = 100;
-    this.y = 100;
+    this.x = x;
+    this.y = y;
+    this.mirrorX = true;
   }
 }
