@@ -8,6 +8,8 @@ class World {
   ];
   ctx;
   canvas;
+  sky = new Sky();
+  robot = new Robot();
   grass = new Grass();
 
   constructor(canvas) {
@@ -19,6 +21,8 @@ class World {
 
   draw() {
     this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
+
+    this.drawObject(this.sky);
     this.drawObject(this.character);
     this.enemies.forEach((enemy) => {
       this.drawObject(enemy);
