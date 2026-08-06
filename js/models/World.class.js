@@ -8,6 +8,7 @@ class World {
   ];
   ctx;
   canvas;
+  grass = new Grass();
 
   constructor(canvas) {
     this.canvas = canvas;
@@ -22,6 +23,7 @@ class World {
     this.enemies.forEach((enemy) => {
       this.drawObject(enemy);
     });
+    this.drawObject(this.grass);
     requestAnimationFrame(() => this.draw());
     // Alternative Schreibweise:
     // let self = this;
