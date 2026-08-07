@@ -14,8 +14,12 @@ body {
 
 .game-wrapper {
   position: relative;
-  width: 720px;
-  height: 480px;
+  width: 866px;
+  height: 618px;
+
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
 
 canvas {
@@ -27,10 +31,11 @@ canvas {
 
 .canvas-frame {
   position: absolute;
-  top: -58px;
-  left: -74px;
+  inset: 0;
+
   width: 866px;
   height: 618px;
+
   pointer-events: none;
   z-index: 10;
 }
