@@ -11,11 +11,14 @@ class World {
   sky = new Sky();
   robot = new Robot();
   grass = new Grass();
+  backgroundobject = [
+    new BackgroundObject("./img/landscape/Middle_Decor.png"),
+    new BackgroundObject("./img/landscape/Foreground.png"),
+  ];
 
   constructor(canvas) {
     this.canvas = canvas;
     this.ctx = canvas.getContext("2d");
-    //  this.character.img.onload = () => this.draw();
     this.draw();
   }
 
@@ -23,15 +26,11 @@ class World {
     this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
 
     this.drawObject(this.sky);
+    this.drawObjects(this.backgroundobject);
     this.drawObject(this.character);
-    this.enemies.forEach((enemy) => {
-      this.drawObject(enemy);
-    });
+    this.drawObjects(this.enemies);
     this.drawObject(this.grass);
     requestAnimationFrame(() => this.draw());
-    // Alternative Schreibweise:
-    // let self = this;
-    // requestAnimationFrame(function() { self.draw() });
   }
 
   drawObject(object) {
@@ -54,5 +53,11 @@ class World {
     this.ctx.scale(-1, 1);
     this.ctx.drawImage(object.img, 0, 0, object.width, object.height);
     this.ctx.restore();
+  }
+
+  drawObjects(object) {
+    object.forEach((obj) => {
+      this.drawObject(obj);
+    });
   }
 }
