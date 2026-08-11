@@ -12,8 +12,9 @@ class World {
   robot = new Robot();
   grass = new Grass();
   backgroundobject = [
-    new BackgroundObject("./img/landscape/Middle_Decor.png"),
-    new BackgroundObject("./img/landscape/Foreground.png"),
+    new BackgroundObject("./img/landscape/Middle_Decor.png", 0.9, 0),
+    new BackgroundObject("./img/landscape/Middle_Decor.png", 0.9, 866),
+    new BackgroundObject("./img/landscape/Foreground.png", 1),
   ];
 
   constructor(canvas) {
