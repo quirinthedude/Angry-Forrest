@@ -34,7 +34,7 @@ class World {
     this.drawObjects(this.backgroundobject);
     this.drawObject(this.character);
     this.drawObjects(this.enemies);
-    this.drawObject(this.grass);
+    this.drawObjects(this.grass);
     requestAnimationFrame(() => this.draw());
   }
 
