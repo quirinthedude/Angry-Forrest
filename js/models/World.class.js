@@ -10,16 +10,15 @@ class World {
   canvas;
   sky = new Sky();
   robot = new Robot();
-  grass = new Grass();
   backgroundobject = [
     new BackgroundObject("/img/landscape/BG_Decor.png", 0.15, 0),
     new BackgroundObject("/img/landscape/BG_Decor.png", 0.15, 866),
-    new BackgroundObject("./img/landscape/Middle_Decor.png", 0.5, 0),
-    new BackgroundObject("./img/landscape/Middle_Decor.png", 0.5, 866),
-    new BackgroundObject("./img/landscape/Foreground.png", 1, 0),
-    new BackgroundObject("./img/landscape/Foreground.png", 1, 866),
+    new BackgroundObject("./img/landscape/Middle_Decor.png", 0.3, 0),
+    new BackgroundObject("./img/landscape/Middle_Decor.png", 0.3, 866),
+    new BackgroundObject("./img/landscape/Foreground.png", 0.8, 0),
+    new BackgroundObject("./img/landscape/Foreground.png", 0.8, 866),
   ];
-  grass = [new Grass(2, 0), new Grass(2, 720)];
+  grass = [new Grass(1.25, 0), new Grass(1.25, 720)];
 
   constructor(canvas) {
     this.canvas = canvas;
