@@ -3,7 +3,7 @@ class Robot extends MovableObject {
   width = 160;
 
   constructor(x, y) {
-    super().loadImage("./img/robot-boss/01_Idle/idle_000.png");
+    super().loadImage("./img/robot-boss/Idle/idle_000.png");
     this.x = x;
     this.y = y;
     this.mirrorX = true;

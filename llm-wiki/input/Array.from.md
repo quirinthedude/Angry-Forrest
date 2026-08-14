@@ -5,9 +5,9 @@
 Für die Walking-Animation eines Characters müssen mehrere Bildpfade erzeugt werden:
 
 ```js
-/img/character/walk/6_animation_walk_000.png
-/img/character/walk/6_animation_walk_001.png
-/img/character/walk/6_animation_walk_002.png
+/img/character/walk/animation_walk_000.png
+/img/character/walk/animation_walk_001.png
+/img/character/walk/animation_walk_002.png
 ...
 ```
 
