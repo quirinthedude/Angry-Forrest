@@ -14,5 +14,21 @@ class Golem extends MovableObject {
     this.y = y;
     this.mirrorX = true;
     this.animate(this.IMAGES_WALKING); // Start
+    this.moveGolem();
+  }
+
+  moveGolem() {
+    setInterval(() => {
+      if (this.x < 10) {
+        this.mirrorX = false; // Change direction
+      } else if (this.x > 710) {
+        this.mirrorX = true; // Change direction
+      }
+      if (this.mirrorX) {
+        this.moveLeft();
+      } else {
+        this.moveRight();
+      }
+    }, 2); // Move every 25 milliseconds
   }
 }
