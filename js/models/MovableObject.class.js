@@ -5,6 +5,7 @@ class MovableObject extends DrawableObject {
   mirrorX = false;
   imageCache = {};
   currentImage = 0;
+  speed = 0.32; // default speed
 
   /**
    *

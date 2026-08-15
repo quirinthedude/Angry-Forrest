@@ -9,11 +9,13 @@ class Golem extends MovableObject {
   constructor(x, y) {
     super();
     this.loadImage(this.IMAGES_WALKING[0]);
-    this.loadImages(this.IMAGES_WALKING, 22, 150);
+    this.loadImages(this.IMAGES_WALKING, 22, 50);
     this.x = x;
     this.y = y;
     this.mirrorX = true;
-    this.animate(this.IMAGES_WALKING); // Start
+    // Jede Golem-Instanz erhält beim Erzeugen eine eigene, konstante Laufgeschwindigkeit.
+    this.speed = 0.6 + Math.random() * 0.3;
+    this.animate(this.IMAGES_WALKING, 25); // Start
     this.moveGolem();
   }
 
@@ -25,10 +27,10 @@ class Golem extends MovableObject {
         this.mirrorX = true; // Change direction
       }
       if (this.mirrorX) {
-        this.moveLeft();
+        this.moveLeft(this.speed);
       } else {
-        this.moveRight();
+        this.moveRight(this.speed);
       }
-    }, 2); // Move every 25 milliseconds
+    }, 2); // Move every 2 milliseconds
   }
 }
