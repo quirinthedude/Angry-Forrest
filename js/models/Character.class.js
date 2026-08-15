@@ -34,15 +34,6 @@ class Character extends MovableObject {
     this.y = 295;
     this.mirrorX = true;
 
-    this.animate();
-  }
-
-  animate() {
-    setInterval(() => {
-      let i = this.currentImage % this.IMAGES_WALKING.length;
-      let path = this.IMAGES_WALKING[i];
-      this.img = this.imageCache[path];
-      this.currentImage++;
-    }, 100);
+    this.animate(this.IMAGES_WALKING);
   }
 }
