@@ -1,15 +1,21 @@
 window.addEventListener("keydown", function (event) {
   if (event.key === "ArrowLeft") {
-    Keyboard.left = true;
+    world.keyboard.left = true;
   } else if (event.key === "ArrowRight") {
-    Keyboard.right = true;
+    world.keyboard.right = true;
   }
+  console.log("keydown");
+  console.log("left: ", world.keyboard.left);
+  console.log("right: ", world.keyboard.right);
 });
 
 window.addEventListener("keyup", function (event) {
   if (event.key === "ArrowLeft") {
-    Keyboard.left = false;
+    world.keyboard.left = false;
   } else if (event.key === "ArrowRight") {
-    Keyboard.right = false;
+    world.keyboard.right = false;
   }
+  console.log("keydup");
+  console.log("left: ", world.keyboard.left);
+  console.log("right: ", world.keyboard.right);
 });

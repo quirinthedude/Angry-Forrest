@@ -1,5 +1,6 @@
 class World {
   character = new Character();
+  keyboard = new Keyboard();
   enemies = [
     new Golem(Math.random() * 300 + 200, 360),
     new Golem(Math.random() * 300 + 200, 360),
