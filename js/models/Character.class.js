@@ -32,7 +32,7 @@ class Character extends MovableObject {
     this.loadImages(this.IMAGES_ATTACKING);
     this.loadImages(this.IMAGES_HURT);
     this.loadImages(this.IMAGES_JUMPING);
-    this.x = 340;
+    this.x = 240;
     this.y = 295;
     this.mirrorX = true;
 
