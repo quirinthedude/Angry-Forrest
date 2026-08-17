@@ -1,5 +1,5 @@
 class World {
-  character = new Character();
+  character;
   keyboard = new Keyboard();
   enemies = [
     new Golem(Math.random() * 300 + 200, 360),
@@ -11,19 +11,13 @@ class World {
   canvas;
   sky = new Sky();
   robot = new Robot();
-  backgroundobject = [
-    new BackgroundObject("/img/landscape/BG_Decor.png", 0.15, 0),
-    new BackgroundObject("/img/landscape/BG_Decor.png", 0.15, 866),
-    new BackgroundObject("./img/landscape/Middle_Decor.png", 0.3, 0),
-    new BackgroundObject("./img/landscape/Middle_Decor.png", 0.3, 866),
-    new BackgroundObject("./img/landscape/Foreground.png", 0.8, 0),
-    new BackgroundObject("./img/landscape/Foreground.png", 0.8, 866),
-  ];
-  grass = [new Grass(1.25, 0), new Grass(1.25, 720)];
-
+  landscape = new Landscape();
   constructor(canvas) {
     this.canvas = canvas;
     this.ctx = canvas.getContext("2d");
+
+    this.character = new Character(this);
+
     this.draw();
   }
 
@@ -31,10 +25,10 @@ class World {
     this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
 
     this.drawObject(this.sky);
-    this.drawObjects(this.backgroundobject);
+    this.drawObjects(this.landscape.backgroundobject);
     this.drawObject(this.character);
     this.drawObjects(this.enemies);
-    this.drawObjects(this.grass);
+    this.drawObjects(this.landscape.grass);
     requestAnimationFrame(() => this.draw());
   }
 

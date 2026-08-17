@@ -22,30 +22,39 @@ class Character extends MovableObject {
     12,
   );
   currentImage = 0;
-  constructor() {
+
+  constructor(world) {
     super();
+    this.world = world;
     this.loadImage(this.IMAGES_IDLE[0]);
     this.loadImages(this.IMAGES_WALKING);
     this.loadImages(this.IMAGES_IDLE);
     this.loadImages(this.IMAGES_ATTACKING);
     this.loadImages(this.IMAGES_HURT);
     this.loadImages(this.IMAGES_JUMPING);
-    this.x = 40;
+    this.x = 340;
     this.y = 295;
     this.mirrorX = true;
 
     this.animate(this.IMAGES_WALKING);
+    this.moveCharacter();
   }
 
   moveCharacter() {
-    if (keyboard.left && keyboard.right) return;
+    setInterval(() => {
+      if (this.world.keyboard.left && this.world.keyboard.right) return;
 
-    if (keyboard.left) {
-      console.log("left");
-    }
+      if (this.world.keyboard.left) {
+        this.mirrorX = false;
+        this.world.landscape.scroll(1);
+        console.log("left");
+      }
 
-    if (keyboard.right) {
-      console.log("right");
-    }
+      if (this.world.keyboard.right) {
+        this.mirrorX = true;
+        this.world.landscape.scroll(-1);
+        console.log("right");
+      }
+    }, 1000 / 60);
   }
 }

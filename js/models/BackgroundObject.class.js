@@ -8,16 +8,16 @@ class BackgroundObject extends MovableObject {
     this.width = 866;
     this.height = 618;
     this.speed = speed; // Set the initial speed of the background object
-    this.animate();
+    // this.animate();
   }
 
   animate() {
-    setInterval(() => {
-      this.x -= this.speed;
+    // setInterval(() => {
+    this.x -= this.speed;
 
-      if (this.x <= -this.width) {
-        this.x += this.width * 2;
-      }
-    }, 1000 / 60); // 60 frames per second
+    if (this.x <= -this.width) {
+      this.x += this.width * 2;
+    }
+    // }, 1000 / 60); // 60 frames per second
   }
 }
