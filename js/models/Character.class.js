@@ -36,4 +36,16 @@ class Character extends MovableObject {
 
     this.animate(this.IMAGES_WALKING);
   }
+
+  moveCharacter() {
+    if (keyboard.left && keyboard.right) return;
+
+    if (keyboard.left) {
+      console.log("left");
+    }
+
+    if (keyboard.right) {
+      console.log("right");
+    }
+  }
 }
