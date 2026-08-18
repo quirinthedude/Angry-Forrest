@@ -46,15 +46,16 @@ class Character extends MovableObject {
 
       if (this.world.keyboard.left) {
         this.mirrorX = false;
-        this.world.landscape.scroll(1);
+        this.moveLeft(1.5);
         console.log("left");
       }
 
       if (this.world.keyboard.right) {
         this.mirrorX = true;
-        this.world.landscape.scroll(-1);
+        this.moveRight(1.5);
         console.log("right");
       }
     }, 1000 / 60);
+    this.world.cameraX = -this.x; // Update the camera position based on the character's position
   }
 }

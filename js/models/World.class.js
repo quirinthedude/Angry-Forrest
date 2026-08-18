@@ -12,6 +12,7 @@ class World {
   sky = new Sky();
   robot = new Robot();
   landscape = new Landscape();
+  cameraX = 0;
   constructor(canvas) {
     this.canvas = canvas;
     this.ctx = canvas.getContext("2d");
@@ -24,11 +25,15 @@ class World {
   draw() {
     this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
 
+    this.ctx.translate(this.cameraX, 0);
+
     this.drawObject(this.sky);
     this.drawObjects(this.landscape.backgroundobject);
     this.drawObject(this.character);
     this.drawObjects(this.enemies);
     this.drawObjects(this.landscape.grass);
+
+    this.ctx.translate(-this.cameraX, 0);
     requestAnimationFrame(() => this.draw());
   }
 
