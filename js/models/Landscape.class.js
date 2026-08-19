@@ -8,14 +8,14 @@ class Landscape {
       this.tileCount,
       this.tileWidth,
       "/img/landscape/BG_Decor.png",
-      0.8,
+      0.65,
     ),
     ...createTiles(
       BackgroundObject,
       this.tileCount,
       this.tileWidth,
       "/img/landscape/Middle_Decor.png",
-      1.4,
+      0.8,
     ),
     ...createTiles(
       BackgroundObject,
@@ -32,25 +32,4 @@ class Landscape {
     "/img/landscape/Ground.png",
     1.9,
   );
-
-  scroll(direction) {
-    this.backgroundobject.forEach((object) => {
-      this.scrollParallax(object, direction);
-    });
-
-    this.grass.forEach((object) => {
-      this.scrollParallax(object, direction);
-    });
-  }
-
-  scrollParallax(object, direction) {
-    object.x += object.speed * direction;
-
-    if (
-      (direction === -1 && object.x <= -object.width) ||
-      (direction === 1 && object.x >= object.width)
-    ) {
-      object.x -= object.width * 2 * direction;
-    }
-  }
 }

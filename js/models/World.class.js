@@ -25,15 +25,19 @@ class World {
   draw() {
     this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
 
+    this.drawObject(this.sky);
+    this.drawParallaxObjects(this.landscape.backgroundobject);
+
+    this.ctx.save();
     this.ctx.translate(this.cameraX, 0);
 
-    this.drawObject(this.sky);
-    this.drawObjects(this.landscape.backgroundobject);
     this.drawObject(this.character);
     this.drawObjects(this.enemies);
-    this.drawObjects(this.landscape.grass);
 
-    this.ctx.translate(-this.cameraX, 0);
+    this.ctx.restore();
+
+    this.drawParallaxObjects(this.landscape.grass);
+
     requestAnimationFrame(() => this.draw());
   }
 
@@ -62,6 +66,15 @@ class World {
   drawObjects(object) {
     object.forEach((obj) => {
       this.drawObject(obj);
+    });
+  }
+
+  drawParallaxObjects(objects) {
+    objects.forEach((object) => {
+      this.ctx.save();
+      this.ctx.translate(this.cameraX * object.speed, 0);
+      this.drawObject(object);
+      this.ctx.restore();
     });
   }
 }
