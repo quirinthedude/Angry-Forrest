@@ -25,7 +25,13 @@ class Landscape {
       1.8,
     ),
   ];
-  grass = createTiles(Grass, this.tileCount, this.tileWidth, 1.9);
+  grass = createTiles(
+    Grass,
+    this.tileCount,
+    this.tileWidth,
+    "/img/landscape/Ground.png",
+    1.9,
+  );
 
   scroll(direction) {
     this.backgroundobject.forEach((object) => {
