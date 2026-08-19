@@ -3,7 +3,7 @@ class Grass extends MovableObject {
     super().loadImage("/img/landscape/Ground.png");
     this.x = x;
     this.y = 260;
-    this.width = 720;
+    this.width = 865;
     this.height = 220; // Adjust the height as needed
     this.speed = speed; // Set the initial speed of the grass object
   }

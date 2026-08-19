@@ -55,7 +55,7 @@ class Character extends MovableObject {
         this.moveRight(1.5);
         console.log("right");
       }
+      this.world.cameraX = -this.x + 240; // Update the camera position based on the character's position
     }, 1000 / 60);
-    this.world.cameraX = -this.x; // Update the camera position based on the character's position
   }
 }

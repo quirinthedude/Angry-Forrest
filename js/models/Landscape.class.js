@@ -8,6 +8,9 @@ class Landscape {
     new BackgroundObject("./img/landscape/Foreground.png", 1.8, 866),
   ];
   grass = [new Grass(1.9, 0), new Grass(1.9, 720)];
+  tileWidth = 865;
+  tileCount = 5;
+  levelLength = this.tileCount * this.tileWidth;
 
   scroll(direction) {
     this.backgroundobject.forEach((object) => {
