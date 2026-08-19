@@ -21,11 +21,11 @@ function createAnimationImages(path, amount) {
  * Generates multiple landscape tiles and positions them next to each other.
  *
  */
-function createTiles(TileClass, count, tileWidth) {
+function createTiles(TileClass, count, tileWidth, path, speed) {
   const tiles = [];
 
   for (let i = 0; i < count; i++) {
-    tiles.push(new tileClass(i * tileWidth));
+    tiles.push(new TileClass(path, speed, i * tileWidth));
   }
   return tiles;
 }

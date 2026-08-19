@@ -1,16 +1,31 @@
 class Landscape {
-  backgroundobject = [
-    new BackgroundObject("/img/landscape/BG_Decor.png", 0.8, 0),
-    new BackgroundObject("/img/landscape/BG_Decor.png", 0.8, 866),
-    new BackgroundObject("./img/landscape/Middle_Decor.png", 1.4, 0),
-    new BackgroundObject("./img/landscape/Middle_Decor.png", 1.4, 866),
-    new BackgroundObject("./img/landscape/Foreground.png", 1.8, 0),
-    new BackgroundObject("./img/landscape/Foreground.png", 1.8, 866),
-  ];
-  grass = [new Grass(1.9, 0), new Grass(1.9, 720)];
   tileWidth = 865;
   tileCount = 5;
   levelLength = this.tileCount * this.tileWidth;
+  backgroundobject = [
+    ...createTiles(
+      BackgroundObject,
+      this.tileCount,
+      this.tileWidth,
+      "/img/landscape/BG_Decor.png",
+      0.8,
+    ),
+    ...createTiles(
+      BackgroundObject,
+      this.tileCount,
+      this.tileWidth,
+      "/img/landscape/Middle_Decor.png",
+      1.4,
+    ),
+    ...createTiles(
+      BackgroundObject,
+      this.tileCount,
+      this.tileWidth,
+      "/img/landscape/Foreground.png",
+      1.8,
+    ),
+  ];
+  grass = createTiles(Grass, this.tileCount, this.tileWidth, 1.9);
 
   scroll(direction) {
     this.backgroundobject.forEach((object) => {
