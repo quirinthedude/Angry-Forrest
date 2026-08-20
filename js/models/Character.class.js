@@ -44,7 +44,7 @@ class Character extends MovableObject {
     setInterval(() => {
       if (this.world.keyboard.left && this.world.keyboard.right) return;
 
-      if (this.world.keyboard.left) {
+      if (this.world.keyboard.left && this.x > 230) {
         this.mirrorX = false;
         this.moveLeft(1.5);
         console.log("left");
