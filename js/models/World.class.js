@@ -1,17 +1,11 @@
 class World {
   character;
   keyboard = new Keyboard();
-  enemies = [
-    new Golem(Math.random() * 300 + 200, 360),
-    new Golem(Math.random() * 300 + 200, 360),
-    new Golem(Math.random() * 300 + 200, 360),
-    new Robot(520, 310),
-  ];
+  enemies = level1.enemies;
+  sky = level1;
+  landscape = level1.landscape;
   ctx;
   canvas;
-  sky = new Sky();
-  robot = new Robot();
-  landscape = new Landscape();
   cameraX = 0;
   constructor(canvas) {
     this.canvas = canvas;
