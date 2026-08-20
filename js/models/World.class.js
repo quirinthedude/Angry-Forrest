@@ -72,7 +72,7 @@ class World {
   drawParallaxObjects(objects) {
     objects.forEach((object) => {
       this.ctx.save();
-      this.ctx.translate(this.cameraX * object.speed, 0);
+      this.ctx.translate(this.cameraX * object.parallaxFactor, 0);
       this.drawObject(object);
       this.ctx.restore();
     });
