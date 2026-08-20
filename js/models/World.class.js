@@ -2,7 +2,7 @@ class World {
   character;
   keyboard = new Keyboard();
   enemies = level1.enemies;
-  sky = level1;
+  sky = level1.sky;
   landscape = level1.landscape;
   ctx;
   canvas;
