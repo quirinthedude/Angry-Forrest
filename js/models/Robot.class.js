@@ -32,8 +32,8 @@ class Robot extends MovableObject {
   isActivated = false;
   activationInterval;
   speedY = -8;
-  accelaration = 0.5;
-  ground = 320;
+  acceleration = 0.5;
+  groundY = 320;
 
   constructor(x, y, world) {
     super();
@@ -66,9 +66,10 @@ class Robot extends MovableObject {
     if (!this.isActivated && this.world.character.x >= this.x - 300) {
       this.isActivated = true;
 
-      clearInterval(this.activationInterval);
-
-      this.animateOnce(this.IMAGES_JUMPING, 100);
+      if (this.speedY > 0 && this.y >= this.groundY) {
+        clearInterval(this.activationInterval);
+      }
+      // this.animateOnce(this.IMAGES_JUMPING, 100);
 
       this.speedY = -8;
 
@@ -80,7 +81,7 @@ class Robot extends MovableObject {
 
   jumpEntrance() {
     this.y += this.speedY;
-    this.speedY += this.accelaration;
+    this.speedY += this.acceleration;
 
     if (this.y >= this.groundY) {
       this.y = this.groundY;
