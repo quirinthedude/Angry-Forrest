@@ -1,9 +1,7 @@
 class World {
   character;
   keyboard = new Keyboard();
-  enemies = level1.enemies;
-  sky = level1.sky;
-  landscape = level1.landscape;
+  level;
   ctx;
   canvas;
   cameraX = 0;
@@ -11,6 +9,7 @@ class World {
     this.canvas = canvas;
     this.ctx = canvas.getContext("2d");
 
+    this.level = createLevel1(this);
     this.character = new Character(this);
 
     this.draw();
@@ -19,18 +18,18 @@ class World {
   draw() {
     this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
 
-    this.drawObject(this.sky);
-    this.drawParallaxObjects(this.landscape.backgroundobject);
+    this.drawObject(this.level.sky);
+    this.drawParallaxObjects(this.level.landscape.backgroundobject);
 
     this.ctx.save();
     this.ctx.translate(this.cameraX, 0);
 
     this.drawObject(this.character);
-    this.drawObjects(this.enemies);
+    this.drawObjects(this.level.enemies);
 
     this.ctx.restore();
 
-    this.drawParallaxObjects(this.landscape.grass);
+    this.drawParallaxObjects(this.level.landscape.grass);
 
     requestAnimationFrame(() => this.draw());
   }

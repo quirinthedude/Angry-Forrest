@@ -52,7 +52,7 @@ class Character extends MovableObject {
 
       if (
         this.world.keyboard.right &&
-        this.x < this.world.landscape.levelLength - 2200
+        this.x < this.world.level.landscape.levelLength - 2200
       ) {
         this.mirrorX = true;
         this.moveRight(1.5);

@@ -30,8 +30,9 @@ class Robot extends MovableObject {
   );
   IMAGES_DYING = createAnimationImages("./img/robot-boss/Death/Death_", 15);
 
-  constructor(x, y) {
+  constructor(x, y, world) {
     super();
+    this.world = world;
     this.loadImage(this.IMAGES_IDLE[0]);
     this.loadImages(this.IMAGES_IDLE);
     this.loadImages(this.IMAGES_WALKING);

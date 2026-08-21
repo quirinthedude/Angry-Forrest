@@ -64,8 +64,9 @@ class Golem extends MovableObject {
   );
   IMAGES_DYING = createAnimationImages("./img/golem/Dying/Golem_Dying_", 15);
 
-  constructor(x, y) {
+  constructor(x, y, world) {
     super();
+    this.world = world;
     this.loadImage(this.IMAGES_IDLE[0]);
     this.loadImages(this.IMAGES_IDLE);
     this.loadImages(this.IMAGES_IDLE_BLINKING);
