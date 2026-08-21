@@ -24,8 +24,33 @@ class MovableObject extends DrawableObject {
     }, speed);
   }
 
+  /**
+   * clear the indiviual animation-interval
+   */
   stopAnimation() {
     clearInterval(this.animationInterval);
+  }
+
+  /**
+   *
+   * @param {Array} images frames to animate
+   * @param {Number} speed obligatory speed of the animation in ms@
+   *
+   * animates the individual sprite as needed and stops after one cycle
+   */
+  animateOnce(images, speed = 400) {
+    this.stopAnimation();
+    this.currentImage = 0;
+
+    this.animationInterval = setInterval(() => {
+      let path = images[this.currentImage];
+      this.img = this.imageCache[path];
+      this.currentImage++;
+
+      if (this.currentImage >= images.length) {
+        this.stopAnimation();
+      }
+    }, speed);
   }
 
   /**

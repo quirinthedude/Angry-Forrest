@@ -31,6 +31,9 @@ class Robot extends MovableObject {
   IMAGES_DYING = createAnimationImages("./img/robot-boss/Death/Death_", 15);
   isActivated = false;
   activationInterval;
+  speedY = -8;
+  accelaration = 0.5;
+  ground = 320;
 
   constructor(x, y, world) {
     super();
@@ -64,7 +67,23 @@ class Robot extends MovableObject {
       this.isActivated = true;
 
       clearInterval(this.activationInterval);
-      console.log("Now");
+
+      this.animateOnce(this.IMAGES_JUMPING, 100);
+
+      this.speedY = -8;
+
+      this.entranceInterval = setInterval(() => {
+        this.jumpEntrance();
+      }, 1000 / 60);
+    }
+  }
+
+  jumpEntrance() {
+    this.y += this.speedY;
+    this.speedY += this.accelaration;
+
+    if (this.y >= this.groundY) {
+      this.y = this.groundY;
     }
   }
 }
