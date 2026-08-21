@@ -67,7 +67,7 @@ erhalten sie deshalb nicht.
 - `js/models/Character.class.js`: Bewegungsgrenze über `world.level.landscape`.
 - `js/models/Robot.class.js`: World-Referenz im Constructor.
 - `js/models/Golem.class.js`: World-Referenz im Constructor.
-- `docs/architecture/world-level-ownership-refactor.md`: diese Dokumentation.
+- `llm-wiki/input/world-level-ownership-refactor.md`: diese Dokumentation.
 
 ## Vorbereitete Funktionen
 

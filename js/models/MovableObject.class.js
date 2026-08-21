@@ -6,6 +6,7 @@ class MovableObject extends DrawableObject {
   imageCache = {};
   currentImage = 0;
   speed = 0.32; // default speed
+  animationInterval;
 
   /**
    *
@@ -15,12 +16,16 @@ class MovableObject extends DrawableObject {
    * animates the individual sprite as needed
    */
   animate(images, speed = 100) {
-    setInterval(() => {
+    this.animationInterval = setInterval(() => {
       let i = this.currentImage % images.length;
       let path = images[i];
       this.img = this.imageCache[path];
       this.currentImage++;
     }, speed);
+  }
+
+  stopAnimation() {
+    clearInterval(this.animationInterval);
   }
 
   /**

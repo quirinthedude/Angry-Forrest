@@ -29,6 +29,8 @@ class Robot extends MovableObject {
     4,
   );
   IMAGES_DYING = createAnimationImages("./img/robot-boss/Death/Death_", 15);
+  isActivated = false;
+  activationInterval;
 
   constructor(x, y, world) {
     super();
@@ -51,5 +53,18 @@ class Robot extends MovableObject {
     this.x = x;
     this.y = y;
     this.mirrorX = true;
+
+    this.activationInterval = setInterval(() => {
+      this.checkActivation();
+    }, 100);
+  }
+
+  checkActivation() {
+    if (!this.isActivated && this.world.character.x >= this.x - 300) {
+      this.isActivated = true;
+
+      clearInterval(this.activationInterval);
+      console.log("Now");
+    }
   }
 }
