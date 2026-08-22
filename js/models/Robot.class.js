@@ -8,18 +8,12 @@ class Robot extends MovableObject {
     "./img/robot-boss/Run_Attack/Run_Attack_",
     12,
   );
-  IMAGES_RUN_SHOOTING = createAnimationImages(
-    "./img/robot-boss/Run_Shot/Run_Shot_",
-    12,
-  );
   IMAGES_ATTACKING = createAnimationImages(
     "./img/robot-boss/Attack/Attack_",
     18,
   );
-  IMAGES_SHOOTING = createAnimationImages("./img/robot-boss/Shot/Shot_", 16);
   IMAGES_JUMPING = createAnimationImages("./img/robot-boss/Jump/Jump_", 13);
   IMAGES_SITTING = createAnimationImages("./img/robot-boss/Sit/Sit_", 15);
-  IMAGES_BOMBING = createAnimationImages("./img/robot-boss/Bomb/Bomb_", 20);
   IMAGES_TURNING_TO_RUN = createAnimationImages(
     "./img/robot-boss/Turn_to_Run/Turn_to_run_",
     4,
@@ -63,12 +57,9 @@ class Robot extends MovableObject {
     if (!this.isActivated && this.world.character.x >= this.x - 300) {
       this.isActivated = true;
 
-      if (this.speedY > 0 && this.y >= this.groundY) {
-        clearInterval(this.activationInterval);
-      }
-      // this.animateOnce(this.IMAGES_JUMPING, 100);
+      this.animateOnce(this.IMAGES_JUMPING, 100);
 
-      this.speedY = -8;
+      this.speedY = -12;
 
       this.entranceInterval = setInterval(() => {
         this.jumpEntrance();
@@ -80,8 +71,17 @@ class Robot extends MovableObject {
     this.y += this.speedY;
     this.speedY += this.acceleration;
 
-    if (this.y >= this.groundY) {
+    if (this.speedY > 0 && this.y >= this.groundY) {
       this.y = this.groundY;
+      clearInterval(this.entranceInterval);
+
+      setTimeout(() => {
+        this.animateOnce(this.IMAGES_TURNING_TO_RUN, 200);
+
+        setTimeout(() => {
+          this.animate(this.IMAGES_RUN_ATTACKING, 100);
+        }, 800);
+      }, 500);
     }
   }
 }
