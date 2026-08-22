@@ -36,7 +36,7 @@ class Character extends MovableObject {
     this.y = 305;
     this.mirrorX = true;
 
-    this.animate(this.IMAGES_JUMPING);
+    this.animate(this.IMAGES_IDLE);
     this.moveCharacter();
   }
 

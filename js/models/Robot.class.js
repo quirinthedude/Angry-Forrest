@@ -1,6 +1,6 @@
 class Robot extends MovableObject {
-  height = 160;
-  width = 160;
+  height = 260;
+  width = 228;
   IMAGES_IDLE = createAnimationImages("./img/robot-boss/Idle/idle_", 9);
   IMAGES_WALKING = createAnimationImages("./img/robot-boss/Walk/Walk_", 12);
   IMAGES_RUNNING = createAnimationImages("./img/robot-boss/Run/Run_", 12);
@@ -33,7 +33,7 @@ class Robot extends MovableObject {
   activationInterval;
   speedY = -8;
   acceleration = 0.5;
-  groundY = 320;
+  groundY = 212;
 
   constructor(x, y, world) {
     super();
@@ -43,12 +43,9 @@ class Robot extends MovableObject {
     this.loadImages(this.IMAGES_WALKING);
     this.loadImages(this.IMAGES_RUNNING);
     this.loadImages(this.IMAGES_RUN_ATTACKING);
-    this.loadImages(this.IMAGES_RUN_SHOOTING);
     this.loadImages(this.IMAGES_ATTACKING);
-    this.loadImages(this.IMAGES_SHOOTING);
     this.loadImages(this.IMAGES_JUMPING);
     this.loadImages(this.IMAGES_SITTING);
-    this.loadImages(this.IMAGES_BOMBING);
     this.loadImages(this.IMAGES_TURNING_TO_RUN);
     this.loadImages(this.IMAGES_TURNING_TO_WALK);
     this.loadImages(this.IMAGES_DYING);
