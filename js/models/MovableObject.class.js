@@ -7,6 +7,7 @@ class MovableObject extends DrawableObject {
   currentImage = 0;
   speed = 0.32; // default speed
   animationInterval;
+  walkingSound;
 
   /**
    *

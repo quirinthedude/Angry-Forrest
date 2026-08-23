@@ -22,6 +22,8 @@ class Character extends MovableObject {
     12,
   );
   currentImage = 0;
+  wantsToWalk = false;
+  isWalking = false;
 
   constructor(world) {
     super();
@@ -38,10 +40,13 @@ class Character extends MovableObject {
 
     this.animate(this.IMAGES_IDLE);
     this.moveCharacter();
+    this.walkingSound = new Audio("/audio/creaking.mp3");
+    this.walkingSound.loop = true;
   }
 
   moveCharacter() {
     setInterval(() => {
+      let wantsToWalk = this.world.keyboard.left || this.world.keyboard.right;
       if (this.world.keyboard.left && this.world.keyboard.right) return;
 
       if (this.world.keyboard.left && this.x > 230) {
@@ -58,6 +63,28 @@ class Character extends MovableObject {
         this.moveRight(1.5);
       }
       this.world.cameraX = -this.x + 240; // Update the camera position based on the character's position
+      this.updateAnimation(wantsToWalk);
     }, 1000 / 60);
+  }
+
+  /**
+   *
+   * @param {boolean} wantsToWalk will change when more animations come
+   *
+   * compares the current intent with the stored animation state.
+   */
+  updateAnimation(wantsToWalk) {
+    if (wantsToWalk === this.isWalking) return;
+    this.stopAnimation();
+    if (wantsToWalk) {
+      this.animate(this.IMAGES_WALKING, 1000 / 20);
+      this.walkingSound.play();
+    } else {
+      this.animate(this.IMAGES_IDLE, 1000 / 60);
+
+      this.walkingSound.pause(); // Pause the walking sound when not walking
+      this.walkingSound.currentTime = 0;
+    }
+    this.isWalking = wantsToWalk;
   }
 }
