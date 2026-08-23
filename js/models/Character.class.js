@@ -44,6 +44,7 @@ class Character extends MovableObject {
     this.walkingSound = new Audio("/audio/creaking.mp3");
     this.walkingSound.loop = true;
     this.jumpSound = new Audio("/audio/ent_jump.mp3");
+    this.currentAnimation = this.IMAGES_IDLE;
   }
 
   moveCharacter() {
@@ -81,18 +82,13 @@ class Character extends MovableObject {
    * compares the current intent with the stored animation state.
    */
   updateAnimation(wantsToWalk) {
-    if (wantsToWalk === this.isWalking) return;
-    this.stopAnimation();
-    if (wantsToWalk) {
-      this.animate(this.IMAGES_WALKING, 1000 / 20);
-      this.walkingSound.play();
+    if (this.y < this.groundY) {
+      this.setAnimation(this.IMAGES_JUMPING, 100);
+    } else if (wantsToWalk) {
+      this.setAnimation(this.IMAGES_WALKING, 50);
     } else {
-      this.animate(this.IMAGES_IDLE, 1000 / 60);
-
-      this.walkingSound.pause(); // Pause the walking sound when not walking
-      this.walkingSound.currentTime = 0;
+      this.setAnimation(this.IMAGES_IDLE, 100);
     }
-    this.isWalking = wantsToWalk;
   }
 
   startJump() {

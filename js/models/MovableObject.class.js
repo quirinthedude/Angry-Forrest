@@ -5,6 +5,7 @@ class MovableObject extends DrawableObject {
   mirrorX = false;
   imageCache = {};
   currentImage = 0;
+  currentAnimation;
   speed = 0.32; // default speed
   animationInterval;
   walkingSound;
@@ -97,5 +98,13 @@ class MovableObject extends DrawableObject {
   applyGravity() {
     this.y += this.speedY;
     this.speedY += this.acceleration;
+  }
+
+  setAnimation(images, speed) {
+    if (this.currentAnimation === images) return;
+
+    this.stopAnimation();
+    this.animate(images, speed);
+    this.currentAnimation = images;
   }
 }
