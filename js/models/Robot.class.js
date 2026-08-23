@@ -45,6 +45,7 @@ class Robot extends MovableObject {
     this.x = x;
     this.y = y;
     this.mirrorX = true;
+    this.acceleration = 0.5;
 
     this.activationInterval = setInterval(() => {
       this.checkActivation();
@@ -72,6 +73,7 @@ class Robot extends MovableObject {
 
     if (this.speedY > 0 && this.y >= this.groundY) {
       this.y = this.groundY;
+      this.speedY = 0;
       clearInterval(this.entranceInterval);
 
       setTimeout(() => {

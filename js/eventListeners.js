@@ -3,10 +3,9 @@ window.addEventListener("keydown", function (event) {
     world.keyboard.left = true;
   } else if (event.key === "ArrowRight") {
     world.keyboard.right = true;
+  } else if (event.key === "ArrowUp") {
+    world.keyboard.jump = true;
   }
-  console.log("keydown");
-  console.log("left: ", world.keyboard.left);
-  console.log("right: ", world.keyboard.right);
 });
 
 window.addEventListener("keyup", function (event) {
@@ -14,8 +13,7 @@ window.addEventListener("keyup", function (event) {
     world.keyboard.left = false;
   } else if (event.key === "ArrowRight") {
     world.keyboard.right = false;
+  } else if (event.key === "ArrowUp") {
+    world.keyboard.jump = false;
   }
-  console.log("keydup");
-  console.log("left: ", world.keyboard.left);
-  console.log("right: ", world.keyboard.right);
 });
