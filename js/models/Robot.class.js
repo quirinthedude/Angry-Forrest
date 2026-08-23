@@ -57,6 +57,8 @@ class Robot extends MovableObject {
 
       this.animateOnce(this.IMAGES_JUMPING, 100);
 
+      // TODO: Boss polish — create a "Matrix effect" near the jump apex by
+      // temporarily lowering acceleration, as if the robot manipulates gravity.
       this.speedY = -12;
 
       this.entranceInterval = setInterval(() => {
