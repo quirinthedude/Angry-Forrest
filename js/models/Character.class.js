@@ -85,9 +85,13 @@ class Character extends MovableObject {
       this.setAnimation(this.IMAGES_JUMPING, 100);
     } else if (wantsToWalk) {
       this.setAnimation(this.IMAGES_WALKING, 50);
+      this.startWalkingSound();
+      return;
     } else {
       this.setAnimation(this.IMAGES_IDLE, 100);
     }
+
+    this.stopWalkingSound();
   }
 
   startJump() {
@@ -107,5 +111,16 @@ class Character extends MovableObject {
         this.speedY = 0;
       }
     }
+  }
+
+  startWalkingSound() {
+    if (this.walkingSound.paused) {
+      this.walkingSound.play();
+    }
+  }
+
+  stopWalkingSound() {
+    this.walkingSound.pause();
+    this.walkingSound.currentTime = 0;
   }
 }
