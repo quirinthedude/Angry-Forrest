@@ -23,7 +23,6 @@ class Character extends MovableObject {
   );
   currentImage = 0;
   wantsToWalk = false;
-  isWalking = false;
   groundY = 305;
 
   constructor(world) {
