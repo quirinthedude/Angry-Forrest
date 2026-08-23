@@ -24,6 +24,7 @@ class Character extends MovableObject {
   currentImage = 0;
   wantsToWalk = false;
   isWalking = false;
+  groundY = 305;
 
   constructor(world) {
     super();
@@ -86,5 +87,11 @@ class Character extends MovableObject {
       this.walkingSound.currentTime = 0;
     }
     this.isWalking = wantsToWalk;
+  }
+
+  startJump() {
+    if (this.y === this.groundY) {
+      this.speedY = -12;
+    }
   }
 }

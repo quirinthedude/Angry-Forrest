@@ -8,6 +8,8 @@ class MovableObject extends DrawableObject {
   speed = 0.32; // default speed
   animationInterval;
   walkingSound;
+  speedY = 0;
+  acceleration = 0.8;
 
   /**
    *
@@ -87,5 +89,13 @@ class MovableObject extends DrawableObject {
   jump() {
     console.log("Jumping");
     this.y -= 10; // Move the character up by 10 pixels
+  }
+
+  /**
+   * affects all moving objects that change y
+   */
+  applyGravity() {
+    this.y += this.speedY;
+    this.speedY += this.acceleration;
   }
 }

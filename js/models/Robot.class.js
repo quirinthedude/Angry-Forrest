@@ -25,8 +25,6 @@ class Robot extends MovableObject {
   IMAGES_DYING = createAnimationImages("./img/robot-boss/Death/Death_", 15);
   isActivated = false;
   activationInterval;
-  speedY = -8;
-  acceleration = 0.5;
   groundY = 212;
 
   constructor(x, y, world) {
@@ -68,8 +66,7 @@ class Robot extends MovableObject {
   }
 
   jumpEntrance() {
-    this.y += this.speedY;
-    this.speedY += this.acceleration;
+    this.applyGravity();
 
     if (this.speedY > 0 && this.y >= this.groundY) {
       this.y = this.groundY;
