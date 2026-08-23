@@ -63,6 +63,11 @@ class Character extends MovableObject {
         this.mirrorX = true;
         this.moveRight(1.5);
       }
+
+      if (this.world.keyboard.jump) {
+        this.startJump();
+      }
+      this.updateVerticalMovement();
       this.world.cameraX = -this.x + 240; // Update the camera position based on the character's position
       this.updateAnimation(wantsToWalk);
     }, 1000 / 60);
@@ -92,6 +97,17 @@ class Character extends MovableObject {
   startJump() {
     if (this.y === this.groundY) {
       this.speedY = -12;
+    }
+  }
+
+  updateVerticalMovement() {
+    if (this.y < this.groundY || this.speedY < 0) {
+      this.applyGravity();
+
+      if (this.y > this.groundY) {
+        this.y = this.groundY;
+        this.speedY = 0;
+      }
     }
   }
 }
