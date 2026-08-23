@@ -43,6 +43,7 @@ class Character extends MovableObject {
     this.moveCharacter();
     this.walkingSound = new Audio("/audio/creaking.mp3");
     this.walkingSound.loop = true;
+    this.jumpSound = new Audio("/audio/ent_jump.mp3");
   }
 
   moveCharacter() {
@@ -96,7 +97,9 @@ class Character extends MovableObject {
 
   startJump() {
     if (this.y === this.groundY) {
-      this.speedY = -12;
+      this.speedY = -18;
+      this.jumpSound.currentTime = 0;
+      this.jumpSound.play();
     }
   }
 
