@@ -53,6 +53,8 @@ class Robot extends MovableObject {
     //remove in time
     this.collisionDebug = true;
     //
+    this.leftOffset = 20;
+    this.rightOffset = 20;
   }
 
   checkActivation() {

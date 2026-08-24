@@ -126,4 +126,18 @@ class Character extends MovableObject {
     this.walkingSound.pause();
     this.walkingSound.currentTime = 0;
   }
+
+  getCollisionOffsets() {
+    if (this.mirrorX) {
+      return {
+        left: 12,
+        right: 36,
+      };
+    }
+
+    return {
+      left: 36,
+      right: 12,
+    };
+  }
 }
