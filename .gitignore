@@ -2,3 +2,5 @@ img/robot-boss/backup/
 scripts/
 .agents/
 
+# Locally generated Ollama embedding index
+llm-wiki/index.json
