@@ -11,6 +11,8 @@ class MovableObject extends DrawableObject {
   walkingSound;
   speedY = 0;
   acceleration = 0.8;
+  leftOffset;
+  rightOffset;
 
   /**
    *

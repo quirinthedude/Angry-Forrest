@@ -54,6 +54,14 @@ class World {
       this.ctx.beginPath();
       this.ctx.lineWidth = 2;
       this.ctx.strokeRect(object.x, object.y, object.width, object.height);
+      this.ctx.beginPath();
+      this.ctx.strokeRect(
+        object.x + object.leftOffset,
+        object.y,
+        object.width - object.rightOffset - object.leftOffset,
+        object.height,
+      );
+      this.ctx.lineWidth = 1;
     }
   }
 

@@ -92,6 +92,8 @@ class Golem extends MovableObject {
     //remove in time
     this.collisionDebug = true;
     //
+    this.leftOffset = 40;
+    this.rightOffset = 40;
   }
 
   moveGolem() {
