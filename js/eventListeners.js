@@ -5,6 +5,8 @@ window.addEventListener("keydown", function (event) {
     world.keyboard.right = true;
   } else if (event.key === "ArrowUp") {
     world.keyboard.jump = true;
+  } else if (event.code === "Space") {
+    debugger;
   }
 });
 

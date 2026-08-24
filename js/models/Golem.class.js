@@ -1,10 +1,7 @@
 class Golem extends MovableObject {
   height = 120;
   width = 120;
-  IMAGES_IDLE = createAnimationImages(
-    "./img/golem/Idle/Golem_Idle_",
-    18,
-  );
+  IMAGES_IDLE = createAnimationImages("./img/golem/Idle/Golem_Idle_", 18);
   IMAGES_IDLE_BLINKING = createAnimationImages(
     "./img/golem/Idle Blinking/Golem_Idle Blinking_",
     18,
@@ -92,6 +89,9 @@ class Golem extends MovableObject {
     this.speed = 0.6 + Math.random() * 0.3;
     this.animate(this.IMAGES_WALKING, 25); // Start
     this.moveGolem();
+    //remove in time
+    this.collisionDebug = true;
+    //
   }
 
   moveGolem() {

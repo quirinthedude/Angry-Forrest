@@ -50,6 +50,9 @@ class Robot extends MovableObject {
     this.activationInterval = setInterval(() => {
       this.checkActivation();
     }, 100);
+    //remove in time
+    this.collisionDebug = true;
+    //
   }
 
   checkActivation() {

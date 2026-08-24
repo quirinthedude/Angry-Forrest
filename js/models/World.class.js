@@ -5,6 +5,10 @@ class World {
   ctx;
   canvas;
   cameraX = 0;
+  // needs to be removed in time
+  collisionDebug = false;
+  //
+
   constructor(canvas) {
     this.canvas = canvas;
     this.ctx = canvas.getContext("2d");
@@ -45,6 +49,11 @@ class World {
         object.width,
         object.height,
       );
+    }
+    if (object.collisionDebug) {
+      this.ctx.beginPath();
+      this.ctx.lineWidth = 2;
+      this.ctx.strokeRect(object.x, object.y, object.width, object.height);
     }
   }
 

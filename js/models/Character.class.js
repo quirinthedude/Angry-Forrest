@@ -44,6 +44,9 @@ class Character extends MovableObject {
     this.walkingSound.loop = true;
     this.jumpSound = new Audio("/audio/ent_jump.mp3");
     this.currentAnimation = this.IMAGES_IDLE;
+    //remove in time
+    this.collisionDebug = true;
+    //
   }
 
   moveCharacter() {
