@@ -73,6 +73,7 @@ class Character extends MovableObject {
       }
       this.updateVerticalMovement();
       this.world.cameraX = -this.x + 240; // Update the camera position based on the character's position
+      this.checkCollisions();
       this.updateAnimation(wantsToWalk);
     }, 1000 / 60);
   }

@@ -109,4 +109,36 @@ class MovableObject extends DrawableObject {
     this.animate(images, speed);
     this.currentAnimation = images;
   }
+
+  isColliding(mo) {
+    const thisOffsets = this.getCollisionOffsets
+      ? this.getCollisionOffsets()
+      : {
+          left: this.leftOffset || 0,
+          right: this.rightOffset || 0,
+        };
+
+    const moOffsets = mo.getCollisionOffsets
+      ? mo.getCollisionOffsets()
+      : {
+          left: mo.leftOffset || 0,
+          right: mo.rightOffset || 0,
+        };
+
+    const thisLeft = this.x + thisOffsets.left;
+    const thisRight = this.x + this.width - thisOffsets.right;
+
+    const moLeft = mo.x + moOffsets.left;
+    const moRight = mo.x + mo.width - moOffsets.right;
+
+    return thisRight > moLeft && thisLeft < moRight;
+  }
+
+  checkCollisions() {
+    this.world.level.enemies.forEach((enemy) => {
+      if (this.isColliding(enemy)) {
+        console.log("collision");
+      }
+    });
+  }
 }
