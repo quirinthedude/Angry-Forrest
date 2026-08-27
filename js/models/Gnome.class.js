@@ -94,6 +94,8 @@ class Gnome extends MovableObject {
     //
     this.leftOffset = 40;
     this.rightOffset = 40;
+    this.topOffset = 40;
+    this.bottomOffset = 40;
   }
 
   moveGnome() {

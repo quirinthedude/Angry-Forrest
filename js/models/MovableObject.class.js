@@ -13,8 +13,8 @@ class MovableObject extends DrawableObject {
   acceleration = 0.8;
   leftOffset;
   rightOffset;
-  topOffset;
-  bottomOffset;
+  topOffset = 0;
+  bottomOffset = 0;
 
   /**
    *
@@ -142,5 +142,19 @@ class MovableObject extends DrawableObject {
         console.log("collision");
       }
     });
+  }
+
+  getCollisionOffsets() {
+    if (this.mirrorX) {
+      return {
+        left: 12,
+        right: 36,
+      };
+    }
+
+    return {
+      left: 36,
+      right: 12,
+    };
   }
 }
