@@ -13,6 +13,8 @@ class MovableObject extends DrawableObject {
   acceleration = 0.8;
   leftOffset;
   rightOffset;
+  topOffset;
+  bottomOffset;
 
   /**
    *

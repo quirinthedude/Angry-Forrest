@@ -17,7 +17,7 @@ später World
 ```
 
 `level1` wurde beim Laden des Scripts als fertige globale `Level`-Instanz
-erzeugt. Dadurch entstanden `Golem` und `Robot`, bevor die gemeinsame
+erzeugt. Dadurch entstanden `Gnome` und `Robot`, bevor die gemeinsame
 `World`-Instanz existierte. Aktive Bewohner hätten ihre World-Referenz deshalb
 nachträglich erhalten müssen.
 
@@ -66,7 +66,7 @@ erhalten sie deshalb nicht.
 - `js/models/World.class.js`: Level-Erzeugung und Zugriffe über `world.level`.
 - `js/models/Character.class.js`: Bewegungsgrenze über `world.level.landscape`.
 - `js/models/Robot.class.js`: World-Referenz im Constructor.
-- `js/models/Golem.class.js`: World-Referenz im Constructor.
+- `js/models/Gnome.class.js`: World-Referenz im Constructor.
 - `llm-wiki/input/world-level-ownership-refactor.md`: diese Dokumentation.
 
 ## Vorbereitete Funktionen
@@ -83,11 +83,11 @@ Diese Funktionen sind in diesem Refactor noch nicht implementiert.
 
 1. `World` erhält Canvas und Zeichenkontext.
 2. `World` ruft `createLevel1(this)` auf.
-3. `Level` und aktive Bewohner entstehen; Golem-/Robot-Referenzen zeigen
+3. `Level` und aktive Bewohner entstehen; Gnome-/Robot-Referenzen zeigen
    bereits auf diese World.
 4. `Character` entsteht mit derselben World-Referenz.
 5. Die Zeichen-Loop startet.
 
-Die bestehende Golem-Bewegung greift nicht auf `world.character` zu und darf
+Die bestehende Gnome-Bewegung greift nicht auf `world.character` zu und darf
 daher bereits in Schritt 3 starten. Character-Bewegungslogik läuft erst nach
 seiner Erzeugung; zu diesem Zeitpunkt ist das Level bereits vorhanden.

@@ -8,8 +8,8 @@ In einem objektorientierten Spiel existieren viele Instanzen gleichzeitig:
 World
 ├── Character
 ├── Enemies
-│   ├── Golem
-│   ├── Golem
+│   ├── Gnome
+│   ├── Gnome
 │   └── Robot
 ├── Landscape
 ├── Sky
@@ -191,9 +191,9 @@ Der Robot wird zunächst in `level1.js` erzeugt:
 ```js
 const level1 = new Level(
   [
-    new Golem(...),
-    new Golem(...),
-    new Golem(...),
+    new Gnome(...),
+    new Gnome(...),
+    new Gnome(...),
     new Robot(2300, 360),
   ],
   new Sky(),
@@ -452,7 +452,7 @@ Typische aktive Objekte:
 ```text
 Character
 Robot
-Golem
+Gnome
 andere Gegner
 Projektile
 bewegliche NPCs
@@ -489,7 +489,7 @@ Man kann `World` daher als zentrale gemeinsame Umgebung verstehen:
           ┌─────────┼─────────┐
           │         │         │
           ▼         ▼         ▼
-      Character   Robot     Golem
+      Character   Robot     Gnome
                      │
                      │
                      └── kann über world

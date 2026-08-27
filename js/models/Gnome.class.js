@@ -1,65 +1,65 @@
-class Golem extends MovableObject {
+class Gnome extends MovableObject {
   height = 120;
   width = 120;
-  IMAGES_IDLE = createAnimationImages("./img/golem/Idle/Golem_Idle_", 18);
+  IMAGES_IDLE = createAnimationImages("./img/gnome/Idle/Gnome_Idle_", 18);
   IMAGES_IDLE_BLINKING = createAnimationImages(
-    "./img/golem/Idle Blinking/Golem_Idle Blinking_",
+    "./img/gnome/Idle Blinking/Gnome_Idle Blinking_",
     18,
   );
   IMAGES_WALKING = createAnimationImages(
-    "./img/golem/Walking/Golem_Walking_",
+    "./img/gnome/Walking/Gnome_Walking_",
     24,
   );
   IMAGES_RUNNING = createAnimationImages(
-    "./img/golem/Running/Golem_Running_",
+    "./img/gnome/Running/Gnome_Running_",
     12,
   );
   IMAGES_ATTACKING = createAnimationImages(
-    "./img/golem/Slashing/Golem_Slashing_",
+    "./img/gnome/Slashing/Gnome_Slashing_",
     12,
   );
   IMAGES_ATTACKING_AIR = createAnimationImages(
-    "./img/golem/Slashing in The Air/Golem_Slashing in The Air_",
+    "./img/gnome/Slashing in The Air/Gnome_Slashing in The Air_",
     12,
   );
   IMAGES_THROWING = createAnimationImages(
-    "./img/golem/Throwing/Golem_Throwing_",
+    "./img/gnome/Throwing/Gnome_Throwing_",
     12,
   );
   IMAGES_THROWING_AIR = createAnimationImages(
-    "./img/golem/Throwing in The Air/Golem_Throwing in The Air_",
+    "./img/gnome/Throwing in The Air/Gnome_Throwing in The Air_",
     12,
   );
-  IMAGES_HURT = createAnimationImages("./img/golem/Hurt/Golem_Hurt_", 12);
+  IMAGES_HURT = createAnimationImages("./img/gnome/Hurt/Gnome_Hurt_", 12);
   IMAGES_JUMPING = createAnimationImages(
-    "./img/golem/Jump Loop/Golem_Jump Loop_",
+    "./img/gnome/Jump Loop/Gnome_Jump Loop_",
     6,
   );
   IMAGES_JUMP_START = createAnimationImages(
-    "./img/golem/Jump Start/Golem_Jump Start_",
+    "./img/gnome/Jump Start/Gnome_Jump Start_",
     6,
   );
   IMAGES_KICKING = createAnimationImages(
-    "./img/golem/Kicking/Golem_Kicking_",
+    "./img/gnome/Kicking/Gnome_Kicking_",
     12,
   );
   IMAGES_RUN_SLASHING = createAnimationImages(
-    "./img/golem/Run Slashing/Golem_Run Slashing_",
+    "./img/gnome/Run Slashing/Gnome_Run Slashing_",
     12,
   );
   IMAGES_RUN_THROWING = createAnimationImages(
-    "./img/golem/Run Throwing/Golem_Run Throwing_",
+    "./img/gnome/Run Throwing/Gnome_Run Throwing_",
     12,
   );
   IMAGES_SLIDING = createAnimationImages(
-    "./img/golem/Sliding/Golem_Sliding_",
+    "./img/gnome/Sliding/Gnome_Sliding_",
     6,
   );
   IMAGES_FALLING_DOWN = createAnimationImages(
-    "./img/golem/Falling Down/Golem_Falling Down_",
+    "./img/gnome/Falling Down/Gnome_Falling Down_",
     6,
   );
-  IMAGES_DYING = createAnimationImages("./img/golem/Dying/Golem_Dying_", 15);
+  IMAGES_DYING = createAnimationImages("./img/gnome/Dying/Gnome_Dying_", 15);
 
   constructor(x, y, world) {
     super();
@@ -85,10 +85,10 @@ class Golem extends MovableObject {
     this.x = x;
     this.y = y;
     this.mirrorX = true;
-    // Jede Golem-Instanz erhält beim Erzeugen eine eigene, konstante Laufgeschwindigkeit.
+    // Jede Gnome-Instanz erhält beim Erzeugen eine eigene, konstante Laufgeschwindigkeit.
     this.speed = 0.6 + Math.random() * 0.3;
     this.animate(this.IMAGES_WALKING, 25); // Start
-    this.moveGolem();
+    this.moveGnome();
     //remove in time
     this.collisionDebug = true;
     //
@@ -96,7 +96,7 @@ class Golem extends MovableObject {
     this.rightOffset = 40;
   }
 
-  moveGolem() {
+  moveGnome() {
     setInterval(() => {
       if (this.x < 10) {
         this.mirrorX = false; // Change direction

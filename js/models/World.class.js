@@ -63,9 +63,9 @@ class World {
       this.ctx.beginPath();
       this.ctx.strokeRect(
         object.x + offsets.left,
-        object.y,
+        object.y + offsets.top,
         object.width - offsets.right - offsets.left,
-        object.height,
+        object.height - offsets.top - offsets.bottom,
       );
       this.ctx.lineWidth = 1;
     }

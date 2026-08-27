@@ -37,12 +37,12 @@ Die Schritte 1 bis 4 sind im Grunde ein manueller Debugger: Man betrachtet diese
 
 ## Beispiel: `forEach` auf `undefined`
 
-Beim Erzeugen eines `Golem` trat diese Meldung auf:
+Beim Erzeugen eines `Gnome` trat diese Meldung auf:
 
 ```text
 Uncaught TypeError: Cannot read properties of undefined (reading 'forEach')
-    at Golem.loadImages (MovableObject.class.js:43:7)
-    at new Golem (Golem.class.js:13:10)
+    at Gnome.loadImages (MovableObject.class.js:43:7)
+    at new Gnome (Gnome.class.js:13:10)
 ```
 
 ### 1. Die Fehlerstelle lesen
@@ -67,18 +67,18 @@ Nicht `forEach()` ist defekt. Das Argument `arr` hat beim Aufruf keinen gültige
 
 ### 2. Zur Aufrufstelle zurückgehen
 
-Der nächste Stack-Trace-Eintrag verweist auf den Konstruktor des Golems:
+Der nächste Stack-Trace-Eintrag verweist auf den Konstruktor des Gnomes:
 
 ```js
 this.loadImages(this.IMAGES_WALKING);
 this.loadImages(this.IMAGES_IDLE);
 ```
 
-`IMAGES_WALKING` ist im Golem definiert:
+`IMAGES_WALKING` ist im Gnome definiert:
 
 ```js
 IMAGES_WALKING = createAnimationImages(
-  "/img/golem/Walking/Golem_Walking_",
+  "/img/gnome/Walking/Gnome_Walking_",
   22,
 );
 ```
@@ -111,7 +111,7 @@ Das erklärt die Fehlermeldung vollständig.
 
 ### 4. Ursache statt Symptom korrigieren
 
-Der Golem hatte nur eine Walking-Animation. Deshalb werden nur die dazugehörigen Bilder geladen:
+Der Gnome hatte nur eine Walking-Animation. Deshalb werden nur die dazugehörigen Bilder geladen:
 
 ```js
 this.loadImage(this.IMAGES_WALKING[0]);
@@ -119,7 +119,7 @@ this.loadImages(this.IMAGES_WALKING);
 this.animate(this.IMAGES_WALKING);
 ```
 
-Die Aufrufe für `IMAGES_IDLE`, `IMAGES_ATTACKING`, `IMAGES_HURT` und `IMAGES_JUMPING` gehören erst dann in den Golem, wenn diese Arrays dort auch definiert wurden.
+Die Aufrufe für `IMAGES_IDLE`, `IMAGES_ATTACKING`, `IMAGES_HURT` und `IMAGES_JUMPING` gehören erst dann in den Gnome, wenn diese Arrays dort auch definiert wurden.
 
 ---
 
