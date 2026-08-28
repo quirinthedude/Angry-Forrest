@@ -150,4 +150,8 @@ class MovableObject extends DrawableObject {
       bottom: this.bottomOffset,
     };
   }
+
+  isInTheAir() {
+    return this.y < this.groundY;
+  }
 }

@@ -29,6 +29,8 @@ class Character extends MovableObject {
   currentImage = 0;
   wantsToWalk = false;
   groundY = 305;
+  walkSpeed = 1.5;
+  airSpeed = 5;
 
   constructor(world) {
     super();
@@ -57,12 +59,13 @@ class Character extends MovableObject {
   moveCharacter() {
     setInterval(() => {
       let wantsToWalk = this.world.keyboard.left || this.world.keyboard.right;
+      let movementSpeed = this.isInTheAir() ? this.airSpeed : this.walkSpeed;
+
       if (this.world.keyboard.left && this.world.keyboard.right) return;
 
       if (this.world.keyboard.left && this.x > 230) {
         this.mirrorX = false;
-        this.moveLeft(1.5);
-        console.log("left");
+        this.moveLeft(movementSpeed);
       }
 
       if (
@@ -70,7 +73,7 @@ class Character extends MovableObject {
         this.x < this.world.level.landscape.levelLength - 2200
       ) {
         this.mirrorX = true;
-        this.moveRight(1.5);
+        this.moveRight(movementSpeed);
       }
 
       if (this.world.keyboard.jump) {
@@ -105,7 +108,7 @@ class Character extends MovableObject {
 
   startJump() {
     if (this.y === this.groundY) {
-      this.speedY = -18;
+      this.speedY = -22;
       this.jumpSound.currentTime = 0;
       this.jumpSound.play();
     }
