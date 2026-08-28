@@ -85,8 +85,8 @@ class MovableObject extends DrawableObject {
     });
   }
 
-  move(speed = 0.32, direction) {
-    this.x += speed * direction;
+  move(speed) {
+    this.x += speed * this.direction;
   }
 
   jump() {
@@ -151,5 +151,9 @@ class MovableObject extends DrawableObject {
 
   isInTheAir() {
     return this.y < this.groundY;
+  }
+
+  shouldMirror() {
+    return this.direction === 1;
   }
 }

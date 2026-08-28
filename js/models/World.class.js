@@ -39,7 +39,7 @@ class World {
   }
 
   drawObject(object) {
-    if (object.mirrorX) {
+    if (object.shouldMirror()) {
       this.drawMirroredObject(object);
     } else {
       this.ctx.drawImage(
