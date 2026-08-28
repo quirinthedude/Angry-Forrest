@@ -145,16 +145,11 @@ class MovableObject extends DrawableObject {
   }
 
   getCollisionOffsets() {
-    if (this.mirrorX) {
-      return {
-        left: 12,
-        right: 36,
-      };
-    }
-
     return {
-      left: 36,
-      right: 12,
+      left: this.mirrorX ? this.leftOffset : this.rightOffset,
+      right: this.mirrorX ? this.rightOffset : this.leftOffset,
+      top: this.topOffset,
+      bottom: this.bottomOffset,
     };
   }
 }

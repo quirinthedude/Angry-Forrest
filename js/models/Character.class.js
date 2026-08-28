@@ -1,6 +1,11 @@
 class Character extends MovableObject {
   height = 180;
   width = 120;
+  leftOffset = 12;
+  rightOffset = 36;
+  topOffset = 10;
+  bottomOffset = 16;
+
   IMAGES_IDLE = createAnimationImages(
     "./img/character/idle/animation_idle_",
     20,
@@ -47,10 +52,6 @@ class Character extends MovableObject {
     //remove in time
     this.collisionDebug = true;
     //
-    this.leftOffset = 12;
-    this.rightOffset = 36;
-    this.topOffset = 10;
-    this.bottomOffset = 16;
   }
 
   moveCharacter() {

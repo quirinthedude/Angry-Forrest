@@ -1,6 +1,11 @@
 class Gnome extends MovableObject {
   height = 120;
   width = 120;
+  leftOffset = 40;
+  rightOffset = 40;
+  topOffset = 35;
+  bottomOffset = 0;
+
   IMAGES_IDLE = createAnimationImages("./img/gnome/Idle/Gnome_Idle_", 18);
   IMAGES_IDLE_BLINKING = createAnimationImages(
     "./img/gnome/Idle Blinking/Gnome_Idle Blinking_",
@@ -92,10 +97,6 @@ class Gnome extends MovableObject {
     //remove in time
     this.collisionDebug = true;
     //
-    this.leftOffset = 40;
-    this.rightOffset = 40;
-    this.topOffset = 40;
-    this.bottomOffset = 40;
   }
 
   moveGnome() {

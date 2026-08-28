@@ -1,6 +1,11 @@
 class Robot extends MovableObject {
   height = 260;
   width = 228;
+  topOffset = 80;
+  bottomOffset = 0;
+  leftOffset = 20;
+  rightOffset = 40;
+
   IMAGES_IDLE = createAnimationImages("./img/robot-boss/Idle/idle_", 9);
   IMAGES_WALKING = createAnimationImages("./img/robot-boss/Walk/Walk_", 12);
   IMAGES_RUNNING = createAnimationImages("./img/robot-boss/Run/Run_", 12);
@@ -53,10 +58,6 @@ class Robot extends MovableObject {
     //remove in time
     this.collisionDebug = true;
     //
-    this.topOffset = 70;
-    this.bottomOffset = 0;
-    this.leftOffset = 20;
-    this.rightOffset = 20;
   }
 
   checkActivation() {
