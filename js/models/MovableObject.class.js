@@ -3,6 +3,7 @@ class MovableObject extends DrawableObject {
   y;
   img;
   mirrorX = false;
+  direction = 1;
   imageCache = {};
   currentImage = 0;
   currentAnimation;
@@ -84,11 +85,8 @@ class MovableObject extends DrawableObject {
     });
   }
 
-  moveRight(speed = 0.32) {
-    this.x += speed;
-  }
-  moveLeft(speed = 0.32) {
-    this.x -= speed;
+  move(speed = 0.32, direction) {
+    this.x += speed * direction;
   }
 
   jump() {

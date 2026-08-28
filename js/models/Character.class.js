@@ -65,7 +65,8 @@ class Character extends MovableObject {
 
       if (this.world.keyboard.left && this.x > 230) {
         this.mirrorX = false;
-        this.moveLeft(movementSpeed);
+        this.direction = -1;
+        this.move(movementSpeed, this.direction);
       }
 
       if (
@@ -73,7 +74,8 @@ class Character extends MovableObject {
         this.x < this.world.level.landscape.levelLength - 2200
       ) {
         this.mirrorX = true;
-        this.moveRight(movementSpeed);
+        this.direction = 1;
+        this.move(movementSpeed, this.direction);
       }
 
       if (this.world.keyboard.jump) {

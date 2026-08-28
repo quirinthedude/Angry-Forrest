@@ -102,15 +102,13 @@ class Gnome extends MovableObject {
   moveGnome() {
     setInterval(() => {
       if (this.x < 10) {
-        this.mirrorX = false; // Change direction
+        this.mirrorX = false;
+        this.direction = 1;
       } else if (this.x > 710) {
-        this.mirrorX = true; // Change direction
+        this.mirrorX = true;
+        this.direction = -1;
       }
-      if (this.mirrorX) {
-        this.moveLeft(this.speed);
-      } else {
-        this.moveRight(this.speed);
-      }
-    }, 2); // Move every 2 milliseconds
+      this.move(this.speed, this.direction);
+    }, 20); // Move every 2 milliseconds
   }
 }
