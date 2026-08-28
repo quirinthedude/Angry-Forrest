@@ -27,7 +27,7 @@ DEFAULT_CHAT_MODEL = "qwen3:8b"
 DEFAULT_OLLAMA_URL = "http://127.0.0.1:11434"
 
 
-def read_chunks(max_chars: int = 1800, include_code: bool = False) -> list[dict[str, str | int]]:
+def read_chunks(max_chars: int = 1800, include_code: bool = True) -> list[dict[str, str | int]]:
     """Split Markdown files into heading-aware, bounded text chunks."""
     chunks: list[dict[str, str | int]] = []
 
@@ -194,7 +194,7 @@ def rank_chunks(
     ]
     if not chunks:
         raise RuntimeError(
-            "No chunks available for scope 'code'; rebuild with 'build --include-code' first"
+            "No chunks available for scope 'code'; rebuild without '--exclude-code' first"
         )
 
     query_vector = embed([query], model, ollama_url)[0]
@@ -274,10 +274,16 @@ def main() -> int:
     parser.add_argument("--ollama-url", default=DEFAULT_OLLAMA_URL)
     subparsers = parser.add_subparsers(dest="command", required=True)
 
-    build = subparsers.add_parser("build", help="embed all Markdown input files")
+    build = subparsers.add_parser("build", help="embed Wiki input files and JavaScript code")
     build.add_argument("--max-chars", type=int, default=1800)
     build.add_argument("--batch-size", type=int, default=8)
-    build.add_argument("--include-code", action="store_true", help="also embed JavaScript files from js/")
+    build.add_argument(
+        "--exclude-code",
+        action="store_false",
+        dest="include_code",
+        help="exclude JavaScript files from js/ (code is included by default)",
+    )
+    build.set_defaults(include_code=True)
 
     query = subparsers.add_parser("search", help="search the local embedding index")
     query.add_argument("query")

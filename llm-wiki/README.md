@@ -12,9 +12,16 @@ Ollama muss laufen und das Modell muss vorhanden sein:
 python3 llm-wiki/embed_wiki.py build
 ```
 
-Der Index wird als `llm-wiki/index.json` gespeichert. Er enthält pro Text-Chunk
-die Quelldatei, den Text und den Embedding-Vektor. Dadurch ist die erste Version
-leicht inspizierbar und benötigt keine externe Datenbank.
+Der Index wird als `llm-wiki/index.json` gespeichert. Er enthält standardmäßig
+pro Wiki- und JavaScript-Chunk die Quelldatei, den Text und den
+Embedding-Vektor. Dadurch ist die erste Version leicht inspizierbar und
+benötigt keine externe Datenbank.
+
+Falls ausnahmsweise nur die Markdown-Dateien eingebettet werden sollen:
+
+```bash
+python3 llm-wiki/embed_wiki.py build --exclude-code
+```
 
 ## Semantisch suchen
 
@@ -25,13 +32,6 @@ python3 llm-wiki/embed_wiki.py search "Wie bekommt ein Gegner Zugriff auf die Wo
 Die Ergebnisse werden als JSON-Zeilen mit Ähnlichkeitswert, Quelle und Text
 ausgegeben. Nach Änderungen an den Markdown-Dateien muss der Index mit `build`
 neu erzeugt werden.
-
-Für eine kombinierte Wiki- und Code-Suche kann der JavaScript-Code optional
-eingebettet werden:
-
-```bash
-python3 llm-wiki/embed_wiki.py build --include-code
-```
 
 ## Frage mit lokaler Antwortgenerierung
 
@@ -66,4 +66,4 @@ python3 llm-wiki/embed_wiki.py \
 
 Der Suchbereich kann mit `--scope wiki`, `--scope code` oder `--scope all`
 eingeschränkt werden. Für `code` und `all` mit Code-Treffern muss der Index
-zuvor mit `build --include-code` erzeugt worden sein.
+zuvor ohne `--exclude-code` erzeugt worden sein.
