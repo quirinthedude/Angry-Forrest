@@ -113,27 +113,25 @@ class MovableObject extends DrawableObject {
   }
 
   isColliding(mo) {
-    const thisOffsets = this.getCollisionOffsets
-      ? this.getCollisionOffsets()
-      : {
-          left: this.leftOffset || 0,
-          right: this.rightOffset || 0,
-        };
-
-    const moOffsets = mo.getCollisionOffsets
-      ? mo.getCollisionOffsets()
-      : {
-          left: mo.leftOffset || 0,
-          right: mo.rightOffset || 0,
-        };
+    const thisOffsets = this.getCollisionOffsets();
+    const moOffsets = mo.getCollisionOffsets();
 
     const thisLeft = this.x + thisOffsets.left;
     const thisRight = this.x + this.width - thisOffsets.right;
+    const thisTop = this.y + thisOffsets.top;
+    const thisBottom = this.y + this.height - thisOffsets.bottom;
 
     const moLeft = mo.x + moOffsets.left;
     const moRight = mo.x + mo.width - moOffsets.right;
+    const moTop = mo.y + moOffsets.top;
+    const moBottom = mo.y + mo.height - moOffsets.bottom;
 
-    return thisRight > moLeft && thisLeft < moRight;
+    return (
+      thisRight > moLeft &&
+      thisLeft < moRight &&
+      thisBottom > moTop &&
+      thisTop < moBottom
+    );
   }
 
   checkCollisions() {
