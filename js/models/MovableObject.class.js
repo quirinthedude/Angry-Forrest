@@ -2,7 +2,7 @@ class MovableObject extends DrawableObject {
   x;
   y;
   img;
-  mirrorX = false;
+  nativeDirection = -1;
   direction = 1;
   imageCache = {};
   currentImage = 0;
@@ -154,6 +154,6 @@ class MovableObject extends DrawableObject {
   }
 
   shouldMirror() {
-    return this.direction === 1;
+    return this.direction !== this.nativeDirection;
   }
 }

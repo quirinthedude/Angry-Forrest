@@ -5,6 +5,7 @@ class Gnome extends MovableObject {
   rightOffset = 40;
   topOffset = 35;
   bottomOffset = 0;
+  nativeDirection = 1;
 
   IMAGES_IDLE = createAnimationImages("./img/gnome/Idle/Gnome_Idle_", 18);
   IMAGES_IDLE_BLINKING = createAnimationImages(
@@ -66,7 +67,7 @@ class Gnome extends MovableObject {
   );
   IMAGES_DYING = createAnimationImages("./img/gnome/Dying/Gnome_Dying_", 15);
 
-  constructor(x, y, world) {
+  constructor(x, y, minX, maxX, world) {
     super();
     this.world = world;
     this.loadImage(this.IMAGES_IDLE[0]);
@@ -89,7 +90,8 @@ class Gnome extends MovableObject {
     this.loadImages(this.IMAGES_DYING);
     this.x = x;
     this.y = y;
-    this.mirrorX = true;
+    this.minX = minX;
+    this.maxX = maxX;
     // Jede Gnome-Instanz erhält beim Erzeugen eine eigene, konstante Laufgeschwindigkeit.
     this.speed = 0.6 + Math.random() * 0.3;
     this.animate(this.IMAGES_WALKING, 25); // Start
@@ -101,14 +103,12 @@ class Gnome extends MovableObject {
 
   moveGnome() {
     setInterval(() => {
-      if (this.x < 10) {
-        this.mirrorX = false;
+      if (this.x < this.minX) {
         this.direction = 1;
-      } else if (this.x > 710) {
-        this.mirrorX = true;
+      } else if (this.x > this.maxX) {
         this.direction = -1;
       }
-      this.move(this.speed, this.direction);
+      this.move(this.speed);
     }, 20); // Move every 2 milliseconds
   }
 }
