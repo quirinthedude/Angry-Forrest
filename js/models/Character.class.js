@@ -43,7 +43,6 @@ class Character extends MovableObject {
     this.loadImages(this.IMAGES_JUMPING);
     this.x = 240;
     this.y = 305;
-    this.mirrorX = true;
 
     this.animate(this.IMAGES_IDLE);
     this.moveCharacter();
@@ -64,7 +63,6 @@ class Character extends MovableObject {
       if (this.world.keyboard.left && this.world.keyboard.right) return;
 
       if (this.world.keyboard.left && this.x > 230) {
-        this.mirrorX = false;
         this.direction = -1;
         this.move(movementSpeed);
       }
@@ -73,7 +71,6 @@ class Character extends MovableObject {
         this.world.keyboard.right &&
         this.x < this.world.level.landscape.levelLength - 2200
       ) {
-        this.mirrorX = true;
         this.direction = 1;
         this.move(movementSpeed);
       }

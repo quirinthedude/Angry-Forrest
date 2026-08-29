@@ -49,7 +49,6 @@ class Robot extends MovableObject {
     this.animate(this.IMAGES_IDLE, 100);
     this.x = x;
     this.y = y;
-    this.mirrorX = true;
     this.acceleration = 0.5;
 
     this.activationInterval = setInterval(() => {

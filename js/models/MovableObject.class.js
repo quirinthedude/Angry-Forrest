@@ -142,8 +142,8 @@ class MovableObject extends DrawableObject {
 
   getCollisionOffsets() {
     return {
-      left: this.mirrorX ? this.leftOffset : this.rightOffset,
-      right: this.mirrorX ? this.rightOffset : this.leftOffset,
+      left: this.shouldMirror() ? this.leftOffset : this.rightOffset,
+      right: this.shouldMirror() ? this.rightOffset : this.leftOffset,
       top: this.topOffset,
       bottom: this.bottomOffset,
     };
