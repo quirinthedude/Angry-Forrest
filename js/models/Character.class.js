@@ -26,6 +26,10 @@ class Character extends MovableObject {
     "./img/character/jump/animation_jump_",
     12,
   );
+  IMAGES_LEAF = createAnimationImages(
+    "./img/character/leaf/animation_leaf_",
+    18,
+  );
   currentImage = 0;
   wantsToWalk = false;
   groundY = 305;
@@ -41,6 +45,7 @@ class Character extends MovableObject {
     this.loadImages(this.IMAGES_ATTACKING);
     this.loadImages(this.IMAGES_HURT);
     this.loadImages(this.IMAGES_JUMPING);
+    this.loadImages(this.IMAGES_LEAF);
     this.x = 240;
     this.y = 305;
 
@@ -49,6 +54,7 @@ class Character extends MovableObject {
     this.walkingSound = new Audio("/audio/creaking.mp3");
     this.walkingSound.loop = true;
     this.jumpSound = new Audio("/audio/ent_jump.mp3");
+    this.hurtSound = new Audio("/audio/ent_hurt.mp3");
     this.currentAnimation = this.IMAGES_IDLE;
     //remove in time
     this.collisionDebug = true;
@@ -64,7 +70,6 @@ class Character extends MovableObject {
       this.updateVerticalMovement();
       this.updateCamera();
       this.handleCollision();
-      const enemy = this.checkCollisions();
       this.updateAnimation(wantsToWalk);
     }, 1000 / 60);
   }
@@ -100,18 +105,25 @@ class Character extends MovableObject {
 
   handleCollision() {
     const enemy = this.checkCollisions();
+    const now = Date.now();
 
-    if (enemy) {
+    if (enemy && now - this.lastHit > 1000) {
       this.energy -= 10;
-      characterHurt();
-      updateCharacterEnergyBar();
+      this.lastHit = now;
+
+      this.characterHurt();
+      this.updateCharacterEnergyBar();
+
       if (this.energy <= 0) {
-        characterDies();
+        this.characterDies();
       }
     }
   }
 
   characterDies() {
+    this.energy = 0;
+    console.log("dead!");
+
     // Implement character death logic here
   }
 
@@ -120,7 +132,14 @@ class Character extends MovableObject {
   }
 
   characterHurt() {
+    this.hurtSound.currentTime = 0;
+    this.hurtSound.play();
+
+    this.setAnimation(this.IMAGES_LEAF, 100); // Set the hurt animation
+
+    console.log("hurt!", this.energy);
     // play animation character hurt
+    // play sound hurt
     // timeout of 1 s, blinking therewhile
   }
 
