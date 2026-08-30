@@ -58,31 +58,35 @@ class Character extends MovableObject {
   moveCharacter() {
     setInterval(() => {
       let wantsToWalk = this.world.keyboard.left || this.world.keyboard.right;
-      let movementSpeed = this.isInTheAir() ? this.airSpeed : this.walkSpeed;
 
-      if (this.world.keyboard.left && this.world.keyboard.right) return;
-
-      if (this.world.keyboard.left && this.x > 230) {
-        this.direction = -1;
-        this.move(movementSpeed);
-      }
-
-      if (
-        this.world.keyboard.right &&
-        this.x < this.world.level.landscape.levelLength - 2200
-      ) {
-        this.direction = 1;
-        this.move(movementSpeed);
-      }
-
+      this.handleHorizontalMovement();
       if (this.world.keyboard.jump) {
         this.startJump();
       }
       this.updateVerticalMovement();
       this.world.cameraX = -this.x + 240; // Update the camera position based on the character's position
-      this.checkCollisions();
+      const enemy = this.checkCollisions();
       this.updateAnimation(wantsToWalk);
     }, 1000 / 60);
+  }
+
+  handleHorizontalMovement() {
+    let movementSpeed = this.isInTheAir() ? this.airSpeed : this.walkSpeed;
+
+    if (this.world.keyboard.left && this.world.keyboard.right) return;
+
+    if (this.world.keyboard.left && this.x > 230) {
+      this.direction = -1;
+      this.move(movementSpeed);
+    }
+
+    if (
+      this.world.keyboard.right &&
+      this.x < this.world.level.landscape.levelLength - 2200
+    ) {
+      this.direction = 1;
+      this.move(movementSpeed);
+    }
   }
 
   /**

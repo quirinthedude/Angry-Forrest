@@ -12,6 +12,7 @@ class MovableObject extends DrawableObject {
   walkingSound;
   speedY = 0;
   acceleration = 0.8;
+  energy = 100;
   leftOffset;
   rightOffset;
   topOffset = 0;
@@ -133,11 +134,12 @@ class MovableObject extends DrawableObject {
   }
 
   checkCollisions() {
-    this.world.level.enemies.forEach((enemy) => {
+    for (const enemy of this.world.level.enemies) {
       if (this.isColliding(enemy)) {
-        console.log("collision");
+        return enemy;
       }
-    });
+    }
+    return null;
   }
 
   getCollisionOffsets() {
