@@ -39,6 +39,12 @@ class World {
   }
 
   drawObject(object) {
+    if (
+      object.isHurt &&
+      object.isHurt() &&
+      Math.floor(Date.now() / 100) % 2 === 0
+    )
+      return;
     if (object.shouldMirror()) {
       this.drawMirroredObject(object);
     } else {

@@ -135,8 +135,6 @@ class Character extends MovableObject {
     this.hurtSound.currentTime = 0;
     this.hurtSound.play();
 
-    this.setAnimation(this.IMAGES_LEAF, 100); // Set the hurt animation
-
     console.log("hurt!", this.energy);
     // play animation character hurt
     // play sound hurt
@@ -150,6 +148,11 @@ class Character extends MovableObject {
    * compares the current intent with the stored animation state.
    */
   updateAnimation(wantsToWalk) {
+    if (this.isHurt()) {
+      this.setAnimation(this.IMAGES_HURT, 100);
+      this.stopWalkingSound();
+      return;
+    }
     if (this.y < this.groundY) {
       this.setAnimation(this.IMAGES_JUMPING, 100);
     } else if (wantsToWalk) {
@@ -191,5 +194,9 @@ class Character extends MovableObject {
   stopWalkingSound() {
     this.walkingSound.pause();
     this.walkingSound.currentTime = 0;
+  }
+
+  isHurt() {
+    return Date.now() - this.lastHit < 1000;
   }
 }
