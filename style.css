@@ -14,13 +14,18 @@ body {
 }
 
 .game-wrapper {
-  position: relative;
+  /* position: relative;
   width: 866px;
-  height: 618px;
+  height: 618px; */
 
   display: flex;
   justify-content: center;
   align-items: center;
+}
+
+.character-energy {
+  width: 72px;
+  height: 217px;
 }
 
 canvas {
