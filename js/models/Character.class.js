@@ -60,11 +60,10 @@ class Character extends MovableObject {
       let wantsToWalk = this.world.keyboard.left || this.world.keyboard.right;
 
       this.handleHorizontalMovement();
-      if (this.world.keyboard.jump) {
-        this.startJump();
-      }
+      this.handleJump();
       this.updateVerticalMovement();
-      this.world.cameraX = -this.x + 240; // Update the camera position based on the character's position
+      this.updateCamera();
+      this.handleCollision();
       const enemy = this.checkCollisions();
       this.updateAnimation(wantsToWalk);
     }, 1000 / 60);
@@ -87,6 +86,42 @@ class Character extends MovableObject {
       this.direction = 1;
       this.move(movementSpeed);
     }
+  }
+
+  handleJump() {
+    if (this.world.keyboard.jump) {
+      this.startJump();
+    }
+  }
+
+  updateCamera() {
+    this.world.cameraX = -this.x + 240; // Update the camera position based on the character's position
+  }
+
+  handleCollision() {
+    const enemy = this.checkCollisions();
+
+    if (enemy) {
+      this.energy -= 10;
+      characterHurt();
+      updateCharacterEnergyBar();
+      if (this.energy <= 0) {
+        characterDies();
+      }
+    }
+  }
+
+  characterDies() {
+    // Implement character death logic here
+  }
+
+  updateCharacterEnergyBar() {
+    // Implement energy bar update logic here
+  }
+
+  characterHurt() {
+    // play animation character hurt
+    // timeout of 1 s, blinking therewhile
   }
 
   /**
