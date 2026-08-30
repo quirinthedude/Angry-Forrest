@@ -128,7 +128,10 @@ class Character extends MovableObject {
   }
 
   updateCharacterEnergyBar() {
-    // Implement energy bar update logic here
+    const index = Math.max(0, Math.ceil(this.energy / 10) - 1);
+
+    document.getElementById("character-energy-bar").src =
+      `./img/char_energy/char_energy${index}.png`;
   }
 
   characterHurt() {

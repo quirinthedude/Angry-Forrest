@@ -14,23 +14,40 @@ body {
 }
 
 .game-wrapper {
-  /* position: relative;
+  position: relative;
   width: 866px;
-  height: 618px; */
+  height: 618px;
 
-  display: flex;
+  /* display: flex;
   justify-content: center;
-  align-items: center;
+  align-items: center; */
 }
 
 .character-energy {
+  position: absolute;
+  left: 10px;
+  top: 50%;
+  transform: translateY(-50%);
+
   width: 72px;
   height: 217px;
+
+  z-index: 20;
+}
+
+.character-energy img {
+  width: 72px;
+  height: 217px;
+  display: block;
 }
 
 canvas {
+  position: absolute;
+  left: 73px;
+  top: 69px;
+
   background-color: black;
-  display: block;
+  /* display: block; */
   width: 720px;
   height: 480px;
 }
