@@ -20,10 +20,20 @@ class ScrollingText {
       if (path) paths.add(path);
     }
 
+    if (paths.size === 0) {
+      this.ready = true;
+      return;
+    }
+
+    let loadedImages = 0;
+
     paths.forEach((path) => {
       const image = new Image();
       image.onload = () => {
-        this.ready = true;
+        loadedImages++;
+        if (loadedImages === paths.size) {
+          this.ready = true;
+        }
       };
       image.src = path;
       this.images[path] = image;
