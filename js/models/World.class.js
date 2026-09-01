@@ -16,7 +16,6 @@ class World {
     this.level = createLevel1(this);
     this.character = new Character(this);
 
-    this.draw();
   }
 
   draw() {
@@ -34,7 +33,6 @@ class World {
     this.ctx.restore();
 
     this.drawParallaxObjects(this.level.landscape.grass);
-
     requestAnimationFrame(() => this.draw());
   }
 

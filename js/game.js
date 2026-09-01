@@ -1,8 +1,10 @@
 let canvas;
 let world;
+let game;
 
 function init() {
   canvas = document.getElementById("canvas");
-  world = new World(canvas);
-  window.world = world;
+  game = new Game(canvas);
+  window.game = game;
+  game.start();
 }
