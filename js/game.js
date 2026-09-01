@@ -1,5 +1,4 @@
 let canvas;
-let world;
 let game;
 
 function init() {

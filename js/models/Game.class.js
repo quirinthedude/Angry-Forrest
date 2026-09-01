@@ -28,8 +28,7 @@ class Game {
     this.startGameSong();
 
     this.world = new World(this.canvas);
-    world = this.world;
-    window.world = this.world;
+
     this.state = "playing";
     this.setGameplayUiVisible(true);
     this.world.draw();
