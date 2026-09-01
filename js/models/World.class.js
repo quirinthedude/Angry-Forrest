@@ -9,13 +9,13 @@ class World {
   collisionDebug = false;
   //
 
-  constructor(canvas) {
+  constructor(canvas, game) {
     this.canvas = canvas;
+    this.game = game;
     this.ctx = canvas.getContext("2d");
 
     this.level = createLevel1(this);
     this.character = new Character(this);
-
   }
 
   draw() {
@@ -96,5 +96,21 @@ class World {
       this.drawObject(object);
       this.ctx.restore();
     });
+  }
+
+  characterDied() {
+    this.game.endGame();
+  }
+
+  endGame() {
+    if (this.state === "gameOver") return;
+
+    this.state = "gameOver";
+
+    this.gameSong.pause();
+    this.gameSong.currentTime = 0;
+
+    this.funeralSong.currentTime = 0;
+    this.funeralSong.play();
   }
 }

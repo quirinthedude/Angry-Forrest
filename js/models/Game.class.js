@@ -5,9 +5,11 @@ class Game {
   constructor(canvas) {
     this.canvas = canvas;
     this.intro = new IntroScene(canvas);
+    this.world = new World(this.canvas, this);
     this.setGameplayUiVisible(false);
     this.titleSong = new Audio("/audio/title_song.mp3");
     this.gameSong = new Audio("./audio/game_song.mp3");
+    this.funeralSong = new Audio("./audio/Mourning Brass - 2.mp3");
   }
 
   start() {

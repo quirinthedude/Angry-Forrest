@@ -30,11 +30,13 @@ class Character extends MovableObject {
     "./img/character/leaf/animation_leaf_",
     18,
   );
+  DEAD_IMAGE = "./img/character/dead/6.png";
   currentImage = 0;
   wantsToWalk = false;
   groundY = 305;
   walkSpeed = 1.5;
   airSpeed = 5;
+  isDead = false;
 
   constructor(world) {
     super();
@@ -55,6 +57,7 @@ class Character extends MovableObject {
     this.walkingSound.loop = true;
     this.jumpSound = new Audio("/audio/ent_jump.mp3");
     this.hurtSound = new Audio("/audio/ent_hurt.mp3");
+    this.deathSound = new Audio("./audio/Mourning Brass - 2.mp3");
     this.currentAnimation = this.IMAGES_IDLE;
     //remove in time
     this.collisionDebug = true;
@@ -63,6 +66,7 @@ class Character extends MovableObject {
 
   moveCharacter() {
     setInterval(() => {
+      if (this.isDead) return;
       let wantsToWalk = this.world.keyboard.left || this.world.keyboard.right;
 
       this.handleHorizontalMovement();
@@ -121,10 +125,16 @@ class Character extends MovableObject {
   }
 
   characterDies() {
-    this.energy = 0;
-    console.log("dead!");
+    if (this.isDead) return;
 
-    // Implement character death logic here
+    this.isDead = true;
+    this.energy = 0;
+
+    this.stopWalkingSound();
+    this.stopAnimation();
+    this.loadImage(this.DEAD_IMAGE);
+
+    this.world.characterDied();
   }
 
   updateCharacterEnergyBar() {
@@ -151,6 +161,7 @@ class Character extends MovableObject {
    * compares the current intent with the stored animation state.
    */
   updateAnimation(wantsToWalk) {
+    if (this.isDead) return;
     if (this.isHurt()) {
       this.setAnimation(this.IMAGES_HURT, 100);
       this.stopWalkingSound();
