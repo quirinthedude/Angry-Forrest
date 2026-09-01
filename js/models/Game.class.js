@@ -7,6 +7,7 @@ class Game {
     this.intro = new IntroScene(canvas);
     this.setGameplayUiVisible(false);
     this.titleSong = new Audio("/audio/title_song.mp3");
+    this.gameSong = new Audio("./audio/game_song.mp3");
   }
 
   start() {
@@ -23,6 +24,9 @@ class Game {
 
   startWorld() {
     this.intro.stop();
+
+    this.startGameSong();
+
     this.world = new World(this.canvas);
     world = this.world;
     window.world = this.world;
@@ -57,5 +61,13 @@ class Game {
     if (event.key === "ArrowLeft") this.world.keyboard.left = false;
     if (event.key === "ArrowRight") this.world.keyboard.right = false;
     if (event.key === "ArrowUp") this.world.keyboard.jump = false;
+  }
+
+  startGameSong() {
+    this.titleSong.pause();
+    this.titleSong.currentTime = 0;
+
+    this.gameSong.loop = true;
+    this.gameSong.play();
   }
 }
