@@ -63,14 +63,14 @@ class GameOver {
 
     if (this.x <= targetX) {
       this.x = targetX;
-      this.state = "GameOverWait";
+      this.state = "gameOverWait";
       this.waitStartedAt = Date.now();
     }
   }
 
   waitGameOver() {
     if (Date.now() - this.waitStartedAt >= 3000) {
-      this.state = "GameOverOut";
+      this.state = "gameOverOut";
     }
   }
 
@@ -119,7 +119,7 @@ class GameOver {
         this.x,
         this.y,
         this.width,
-        this.height,
+        this.gameOverHeight,
       );
     } else {
       this.drawPressEnter();
@@ -133,14 +133,14 @@ class GameOver {
         this.x,
         this.y,
         this.width,
-        this.height,
+        this.pressEnterHeight,
       );
       return;
     }
 
     const angle = Math.sin(Date.now() / 120) * 0.05;
     const centerX = this.x + this.width / 2;
-    const centerY = this.y + this.height / 2;
+    const centerY = this.y + this.pressEnterHeight / 2;
 
     this.ctx.save();
     this.ctx.translate(centerX, centerY);
@@ -149,9 +149,9 @@ class GameOver {
     this.ctx.drawImage(
       this.pressEnterImage,
       -this.width / 2,
-      -this.height / 2,
+      -this.pressEnterHeight / 2,
       this.width,
-      this.height,
+      this.pressEnterHeight,
     );
 
     this.ctx.restore();
