@@ -1,6 +1,7 @@
 class Game {
   state = "intro";
   world = null;
+  gameOver = null;
 
   constructor(canvas) {
     this.canvas = canvas;
@@ -74,6 +75,8 @@ class Game {
 
     this.funeralSong.currentTime = 0;
     this.funeralSong.play();
+
+    this.gameOver = new GameOver(this.canvas);
   }
 
   startGameSong() {

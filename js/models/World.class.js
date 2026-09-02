@@ -33,6 +33,12 @@ class World {
     this.ctx.restore();
 
     this.drawParallaxObjects(this.level.landscape.grass);
+
+    if (this.game.gameOver) {
+      this.game.gameOver.update();
+      this.game.gameOver.draw();
+    }
+
     requestAnimationFrame(() => this.draw());
   }
 
