@@ -5,8 +5,8 @@ class Game {
   constructor(canvas) {
     this.canvas = canvas;
     this.intro = new IntroScene(canvas);
-    this.world = new World(this.canvas, this);
     this.setGameplayUiVisible(false);
+
     this.titleSong = new Audio("/audio/title_song.mp3");
     this.gameSong = new Audio("./audio/game_song.mp3");
     this.funeralSong = new Audio("./audio/Mourning Brass - 2.mp3");
@@ -29,7 +29,7 @@ class Game {
 
     this.startGameSong();
 
-    this.world = new World(this.canvas);
+    this.world = new World(this.canvas, this);
 
     this.state = "playing";
     this.setGameplayUiVisible(true);
@@ -62,6 +62,18 @@ class Game {
     if (event.key === "ArrowLeft") this.world.keyboard.left = false;
     if (event.key === "ArrowRight") this.world.keyboard.right = false;
     if (event.key === "ArrowUp") this.world.keyboard.jump = false;
+  }
+
+  endGame() {
+    if (this.state === "gameOver") return;
+
+    this.state = "gameOver";
+
+    this.gameSong.pause();
+    this.gameSong.currentTime = 0;
+
+    this.funeralSong.currentTime = 0;
+    this.funeralSong.play();
   }
 
   startGameSong() {

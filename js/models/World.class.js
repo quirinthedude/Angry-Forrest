@@ -101,16 +101,4 @@ class World {
   characterDied() {
     this.game.endGame();
   }
-
-  endGame() {
-    if (this.state === "gameOver") return;
-
-    this.state = "gameOver";
-
-    this.gameSong.pause();
-    this.gameSong.currentTime = 0;
-
-    this.funeralSong.currentTime = 0;
-    this.funeralSong.play();
-  }
 }
