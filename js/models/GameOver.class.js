@@ -1,5 +1,5 @@
 class GameOver {
-  state = "entering";
+  state = "gameOverIn";
   x;
   y = 150;
   width = 420;
@@ -21,52 +21,139 @@ class GameOver {
     this.x = canvas.width;
 
     this.gameOverImage.onload = () => {
-      this.height =
+      this.gameOverHeight =
         this.width * (this.gameOverImage.height / this.gameOverImage.width);
-      this.ready = true;
+      this.gameOverReady = true;
+      this.updateReadyState();
+    };
+    this.pressEnterImage.onload = () => {
+      this.pressEnterHeight =
+        this.width * (this.pressEnterImage.height / this.pressEnterImage.width);
+      this.pressEnterReady = true;
+      this.updateReadyState();
     };
   }
+
+  updateReadyState() {
+    this.ready = this.gameOverReady && this.pressEnterReady;
+  }
+
   update() {
     if (!this.ready) return;
 
-    if (this.state === "entering") {
-      this.moveIn();
-    } else if (this.state === "waiting") {
-      this.wait();
-    } else if (this.state === "leaving") {
-      this.moveOut();
+    if (this.state === "gameOverIn") {
+      this.moveGameOverIn();
+    } else if (this.state === "gameOverWait") {
+      this.waitGameOver();
+    } else if (this.state === "gameOverOut") {
+      this.moveGameOverOut();
+    } else if (this.state === "pressEnterIn") {
+      this.movePressEnterIn();
+    } else if (this.state === "pressEnterWobble") {
+      this.waitPressEnter();
+    } else if (this.state === "pressEnterOut") {
+      this.movePressEnterOut();
     }
   }
 
-  moveIn() {
+  moveGameOverIn() {
     const targetX = (this.canvas.width - this.width) / 2;
 
     this.x -= this.speed;
 
     if (this.x <= targetX) {
       this.x = targetX;
-      this.state = "waiting";
+      this.state = "GameOverWait";
       this.waitStartedAt = Date.now();
     }
   }
 
-  wait() {
+  waitGameOver() {
     if (Date.now() - this.waitStartedAt >= 3000) {
-      this.state = "leaving";
+      this.state = "GameOverOut";
     }
   }
 
-  moveOut() {
+  moveGameOverOut() {
     this.x -= this.speed;
 
     if (this.x + this.width < 0) {
-      this.state = "finished";
+      this.state = "pressEnterIn";
+      this.x = this.canvas.width;
+    }
+  }
+
+  movePressEnterIn() {
+    const targetX = (this.canvas.width - this.width) / 2;
+
+    this.x -= this.speed;
+
+    if (this.x <= targetX) {
+      this.x = targetX;
+      this.state = "pressEnterWobble";
+      this.waitStartedAt = Date.now();
+    }
+  }
+
+  waitPressEnter() {
+    if (Date.now() - this.waitStartedAt >= 3000) {
+      this.state = "pressEnterOut";
+    }
+  }
+
+  movePressEnterOut() {
+    this.x -= this.speed;
+
+    if (this.x + this.width < 0) {
+      this.state = "gameOverIn";
+      this.x = this.canvas.width;
     }
   }
 
   draw() {
-    if (!this.ready || this.state === "finished") return;
+    if (!this.ready) return;
 
-    this.ctx.drawImage(this.image, this.x, this.y, this.width, this.height);
+    if (this.state.startsWith("gameOver")) {
+      this.ctx.drawImage(
+        this.gameOverImage,
+        this.x,
+        this.y,
+        this.width,
+        this.height,
+      );
+    } else {
+      this.drawPressEnter();
+    }
+  }
+
+  drawPressEnter() {
+    if (this.state !== "pressEnterWobble") {
+      this.ctx.drawImage(
+        this.pressEnterImage,
+        this.x,
+        this.y,
+        this.width,
+        this.height,
+      );
+      return;
+    }
+
+    const angle = Math.sin(Date.now() / 120) * 0.05;
+    const centerX = this.x + this.width / 2;
+    const centerY = this.y + this.height / 2;
+
+    this.ctx.save();
+    this.ctx.translate(centerX, centerY);
+    this.ctx.rotate(angle);
+
+    this.ctx.drawImage(
+      this.pressEnterImage,
+      -this.width / 2,
+      -this.height / 2,
+      this.width,
+      this.height,
+    );
+
+    this.ctx.restore();
   }
 }
