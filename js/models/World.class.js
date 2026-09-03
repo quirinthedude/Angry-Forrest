@@ -29,10 +29,10 @@ class World {
 
     this.drawObject(this.character);
     this.drawObjects(this.level.enemies);
-    this.drawParallaxObjects(this.level.fruits);
 
     this.ctx.restore();
 
+    this.drawParallaxObjects(this.level.fruits);
     this.drawParallaxObjects(this.level.landscape.grass);
 
     if (this.game.gameOver) {

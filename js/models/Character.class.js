@@ -38,6 +38,10 @@ class Character extends MovableObject {
   airSpeed = 5;
   isDead = false;
 
+  // lastFruitCollision = null;
+
+  activeFruitCollision = new Set();
+
   constructor(world) {
     super();
     this.world = world;
@@ -74,6 +78,20 @@ class Character extends MovableObject {
       this.updateVerticalMovement();
       this.updateCamera();
       this.handleCollision();
+      const fruits = this.checkFruitCollision();
+      const currentCollisions = new Set(fruits);
+
+      for (const fruit of fruits) {
+        if (!this.activeFruitCollision.has(fruit)) {
+          console.log("fruit collision", fruit);
+        }
+      }
+      this.activeFruitCollision = currentCollisions;
+      // if (fruit && fruit !== this.lastFruitCollision) {
+      //   console.log("fruit collision", fruit);
+      // }
+      // this.lastFruitCollision = fruit;
+
       this.updateAnimation(wantsToWalk);
     }, 1000 / 60);
   }
@@ -122,6 +140,40 @@ class Character extends MovableObject {
         this.characterDies();
       }
     }
+  }
+
+  checkFruitCollision() {
+    const collisions = [];
+    const characterOffsets = this.getCollisionOffsets();
+
+    const characterScreenX = this.x + this.world.cameraX;
+
+    const characterLeft = characterScreenX + characterOffsets.left;
+    const characterRight =
+      characterScreenX + this.width - characterOffsets.right;
+    const characterTop = this.y + characterOffsets.top;
+    const characterBottom = this.y + this.height - characterOffsets.bottom;
+
+    for (const fruit of this.world.level.fruits) {
+      const fruitOffsets = fruit.getCollisionOffsets();
+      const fruitScreenX = fruit.x + this.world.cameraX * fruit.parallaxFactor;
+
+      const fruitLeft = fruitScreenX + fruitOffsets.left;
+      const fruitRight = fruitScreenX + fruit.width - fruitOffsets.right;
+      const fruitTop = fruit.y + fruitOffsets.top;
+      const fruitBottom = fruit.y + fruit.height - fruitOffsets.bottom;
+
+      if (
+        characterRight > fruitLeft &&
+        characterLeft < fruitRight &&
+        characterBottom > fruitTop &&
+        characterTop < fruitBottom
+      ) {
+        collisions.push(fruit);
+      }
+    }
+
+    return collisions;
   }
 
   characterDies() {
