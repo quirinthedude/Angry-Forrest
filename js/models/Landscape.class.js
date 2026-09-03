@@ -1,7 +1,7 @@
 class Landscape {
   tileWidth = 865;
   tileCount = 5;
-  levelLength = this.tileCount * this.tileWidth;
+  levelLength = 100 + this.tileCount * this.tileWidth;
   backgroundobject = [
     ...createTiles(
       BackgroundObject,

@@ -29,6 +29,7 @@ class World {
 
     this.drawObject(this.character);
     this.drawObjects(this.level.enemies);
+    this.drawParallaxObjects(this.level.fruits);
 
     this.ctx.restore();
 
