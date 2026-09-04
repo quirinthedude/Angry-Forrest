@@ -1,10 +1,10 @@
 class Robot extends MovableObject {
   height = 260;
   width = 228;
-  topOffset = 80;
+  topOffset = 100;
   bottomOffset = 0;
   leftOffset = 20;
-  rightOffset = 40;
+  rightOffset = 65;
 
   IMAGES_IDLE = createAnimationImages("./img/robot-boss/Idle/idle_", 9);
   IMAGES_WALKING = createAnimationImages("./img/robot-boss/Walk/Walk_", 12);

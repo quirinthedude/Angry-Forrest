@@ -93,7 +93,7 @@ class Character extends MovableObject {
       this.activeFruitCollision = currentCollisions;
 
       this.world.thrownFruits.forEach((fruit) => fruit.update());
-
+      this.world.checkThrownFruitCollisions();
       this.updateAnimation(wantsToWalk);
     }, 1000 / 60);
   }

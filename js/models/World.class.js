@@ -110,4 +110,27 @@ class World {
   characterDied() {
     this.game.endGame();
   }
+
+  checkThrownFruitCollisions() {
+    for (let fruits = this.thrownFruits.length - 1; fruits >= 0; fruits--) {
+      const fruit = this.thrownFruits[fruits];
+
+      for (const enemy of this.level.enemies) {
+        if (fruit.isColliding(enemy)) {
+          console.log("enemy hit", enemy);
+
+          fruit.hit();
+
+          setTimeout(() => {
+            const index = this.thrownFruits.indexOf(fruit);
+            if (index !== -1) {
+              this.thrownFruits.splice(index, 1);
+            }
+          }, 360);
+
+          break;
+        }
+      }
+    }
+  }
 }
