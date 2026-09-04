@@ -19,3 +19,4 @@
 
 - sound bei werfen der fruit
 - animation des characters bei werfen der fruit
+- trifft die fruit keinen Gegner bleibt sie am Boden liegen und kann wieder aufgesammelt werden
