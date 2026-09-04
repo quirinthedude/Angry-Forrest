@@ -68,7 +68,7 @@ class Character extends MovableObject {
     //remove in time
     this.collisionDebug = true;
     //
-    this.fruitSound = new Audio("./audio/fruit.wav");
+    this.fruitSound = new Audio("./audio/fruit_louder.wav");
   }
 
   moveCharacter() {
