@@ -13,6 +13,7 @@
 - enter abfragen und Neustart
 - Trauermarsch loop
 - Grabstein immer auf festes y setzen
+- spiegelung von character ausschalten
 
 ### throw fruit
 
