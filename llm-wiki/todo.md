@@ -2,6 +2,8 @@
 
 ## Architektur / Cleanup
 
+- die collidingaufrufe sind momentan in character.move() -> sie müssen später von world untersucht werden
+
 ### Priorität: später
 
 - [ ] `TITLE_GLYPH_ALIASES` entweder tatsächlich in `ScrollingText` verwenden oder entfernen, falls die Alias-Funktion nicht gebraucht wird.
