@@ -94,6 +94,11 @@ class Character extends MovableObject {
 
       this.world.thrownFruits.forEach((fruit) => fruit.update());
       this.world.checkThrownFruitCollisions();
+      this.world.level.enemies.forEach((enemy) => {
+        if (enemy instanceof Gnome) {
+          enemy.updateKnockout();
+        }
+      });
       this.updateAnimation(wantsToWalk);
     }, 1000 / 60);
   }

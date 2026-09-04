@@ -6,6 +6,7 @@ class Gnome extends MovableObject {
   topOffset = 35;
   bottomOffset = 0;
   nativeDirection = 1;
+  isKnockedOut = false;
 
   IMAGES_IDLE = createAnimationImages("./img/gnome/Idle/Gnome_Idle_", 18);
   IMAGES_IDLE_BLINKING = createAnimationImages(
@@ -103,6 +104,8 @@ class Gnome extends MovableObject {
 
   moveGnome() {
     setInterval(() => {
+      if (this.isKnockedOut) return;
+
       if (this.x < this.minX) {
         this.direction = 1;
       } else if (this.x > this.maxX) {
@@ -110,5 +113,26 @@ class Gnome extends MovableObject {
       }
       this.move(this.speed);
     }, 20); // Move every 2 milliseconds
+  }
+
+  hitByFruit(direction) {
+    if (this.isKnockedOut) return;
+
+    this.isKnockedOut = true;
+
+    this.stopAnimation();
+
+    this.direction = direction;
+    this.speedX = 6;
+    this.speedY = -14;
+    this.acceleration = 0.6;
+  }
+
+  updateKnockout() {
+    if (!this.isKnockedOut) return;
+
+    this.x += this.speedX * this.direction;
+    this.y += this.speedY;
+    this.speedY += this.acceleration;
   }
 }

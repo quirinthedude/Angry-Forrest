@@ -121,6 +121,10 @@ class World {
 
           fruit.hit();
 
+          if (enemy instanceof Gnome) {
+            enemy.hitByFruit(fruit.direction);
+          }
+
           setTimeout(() => {
             const index = this.thrownFruits.indexOf(fruit);
             if (index !== -1) {
