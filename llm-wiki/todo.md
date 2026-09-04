@@ -13,3 +13,8 @@
 - enter abfragen und Neustart
 - Trauermarsch loop
 - Grabstein immer auf festes y setzen
+
+### throw fruit
+
+- sound bei werfen der fruit
+- animation des characters bei werfen der fruit
