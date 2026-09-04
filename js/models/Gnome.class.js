@@ -89,6 +89,7 @@ class Gnome extends MovableObject {
     this.loadImages(this.IMAGES_SLIDING);
     this.loadImages(this.IMAGES_FALLING_DOWN);
     this.loadImages(this.IMAGES_DYING);
+    this.deathSound = new Audio("./audio/gnome_death.mp3");
     this.x = x;
     this.y = y;
     this.minX = minX;
@@ -121,6 +122,9 @@ class Gnome extends MovableObject {
     this.isKnockedOut = true;
 
     this.stopAnimation();
+
+    this.deathSound.currentTime = 0;
+    this.deathSound.play();
 
     this.direction = direction;
     this.speedX = 6;
