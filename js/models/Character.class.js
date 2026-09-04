@@ -37,6 +37,7 @@ class Character extends MovableObject {
   walkSpeed = 1.5;
   airSpeed = 5;
   isDead = false;
+  maxFruitInventory = 3;
   fruitInventory = 0;
 
   // lastFruitCollision = null;
@@ -262,6 +263,8 @@ class Character extends MovableObject {
   }
 
   collectFruit(fruit) {
+    if (this.fruitInventory >= this.maxFruitInventory) return;
+
     const index = this.world.level.fruits.indexOf(fruit);
 
     if (index === -1) return;
@@ -274,5 +277,17 @@ class Character extends MovableObject {
     this.fruitSound.play();
 
     console.log("fruit inventory:", this.fruitInventory);
+    this.updateFruitInventory();
+  }
+
+  updateFruitInventory() {
+    const slots = document.querySelectorAll(".fruit-slot");
+
+    slots.forEach((slot, index) => {
+      slot.src =
+        index < this.fruitInventory
+          ? "./img/objects/fruit.png"
+          : "./img/objects/fruit_bw.png";
+    });
   }
 }

@@ -62,3 +62,19 @@ canvas {
   pointer-events: none;
   z-index: 10;
 }
+
+.fruit-inventory {
+  position: absolute;
+  bottom: 12px;
+  left: 50%;
+  transform: translateX(-50%);
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  z-index: 3;
+}
+
+.fruit-inventory img {
+  width: 32px;
+  height: auto;
+}
