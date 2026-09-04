@@ -37,6 +37,7 @@ class Character extends MovableObject {
   walkSpeed = 1.5;
   airSpeed = 5;
   isDead = false;
+  fruitInventory = 0;
 
   // lastFruitCollision = null;
 
@@ -66,6 +67,7 @@ class Character extends MovableObject {
     //remove in time
     this.collisionDebug = true;
     //
+    this.fruitSound = new Audio("./audio/fruit.wav");
   }
 
   moveCharacter() {
@@ -83,14 +85,10 @@ class Character extends MovableObject {
 
       for (const fruit of fruits) {
         if (!this.activeFruitCollision.has(fruit)) {
-          console.log("fruit collision", fruit);
+          this.collectFruit(fruit);
         }
       }
       this.activeFruitCollision = currentCollisions;
-      // if (fruit && fruit !== this.lastFruitCollision) {
-      //   console.log("fruit collision", fruit);
-      // }
-      // this.lastFruitCollision = fruit;
 
       this.updateAnimation(wantsToWalk);
     }, 1000 / 60);
@@ -201,9 +199,6 @@ class Character extends MovableObject {
     this.hurtSound.play();
 
     console.log("hurt!", this.energy);
-    // play animation character hurt
-    // play sound hurt
-    // timeout of 1 s, blinking therewhile
   }
 
   /**
@@ -264,5 +259,20 @@ class Character extends MovableObject {
 
   isHurt() {
     return Date.now() - this.lastHit < 1000;
+  }
+
+  collectFruit(fruit) {
+    const index = this.world.level.fruits.indexOf(fruit);
+
+    if (index === -1) return;
+
+    this.world.level.fruits.splice(index, 1);
+
+    this.fruitInventory++;
+
+    this.fruitSound.currentTime = 0;
+    this.fruitSound.play();
+
+    console.log("fruit inventory:", this.fruitInventory);
   }
 }
