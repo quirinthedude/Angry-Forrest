@@ -78,6 +78,7 @@ class Character extends MovableObject {
 
       this.handleHorizontalMovement();
       this.handleJump();
+      this.throwFruit();
       this.updateVerticalMovement();
       this.updateCamera();
       this.handleCollision();
@@ -90,6 +91,8 @@ class Character extends MovableObject {
         }
       }
       this.activeFruitCollision = currentCollisions;
+
+      this.world.thrownFruits.forEach((fruit) => fruit.update());
 
       this.updateAnimation(wantsToWalk);
     }, 1000 / 60);
@@ -289,5 +292,22 @@ class Character extends MovableObject {
           ? "./img/objects/fruit.png"
           : "./img/objects/fruit_bw.png";
     });
+  }
+
+  throwFruit() {
+    if (!this.world.keyboard.throw) return;
+    if (this.fruitInventory <= 0) return;
+    this.fruitInventory--;
+    this.updateFruitInventory();
+
+    const fruit = new ThrownFruit(
+      this.x + this.width / 2,
+      this.y + 50,
+      this.direction,
+    );
+
+    this.world.thrownFruits.push(fruit);
+
+    this.world.keyboard.throw = false;
   }
 }

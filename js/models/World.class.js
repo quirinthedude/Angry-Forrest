@@ -5,6 +5,7 @@ class World {
   ctx;
   canvas;
   cameraX = 0;
+  thrownFruits = [];
   // needs to be removed in time
   collisionDebug = false;
   //
@@ -29,6 +30,7 @@ class World {
 
     this.drawObject(this.character);
     this.drawObjects(this.level.enemies);
+    this.drawObjects(this.thrownFruits);
 
     this.ctx.restore();
 

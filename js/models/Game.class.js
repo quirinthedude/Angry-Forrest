@@ -55,6 +55,7 @@ class Game {
     if (event.key === "ArrowLeft") this.world.keyboard.left = true;
     if (event.key === "ArrowRight") this.world.keyboard.right = true;
     if (event.key === "ArrowUp") this.world.keyboard.jump = true;
+    if (event.code === "Space") this.world.keyboard.throw = true;
   }
 
   handleKeyUp(event) {
@@ -63,6 +64,7 @@ class Game {
     if (event.key === "ArrowLeft") this.world.keyboard.left = false;
     if (event.key === "ArrowRight") this.world.keyboard.right = false;
     if (event.key === "ArrowUp") this.world.keyboard.jump = false;
+    if (event.code === "Space") this.world.keyboard.throw = false;
   }
 
   endGame() {
