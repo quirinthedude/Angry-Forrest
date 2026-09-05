@@ -13,6 +13,33 @@ body {
   align-items: center;
 }
 
+.pre-intro {
+  position: fixed;
+  inset: 0;
+  z-index: 100;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  gap: 24px;
+  background: black;
+  color: white;
+  cursor: pointer;
+}
+
+.pre-intro img {
+  max-width: min(80vw, 641px);
+  max-height: 70vh;
+}
+
+.pre-intro span {
+  font-size: 1.5rem;
+}
+
+.pre-intro[hidden] {
+  display: none;
+}
+
 .game-wrapper {
   position: relative;
   width: 866px;

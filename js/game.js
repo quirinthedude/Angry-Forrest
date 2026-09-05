@@ -2,8 +2,17 @@ let canvas;
 let game;
 
 function init() {
-  canvas = document.getElementById("canvas");
-  game = new Game(canvas);
-  window.game = game;
-  game.start();
+  const preIntro = document.getElementById("pre-intro");
+  preIntro.addEventListener(
+    "click",
+    () => {
+      preIntro.hidden = true;
+
+      canvas = document.getElementById("canvas");
+      game = new Game(canvas);
+      window.game = game;
+      game.start();
+    },
+    { once: true },
+  );
 }
