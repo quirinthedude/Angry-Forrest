@@ -63,7 +63,7 @@ class World {
         object.height,
       );
     }
-    if (object.collisionDebug) {
+    if (this.collisionDebug) {
       const offsets = object.getCollisionOffsets
         ? object.getCollisionOffsets()
         : {
@@ -114,6 +114,7 @@ class World {
   checkThrownFruitCollisions() {
     for (let fruits = this.thrownFruits.length - 1; fruits >= 0; fruits--) {
       const fruit = this.thrownFruits[fruits];
+      if (fruit.isHit) continue;
 
       for (const enemy of this.level.enemies) {
         if (fruit.isColliding(enemy)) {
@@ -123,6 +124,8 @@ class World {
 
           if (enemy instanceof Gnome) {
             enemy.hitByFruit(fruit.direction);
+          } else if (enemy instanceof Robot) {
+            enemy.hitByFruit();
           }
 
           setTimeout(() => {

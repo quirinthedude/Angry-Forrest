@@ -54,9 +54,7 @@ class Robot extends MovableObject {
     this.activationInterval = setInterval(() => {
       this.checkActivation();
     }, 100);
-    //remove in time
-    this.collisionDebug = true;
-    //
+    this.energy = 100;
   }
 
   checkActivation() {
@@ -91,5 +89,10 @@ class Robot extends MovableObject {
         }, 800);
       }, 500);
     }
+  }
+
+  hitByFruit() {
+    this.energy = Math.max(0, this.energy - 34);
+    console.log("robot energy:", this.energy);
   }
 }
