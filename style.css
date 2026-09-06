@@ -62,6 +62,27 @@ body {
   z-index: 20;
 }
 
+.robot-energy {
+  position: absolute;
+  right: 5px;
+  top: 50%;
+  transform: translateY(-50%);
+}
+
+.r-energy-frame {
+  position: relative;
+  z-index: 60;
+}
+
+.r-energy {
+  position: absolute;
+  right: 24px;
+  top: 133px;
+  height: 130px;
+  width: 31px;
+  z-index: 50;
+}
+
 .character-energy img {
   width: 72px;
   height: 217px;
