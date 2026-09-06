@@ -50,6 +50,9 @@ class Robot extends MovableObject {
     this.x = x;
     this.y = y;
     this.acceleration = 0.5;
+    this.damageSound = new Audio("/audio/robot_damage.mp3");
+    this.deathSound = new Audio("/audio/robot_death.mp3");
+    this.attackSound = new Audio("/audio/robot_attack.mp3");
 
     this.activationInterval = setInterval(() => {
       this.checkActivation();
@@ -94,6 +97,14 @@ class Robot extends MovableObject {
   hitByFruit() {
     this.energy = Math.max(0, this.energy - 34);
     this.updateRobotEnergyBar();
+    this.damageSound.currentTime = 0;
+    this.damageSound.play();
+    this.animateOnce(this.IMAGES_IDLE, 100);
+    this.animateOnce(this.IMAGES_TURNING_TO_RUN, 100);
+
+    if (this.energy <= 0) {
+      this.die();
+    }
 
     console.log("robot energy:", this.energy);
   }
@@ -107,5 +118,18 @@ class Robot extends MovableObject {
 
     energyBar.style.height = `${height}px`;
     energyBar.style.top = `${bottom - height}px`;
+  }
+
+  die() {
+    this.stopAnimation();
+
+    this.deathSound.currentTime = 0;
+    this.deathSound.play();
+
+    this.animateOnce(this.IMAGES_DYING, 100);
+
+    setTimeout(() => {
+      this.world.game.endGame();
+    }, 5000);
   }
 }
