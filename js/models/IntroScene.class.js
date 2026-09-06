@@ -10,7 +10,7 @@ class IntroScene {
     this.scrollingText = new ScrollingText(
       this.ctx,
       "WELCOME TO ANGRY FORREST - USE ARROW KEYS TO MOVE - PRESS ENTER TO START",
-      { height: 38, speed: 42, y: this.canvas.height - 28 },
+      { height: 38, speed: 62, y: this.canvas.height - 28 },
     );
   }
 

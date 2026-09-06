@@ -40,6 +40,8 @@ class Game {
   setGameplayUiVisible(visible) {
     const energyBar = document.querySelector(".character-energy");
     if (energyBar) energyBar.hidden = !visible;
+    const energyBarR = document.querySelector(".robot-energy");
+    if (energyBarR) energyBarR.hidden = !visible;
   }
 
   handleKeyDown(event) {

@@ -78,8 +78,8 @@ body {
 .r-energy {
   position: absolute;
   right: 24px;
-  top: 90px;
-  height: 130px;
+  top: 32px;
+  height: 170px;
   width: 31px;
   z-index: 50;
 }

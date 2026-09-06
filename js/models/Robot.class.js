@@ -93,6 +93,19 @@ class Robot extends MovableObject {
 
   hitByFruit() {
     this.energy = Math.max(0, this.energy - 34);
+    this.updateRobotEnergyBar();
+
     console.log("robot energy:", this.energy);
+  }
+
+  updateRobotEnergyBar() {
+    const energyBar = document.querySelector(".r-energy");
+    const maxHeight = 170;
+    const bottom = 202;
+
+    const height = (this.energy / 100) * maxHeight;
+
+    energyBar.style.height = `${height}px`;
+    energyBar.style.top = `${bottom - height}px`;
   }
 }
