@@ -99,6 +99,11 @@ class Character extends MovableObject {
           enemy.updateKnockout();
         }
       });
+      const landedFruit = this.checkLandedFruitCollision();
+
+      if (landedFruit) {
+        this.collectLandedFruit(landedFruit);
+      }
       this.updateAnimation(wantsToWalk);
     }, 1000 / 60);
   }
@@ -314,5 +319,30 @@ class Character extends MovableObject {
     this.world.thrownFruits.push(fruit);
 
     this.world.keyboard.throw = false;
+  }
+
+  checkLandedFruitCollision() {
+    for (const fruit of this.world.thrownFruits) {
+      if (fruit.state === "landed" && this.isColliding(fruit)) {
+        return fruit;
+      }
+    }
+    return null;
+  }
+
+  collectLandedFruit(fruit) {
+    if (this.fruitInventory >= this.maxFruitInventory) return;
+
+    const index = this.world.thrownFruits.indexOf(fruit);
+
+    if (index === -1) return;
+
+    this.world.thrownFruits.splice(index, 1);
+
+    this.fruitInventory++;
+    this.updateFruitInventory();
+
+    this.fruitSound.currentTime = 0;
+    this.fruitSound.play();
   }
 }
