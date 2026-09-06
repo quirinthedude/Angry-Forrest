@@ -114,7 +114,7 @@ class World {
   checkThrownFruitCollisions() {
     for (let fruits = this.thrownFruits.length - 1; fruits >= 0; fruits--) {
       const fruit = this.thrownFruits[fruits];
-      if (fruit.isHit) continue;
+      if (fruit.state !== "flying") continue;
 
       for (const enemy of this.level.enemies) {
         if (fruit.isColliding(enemy)) {
@@ -133,7 +133,7 @@ class World {
             if (index !== -1) {
               this.thrownFruits.splice(index, 1);
             }
-          }, 360);
+          }, 240);
 
           break;
         }

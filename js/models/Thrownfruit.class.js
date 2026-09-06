@@ -11,7 +11,8 @@ class ThrownFruit extends MovableObject {
   speedY = -12;
   acceleration = 0.48;
 
-  isHit = false;
+  state = "flying";
+  groundY = 420;
 
   IMAGES_HIT = [
     "./img/objects/hit1.png",
@@ -30,17 +31,28 @@ class ThrownFruit extends MovableObject {
   }
 
   update() {
-    if (this.isHit) return;
+    if (this.state !== "flying") return;
 
     this.x += this.speedX * this.direction;
     this.y += this.speedY;
     this.speedY += this.acceleration;
+
+    if (this.y >= this.groundY) {
+      this.land();
+    }
+  }
+
+  land() {
+    this.state = "landed";
+    this.y = this.groundY;
+    this.speedX = 0;
+    this.speedY = 0;
   }
 
   hit() {
-    if (this.isHit) return;
+    if (this.state !== "flying") return;
 
-    this.isHit = true;
-    this.animateOnce(this.IMAGES_HIT, 120);
+    this.state = "hit";
+    this.animateOnce(this.IMAGES_HIT, 80);
   }
 }
