@@ -67,6 +67,7 @@ body {
   right: 5px;
   top: 50%;
   transform: translateY(-50%);
+  z-index: 10;
 }
 
 .r-energy-frame {
@@ -77,7 +78,7 @@ body {
 .r-energy {
   position: absolute;
   right: 24px;
-  top: 133px;
+  top: 90px;
   height: 130px;
   width: 31px;
   z-index: 50;
