@@ -5,6 +5,7 @@ class Robot extends MovableObject {
   bottomOffset = 0;
   leftOffset = 20;
   rightOffset = 65;
+  isDead = false;
 
   IMAGES_IDLE = createAnimationImages("./img/robot-boss/Idle/idle_", 9);
   IMAGES_WALKING = createAnimationImages("./img/robot-boss/Walk/Walk_", 12);
@@ -95,16 +96,25 @@ class Robot extends MovableObject {
   }
 
   hitByFruit() {
+    const sparingPartner = this.world.character;
     this.energy = Math.max(0, this.energy - 34);
     this.updateRobotEnergyBar();
-    this.damageSound.currentTime = 0;
-    this.damageSound.play();
-    this.animateOnce(this.IMAGES_IDLE, 100);
-    this.animateOnce(this.IMAGES_TURNING_TO_RUN, 100);
 
     if (this.energy <= 0) {
       this.die();
+      return;
     }
+
+    this.damageSound.currentTime = 0;
+    this.damageSound.play();
+
+    this.direction = sparingPartner.x < this.x ? 1 : -1;
+
+    this.animateOnce(this.IMAGES_IDLE, 100);
+
+    setTimeout(() => {
+      this.animateOnce(this.IMAGES_TURNING_TO_RUN, 100);
+    }, 900);
 
     console.log("robot energy:", this.energy);
   }
@@ -121,6 +131,9 @@ class Robot extends MovableObject {
   }
 
   die() {
+    if (this.isDead) return;
+
+    this.isDead = true;
     this.stopAnimation();
 
     this.deathSound.currentTime = 0;
