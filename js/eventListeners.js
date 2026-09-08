@@ -1,7 +1,7 @@
 window.addEventListener("keydown", function (event) {
-  if (game) game.handleKeyDown(event);
+  if (window.game) this.window.game.handleKeyDown(event);
 });
 
 window.addEventListener("keyup", function (event) {
-  if (game) game.handleKeyUp(event);
+  if (window.game) window.game.handleKeyUp(event);
 });
