@@ -11,7 +11,7 @@ class Robot extends MovableObject {
   isFighting = false;
   fightState = "inactive";
   chargeTargetX = null;
-  isTurning = false;
+  // isTurning = false;
 
   IMAGES_IDLE = createAnimationImages("./img/robot-boss/Idle/idle_", 9);
   IMAGES_WALKING = createAnimationImages("./img/robot-boss/Walk/Walk_", 12);
@@ -153,7 +153,7 @@ class Robot extends MovableObject {
     } else if (this.fightState === "charge") {
       this.chargeTowardsTarget();
     } else if (this.fightState === "waiting") {
-      this.startTurn();
+      this.checkNextAttack();
     }
   }
 
@@ -185,24 +185,24 @@ class Robot extends MovableObject {
     }
   }
 
-  startTurn() {
-    if (this.isTurning) return;
+  // startTurn() {
+  //   if (this.isTurning) return;
 
-    this.isTurning = true;
-    this.animateOnce(this.IMAGES_TURNING_TO_RUN, 200);
+  //   this.isTurning = true;
+  //   this.animateOnce(this.IMAGES_TURNING_TO_RUN, 200);
 
-    setTimeout(() => {
-      if (this.isDead) return;
+  //   setTimeout(() => {
+  //     if (this.isDead) return;
 
-      this.direction *= -1;
+  //     this.direction *= -1;
 
-      this.isTurning = false;
-      this.fightState = "turned";
-      this.setAnimation(this.IMAGES_ATTACKING);
+  //     this.isTurning = false;
+  //     this.fightState = "turned";
+  //     this.setAnimation(this.IMAGES_ATTACKING);
 
-      console.log("robot turned");
-    }, 900);
-  }
+  //     console.log("robot turned");
+  //   }, 900);
+  // }
 
   faceCharacter(character) {
     this.direction = character.x < this.x ? 1 : -1;
@@ -223,10 +223,9 @@ class Robot extends MovableObject {
   }
 
   prepareAttack() {
-    const character = this.character;
+    const character = this.world.character;
 
     this.faceCharacter(character);
-
     this.throwBomb();
 
     this.fightState = "charge";
