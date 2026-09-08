@@ -21,3 +21,7 @@
 
 - sound bei werfen der fruit
 - animation des characters bei werfen der fruit
+
+### animateOnce()
+
+- stoppt ein laufendes Interval, aktualisiert aber currentAnimation nicht. Dadurch kann setAnimation() später fälschlich denken, eine Animation laufe noch. Das ist ein echter kleiner Architekturfehler in MovableObject
