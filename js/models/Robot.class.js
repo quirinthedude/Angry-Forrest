@@ -6,6 +6,8 @@ class Robot extends MovableObject {
   leftOffset = 20;
   rightOffset = 65;
   isDead = false;
+  lastBombThrow = 0;
+  bombCooldown = 2000;
 
   IMAGES_IDLE = createAnimationImages("./img/robot-boss/Idle/idle_", 9);
   IMAGES_WALKING = createAnimationImages("./img/robot-boss/Walk/Walk_", 12);
@@ -96,7 +98,6 @@ class Robot extends MovableObject {
   }
 
   hitByFruit() {
-    const sparingPartner = this.world.character;
     this.energy = Math.max(0, this.energy - 34);
     this.updateRobotEnergyBar();
 
@@ -108,14 +109,13 @@ class Robot extends MovableObject {
     this.damageSound.currentTime = 0;
     this.damageSound.play();
 
-    this.direction = sparingPartner.x < this.x ? 1 : -1;
-
     this.animateOnce(this.IMAGES_IDLE, 100);
+    this.faceCharacter(this.world.character);
 
     setTimeout(() => {
       this.animateOnce(this.IMAGES_TURNING_TO_RUN, 100);
     }, 900);
-
+    // this.runTowardsCharacter();
     console.log("robot energy:", this.energy);
   }
 
@@ -144,5 +144,36 @@ class Robot extends MovableObject {
     setTimeout(() => {
       this.world.game.endGame();
     }, 5000);
+  }
+
+  updateFightBehaviour() {
+    if (this.isDead) return;
+
+    const character = this.world.character;
+    const distance = Math.abs(this.x - character.x);
+
+    if (distance > 250) {
+      this.faceCharacter(character);
+      this.throwBomb();
+      this.runTowardsCharacter();
+    }
+  }
+
+  faceCharacter(character) {
+    this.direction = character.x < this.x ? 1 : -1;
+  }
+
+  runTowardsCharacter() {
+    this.setAnimation(this.IMAGES_RUN_ATTACKING, 100);
+    this.move(2);
+  }
+
+  throwBomb() {
+    const now = Date.now();
+
+    if (now - this.lastBombThrow < this.bombCooldown) return;
+    this.lastBombThrow = now;
+
+    console.log("Throw Bomb!");
   }
 }

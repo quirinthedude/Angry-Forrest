@@ -98,6 +98,10 @@ class Character extends MovableObject {
         if (enemy instanceof Gnome) {
           enemy.updateKnockout();
         }
+
+        if (enemy instanceof Robot) {
+          enemy.updateFightBehaviour();
+        }
       });
       const landedFruit = this.checkLandedFruitCollision();
 
