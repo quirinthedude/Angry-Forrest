@@ -8,6 +8,7 @@ class Robot extends MovableObject {
   isDead = false;
   lastBombThrow = 0;
   bombCooldown = 2000;
+  isFighting = false;
 
   IMAGES_IDLE = createAnimationImages("./img/robot-boss/Idle/idle_", 9);
   IMAGES_WALKING = createAnimationImages("./img/robot-boss/Walk/Walk_", 12);
@@ -92,7 +93,8 @@ class Robot extends MovableObject {
 
         setTimeout(() => {
           this.animate(this.IMAGES_RUN_ATTACKING, 100);
-        }, 800);
+          this.isFighting = true;
+        }, 900);
       }, 500);
     }
   }
@@ -147,7 +149,7 @@ class Robot extends MovableObject {
   }
 
   updateFightBehaviour() {
-    if (this.isDead) return;
+    if (!this.isFighting || this.isDead) return;
 
     const character = this.world.character;
     const distance = Math.abs(this.x - character.x);
