@@ -1,9 +1,9 @@
 /**
  * Base class for all drawable game objects.
  *
- * Stores position, dimensions and the currently displayed image.
- * It also tracks image loading so the game can wait until all required
- * assets are available before rendering starts.
+ * A drawable object manages its position, dimensions and currently displayed
+ * image. It also collects image-loading promises so {@link World} can wait
+ * for all required assets before rendering starts.
  */
 class DrawableObject {
   x;
@@ -11,13 +11,22 @@ class DrawableObject {
   width;
   height;
   img;
+
+  /**
+   * Image-loading promises collected for this object.
+   *
+   * Each promise settles when one tracked image has loaded or failed. The
+   * collection allows {@link World} to wait for all assets used by the game.
+   *
+   * @type {Promise<Event>[]}
+   */
   imagePromises = [];
 
   /**
    * Loads an image and assigns it as the currently displayed image.
    *
-   * The loading process is registered before the image source is set,
-   * allowing the game to wait for the asset later.
+   * The image-loading process is registered before the image source is set so
+   * the asset can be included when {@link World} waits for required images.
    *
    * @param {string} path Path to the image asset.
    * @returns {void}
@@ -31,8 +40,9 @@ class DrawableObject {
   /**
    * Registers the loading state of an image.
    *
-   * The created promise resolves when the image has loaded and rejects
-   * if loading the asset fails.
+   * The created promise resolves when the image has loaded and rejects if
+   * loading the asset fails. The promise is added to {@link imagePromises} so
+   * it can later be included in the collective wait operation.
    *
    * @param {HTMLImageElement} image Image element to track.
    * @param {string} path Path used for the error message if loading fails.
@@ -55,6 +65,9 @@ class DrawableObject {
   /**
    * Waits until all images registered by this object have finished loading.
    *
+   * {@link World} uses this method to wait for every drawable object's
+   * collected assets before marking the world as ready.
+   *
    * @returns {Promise<Event[]>} Promise that resolves when all tracked images
    * are loaded.
    */
@@ -65,12 +78,12 @@ class DrawableObject {
   /**
    * Determines whether the object should be mirrored horizontally.
    *
-   * Child classes can override this method when their orientation depends
-   * on their movement direction.
+   * The base implementation returns `false`. Child classes can override this
+   * method when their orientation depends on their movement direction.
    *
    * @returns {boolean} True if the object should be mirrored.
    */
   shouldMirror() {
-    return false; // default value, can be overridden in child classes
+    return false;
   }
 }
