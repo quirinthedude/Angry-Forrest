@@ -54,7 +54,6 @@ class Game {
   }
 
   handleKeyDown(event) {
-    if (this.state !== "playing") return;
     if (this.state === "intro") {
       if (event.key === "Enter") {
         event.preventDefault();
@@ -63,6 +62,8 @@ class Game {
       }
       return;
     }
+
+    if (this.state !== "playing") return;
 
     if (event.key === "ArrowLeft") this.world.keyboard.left = true;
     if (event.key === "ArrowRight") this.world.keyboard.right = true;
