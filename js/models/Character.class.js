@@ -4,7 +4,7 @@ class Character extends MovableObject {
   leftOffset = 12;
   rightOffset = 36;
   topOffset = 10;
-  bottomOffset = 16;
+  bottomOffset = 55;
 
   IMAGES_IDLE = createAnimationImages(
     "./img/character/idle/animation_idle_",
