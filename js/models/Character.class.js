@@ -93,6 +93,7 @@ class Character extends MovableObject {
       this.activeFruitCollision = currentCollisions;
 
       this.world.thrownFruits.forEach((fruit) => fruit.update());
+      this.world.bombs.forEach((bomb) => bomb.update());
       this.world.checkThrownFruitCollisions();
       this.world.level.enemies.forEach((enemy) => {
         if (enemy instanceof Gnome) {

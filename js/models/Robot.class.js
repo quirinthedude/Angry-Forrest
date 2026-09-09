@@ -223,7 +223,7 @@ class Robot extends MovableObject {
     const bomb = new Bomb(
       this.x + this.width / 2 - 25,
       this.y + 100,
-      this.direction,
+      this.direction * -1,
     );
 
     this.world.bombs.push(bomb);
