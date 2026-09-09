@@ -6,10 +6,10 @@ class Bomb extends MovableObject {
   acceleration = 0.35;
   frameTime = 100;
 
-  leftOffset = 0;
-  rightOffset = 0;
-  topOffset = 0;
-  bottomOffset = 0;
+  leftOffset = 30;
+  rightOffset = 30;
+  topOffset = 30;
+  bottomOffset = 30;
 
   IMAGES_FLYING = createAnimationImages("/img/robot-boss/bomb/bomb_", 10);
 

@@ -94,9 +94,7 @@ class Character extends MovableObject {
 
       this.world.thrownFruits.forEach((fruit) => fruit.update());
 
-      this.world.bombs.forEach((bomb) => bomb.update());
-
-      this.world.bombs = this.world.bombs.filter((bomb) => !bomb.isFinished());
+      this.world.updateBombs();
       this.world.checkThrownFruitCollisions();
 
       this.world.level.enemies.forEach((enemy) => {
@@ -151,15 +149,7 @@ class Character extends MovableObject {
     const now = Date.now();
 
     if (enemy && now - this.lastHit > 1000) {
-      this.energy -= 10;
-      this.lastHit = now;
-
-      this.characterHurt();
-      this.updateCharacterEnergyBar();
-
-      if (this.energy <= 0) {
-        this.characterDies();
-      }
+      this.takeDamage(10);
     }
   }
 
@@ -353,5 +343,17 @@ class Character extends MovableObject {
 
     this.fruitSound.currentTime = 0;
     this.fruitSound.play();
+  }
+
+  takeDamage(damage) {
+    this.energy = Math.max(0, this.energy - damage);
+    this.lastHit = Date.now();
+
+    this.characterHurt();
+    this.updateCharacterEnergyBar();
+
+    if (this.energy <= 0) {
+      this.characterDies();
+    }
   }
 }

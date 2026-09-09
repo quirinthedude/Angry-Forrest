@@ -263,4 +263,20 @@ class World {
 
     this.ready = true;
   }
+
+  updateBombs() {
+    for (let i = this.bombs.length - 1; i >= 0; i--) {
+      const bomb = this.bombs[i];
+
+      bomb.update();
+
+      if (!bomb.isFinished()) continue;
+
+      if (bomb.isColliding(this.character)) {
+        this.character.takeDamage(20);
+      }
+
+      this.bombs.splice(i, 1);
+    }
+  }
 }
