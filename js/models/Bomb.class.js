@@ -26,6 +26,8 @@ class Bomb extends MovableObject {
     this.animateOnce(this.IMAGES_FLYING, this.frameTime);
 
     this.createdAt = Date.now();
+
+    this.explodingSound = new Audio("./audio/bomb.mp3");
   }
 
   update() {
