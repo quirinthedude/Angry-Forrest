@@ -1,16 +1,44 @@
+/**
+ * Coordinates the active game world and its rendering lifecycle.
+ *
+ * World connects the canvas, camera, character, level, thrown fruits,
+ * collision checks, game-over rendering and the asset-loading boundary used
+ * before gameplay starts.
+ */
 class World {
+  /** @type {Character} Player character controlled within this world. */
   character;
+
+  /** @type {Keyboard} Shared gameplay input state. */
   keyboard = new Keyboard();
+
+  /** @type {Level} Level containing enemies, fruits and landscape objects. */
   level;
+
+  /** @type {CanvasRenderingContext2D} Context used for all world rendering. */
   ctx;
+
+  /** @type {HTMLCanvasElement} Canvas on which the world is rendered. */
   canvas;
+
+  /** @type {number} Horizontal offset used by world and parallax rendering. */
   cameraX = 0;
+
+  /** @type {Array} Thrown fruits currently managed by the world. */
   thrownFruits = [];
-  // needs to be removed in time
+
+  /** @type {boolean} Whether collision bounds are drawn for debugging. */
   collisionDebug = false;
-  //
+
+  /** @type {boolean} Whether all required world assets have loaded. */
   ready = false;
 
+  /**
+   * Creates the world, its level and its player character.
+   *
+   * @param {HTMLCanvasElement} canvas Canvas used for rendering.
+   * @param {Game} game Game lifecycle coordinator owning this world.
+   */
   constructor(canvas, game) {
     this.canvas = canvas;
     this.game = game;
@@ -20,6 +48,14 @@ class World {
     this.character = new Character(this);
   }
 
+  /**
+   * Renders one frame in the established world, camera and UI order.
+   *
+   * The next frame is scheduled after world objects and an optional game-over
+   * overlay have been rendered.
+   *
+   * @returns {void}
+   */
   draw() {
     this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
 
@@ -46,6 +82,13 @@ class World {
     requestAnimationFrame(() => this.draw());
   }
 
+  /**
+   * Draws one renderable object with hurt blinking, mirroring and optional
+   * collision debugging.
+   *
+   * @param {DrawableObject} object Object to render.
+   * @returns {void}
+   */
   drawObject(object) {
     if (!object.img || !object.img.complete || object.img.naturalWidth === 0) {
       return;
@@ -67,27 +110,42 @@ class World {
         object.height,
       );
     }
-    if (this.collisionDebug) {
-      const offsets = object.getCollisionOffsets
-        ? object.getCollisionOffsets()
-        : {
-            left: object.leftOffset,
-            right: object.rightOffset,
-          };
-      this.ctx.beginPath();
-      this.ctx.lineWidth = 2;
-      this.ctx.strokeRect(object.x, object.y, object.width, object.height);
-      this.ctx.beginPath();
-      this.ctx.strokeRect(
-        object.x + offsets.left,
-        object.y + offsets.top,
-        object.width - offsets.right - offsets.left,
-        object.height - offsets.top - offsets.bottom,
-      );
-      this.ctx.lineWidth = 1;
-    }
+
+    if (this.collisionDebug) this.drawCollisionDebug(object);
   }
 
+  /**
+   * Draws the outer and collision-adjusted bounds of an object.
+   *
+   * @param {DrawableObject} object Object whose bounds should be visualized.
+   * @returns {void}
+   */
+  drawCollisionDebug(object) {
+    const offsets = object.getCollisionOffsets
+      ? object.getCollisionOffsets()
+      : {
+          left: object.leftOffset,
+          right: object.rightOffset,
+        };
+    this.ctx.beginPath();
+    this.ctx.lineWidth = 2;
+    this.ctx.strokeRect(object.x, object.y, object.width, object.height);
+    this.ctx.beginPath();
+    this.ctx.strokeRect(
+      object.x + offsets.left,
+      object.y + offsets.top,
+      object.width - offsets.right - offsets.left,
+      object.height - offsets.top - offsets.bottom,
+    );
+    this.ctx.lineWidth = 1;
+  }
+
+  /**
+   * Draws an object mirrored horizontally at its world position.
+   *
+   * @param {DrawableObject} object Object to render in mirrored orientation.
+   * @returns {void}
+   */
   drawMirroredObject(object) {
     this.ctx.save();
     this.ctx.translate(object.x + object.width, object.y);
@@ -96,12 +154,24 @@ class World {
     this.ctx.restore();
   }
 
-  drawObjects(object) {
-    object.forEach((obj) => {
+  /**
+   * Draws each object in a collection.
+   *
+   * @param {Array} objects Objects to render.
+   * @returns {void}
+   */
+  drawObjects(objects) {
+    objects.forEach((obj) => {
       this.drawObject(obj);
     });
   }
 
+  /**
+   * Draws objects using their individual parallax factors and the camera.
+   *
+   * @param {Array} objects Parallax objects to render.
+   * @returns {void}
+   */
   drawParallaxObjects(objects) {
     objects.forEach((object) => {
       this.ctx.save();
@@ -111,10 +181,23 @@ class World {
     });
   }
 
+  /**
+   * Notifies the game lifecycle when the character has died.
+   *
+   * @returns {void}
+   */
   characterDied() {
     this.game.endGame();
   }
 
+  /**
+   * Resolves collisions between flying thrown fruits and level enemies.
+   *
+   * The existing Gnome- and Robot-specific hit reactions are applied before
+   * the collided fruit is removed after its hit animation delay.
+   *
+   * @returns {void}
+   */
   checkThrownFruitCollisions() {
     for (let fruits = this.thrownFruits.length - 1; fruits >= 0; fruits--) {
       const fruit = this.thrownFruits[fruits];
@@ -145,8 +228,13 @@ class World {
     }
   }
 
-  async waitForAssets() {
-    const objects = [
+  /**
+   * Returns every drawable object whose images are required before gameplay.
+   *
+   * @returns {DrawableObject[]} Objects included in the asset-loading barrier.
+   */
+  getAssetObjects() {
+    return [
       this.character,
       this.level.sky,
       ...this.level.enemies,
@@ -154,6 +242,16 @@ class World {
       ...this.level.landscape.backgroundobject,
       ...this.level.landscape.grass,
     ];
+  }
+
+  /**
+   * Waits for all required world assets before marking the world as ready.
+   *
+   * @returns {Promise<void>} Promise that resolves after every tracked image
+   * has loaded and the world has been marked as ready.
+   */
+  async waitForAssets() {
+    const objects = this.getAssetObjects();
 
     await Promise.all(objects.map((object) => object.waitForImages()));
 
