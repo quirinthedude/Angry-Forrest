@@ -60,6 +60,7 @@ class Robot extends MovableObject {
     this.damageSound = new Audio("/audio/robot_damage.mp3");
     this.deathSound = new Audio("/audio/robot_death.mp3");
     this.attackSound = new Audio("/audio/robot_attack.mp3");
+    this.jumpSound = new Audio("/audio/robot_jump.mp3");
 
     this.activationInterval = setInterval(() => {
       this.checkActivation();
@@ -74,6 +75,8 @@ class Robot extends MovableObject {
       this.chargeTargetX = this.world.character.x + 200;
 
       this.animateOnce(this.IMAGES_JUMPING, 100);
+      this.jumpSound.currentTime = 0;
+      this.jumpSound.play();
 
       // TODO: Boss polish — create a "Matrix effect" near the jump apex by
       // temporarily lowering acceleration, as if the robot manipulates gravity.
@@ -237,5 +240,7 @@ class Robot extends MovableObject {
 
     this.fightState = "charge";
     this.setAnimation(this.IMAGES_RUN_ATTACKING, 100);
+    this.attackSound.currentTime = 0;
+    this.attackSound.play();
   }
 }

@@ -28,6 +28,8 @@ class Bomb extends MovableObject {
     this.createdAt = Date.now();
 
     this.explodingSound = new Audio("./audio/bomb.mp3");
+    this.explodingSound.currentTime = 0;
+    this.explodingSound.play();
   }
 
   update() {
