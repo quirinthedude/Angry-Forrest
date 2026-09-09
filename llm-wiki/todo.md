@@ -2,7 +2,7 @@
 
 ## Architektur / Cleanup
 
-- die collidingaufrufe sind momentan in character.move() -> sie müssen später von world untersucht werden
+- [ ] `World` verwaltet die Updates von `thrownFruits`, `bombs`, Projectile-Collisions und Enemies inzwischen selbst über `updateWorldObjects()`. Der 60-FPS-Takt dafür wird aber weiterhin aus `Character.moveCharacter()` ausgelöst. Später prüfen, ob `World` bzw. ein zentraler Game-Loop diesen Taktgeber übernehmen soll.
 
 ### Priorität: später
 
