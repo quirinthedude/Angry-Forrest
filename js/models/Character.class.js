@@ -73,7 +73,7 @@ class Character extends MovableObject {
 
   moveCharacter() {
     setInterval(() => {
-      if (this.isDead) return;
+      if (!this.world.ready || this.isDead) return;
       let wantsToWalk = this.world.keyboard.left || this.world.keyboard.right;
 
       this.handleHorizontalMovement();

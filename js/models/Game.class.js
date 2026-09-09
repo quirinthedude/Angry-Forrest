@@ -25,12 +25,21 @@ class Game {
     });
   }
 
-  startWorld() {
-    this.intro.stop();
+  async startWorld() {
+    if (this.state === "loading") return;
 
-    this.startGameSong();
-
+    this.state = "loading";
     this.world = new World(this.canvas, this);
+
+    try {
+      await this.world.waitForAssets();
+    } catch (error) {
+      console.error("Could not load game assets: ", error);
+      return;
+    }
+
+    this.intro.stop();
+    this.startGameSong();
 
     this.state = "playing";
     this.setGameplayUiVisible(true);

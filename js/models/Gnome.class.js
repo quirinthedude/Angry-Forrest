@@ -38,7 +38,7 @@ class Gnome extends MovableObject {
 
   moveGnome() {
     setInterval(() => {
-      if (this.isKnockedOut) return;
+      if (!this.world.ready || this.isKnockedOut) return;
 
       if (this.x < this.minX) {
         this.direction = 1;

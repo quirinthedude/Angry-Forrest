@@ -68,6 +68,7 @@ class Robot extends MovableObject {
   }
 
   checkActivation() {
+    if (!this.world.ready) return;
     if (!this.isActivated && this.world.character.x >= this.x - 300) {
       this.isActivated = true;
       this.chargeTargetX = this.world.character.x + 200;
