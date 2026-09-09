@@ -27,7 +27,7 @@ class World {
   /** @type {ThrownFruit[]} Thrown fruits currently managed by the world. */
   thrownFruits = [];
 
-  /** @type {bomb[]} Thrown bombs*/
+  /** @type {Bomb[]} Thrown bombs*/
   bombs = [];
 
   /** @type {boolean} Whether collision bounds are drawn for debugging. */
@@ -278,5 +278,27 @@ class World {
 
       this.bombs.splice(i, 1);
     }
+  }
+
+  updateWorldObjects() {
+    this.updateThrownFruits();
+    this.updateBombs();
+    this.checkThrownFruitCollisions();
+    this.updateEnemies();
+  }
+
+  updateThrownFruits() {
+    this.thrownFruits.forEach((fruit) => fruit.update());
+  }
+
+  updateEnemies() {
+    this.level.enemies.forEach((enemy) => {
+      if (enemy instanceof Gnome) {
+        enemy.updateKnockout();
+      }
+      if (enemy instanceof Robot) {
+        enemy.updateFightBehaviour();
+      }
+    });
   }
 }
