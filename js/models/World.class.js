@@ -24,7 +24,7 @@ class World {
   /** @type {number} Horizontal offset used by world and parallax rendering. */
   cameraX = 0;
 
-  /** @type {Array} Thrown fruits currently managed by the world. */
+  /** @type {ThrownFruit[]} Thrown fruits currently managed by the world. */
   thrownFruits = [];
 
   /** @type {boolean} Whether collision bounds are drawn for debugging. */
@@ -159,7 +159,7 @@ class World {
   /**
    * Draws each object in a collection.
    *
-   * @param {Array} objects Objects to render.
+   * @param {DrawableObject[]} objects Objects to render.
    * @returns {void}
    */
   drawObjects(objects) {
