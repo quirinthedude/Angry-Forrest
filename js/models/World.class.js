@@ -9,6 +9,7 @@ class World {
   // needs to be removed in time
   collisionDebug = false;
   //
+  ready = false;
 
   constructor(canvas, game) {
     this.canvas = canvas;
@@ -46,6 +47,9 @@ class World {
   }
 
   drawObject(object) {
+    if (!object.img || !object.img.complete || object.img.naturalWidth === 0) {
+      return;
+    }
     if (
       object.isHurt &&
       object.isHurt() &&
@@ -139,5 +143,20 @@ class World {
         }
       }
     }
+  }
+
+  async waitForAssets() {
+    const objects = [
+      this.character,
+      this.level.sky,
+      ...this.level.enemies,
+      ...this.level.fruits,
+      ...this.level.landscape.backgroundobject,
+      ...this.level.landscape.grass,
+    ];
+
+    await Promise.all(objects.map((object) => object.waitForImages()));
+
+    this.ready = true;
   }
 }
