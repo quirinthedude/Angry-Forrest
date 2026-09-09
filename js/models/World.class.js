@@ -124,8 +124,10 @@ class World {
     const offsets = object.getCollisionOffsets
       ? object.getCollisionOffsets()
       : {
-          left: object.leftOffset,
-          right: object.rightOffset,
+          left: object.leftOffset ?? 0,
+          right: object.rightOffset ?? 0,
+          top: object.topOffset ?? 0,
+          bottom: object.bottomOffset ?? 0,
         };
     this.ctx.beginPath();
     this.ctx.lineWidth = 2;
