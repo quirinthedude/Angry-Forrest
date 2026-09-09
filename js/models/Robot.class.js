@@ -220,7 +220,13 @@ class Robot extends MovableObject {
     if (now - this.lastBombThrow < this.bombCooldown) return;
     this.lastBombThrow = now;
 
-    console.log("Throw Bomb!");
+    const bomb = new Bomb(
+      this.x + this.width / 2 - 25,
+      this.y + 100,
+      this.direction,
+    );
+
+    this.world.bombs.push(bomb);
   }
 
   prepareAttack() {

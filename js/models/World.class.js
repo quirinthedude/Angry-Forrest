@@ -27,6 +27,9 @@ class World {
   /** @type {ThrownFruit[]} Thrown fruits currently managed by the world. */
   thrownFruits = [];
 
+  /** @type {bomb[]} Thrown bombs*/
+  bombs = [];
+
   /** @type {boolean} Whether collision bounds are drawn for debugging. */
   collisionDebug = false;
 
@@ -68,6 +71,7 @@ class World {
     this.drawObject(this.character);
     this.drawObjects(this.level.enemies);
     this.drawObjects(this.thrownFruits);
+    this.drawObjects(this.bombs);
 
     this.ctx.restore();
 
