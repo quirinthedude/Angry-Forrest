@@ -23,11 +23,11 @@ class Game {
   world = null;
 
   /**
-   * Active game-over overlay, created when the game ends.
+   * Active end-game overlay, created when the game ends.
    *
-   * @type {GameOver|null}
+   * @type {EndGame|null}
    */
-  gameOver = null;
+  endScreen = null;
 
   /**
    * Creates the lifecycle coordinator for the supplied game canvas.
@@ -167,7 +167,7 @@ class Game {
    * Transitions the game to the game-over state.
    *
    * Repeated calls are ignored once the game is already over. The gameplay
-   * music is stopped, the funeral music starts and the game-over overlay is
+   * music is stopped, the funeral music starts and the end-game overlay is
    * created for the world to render.
    *
    * @returns {void}
@@ -183,7 +183,7 @@ class Game {
     this.funeralSong.currentTime = 0;
     this.funeralSong.play();
 
-    this.gameOver = new GameOver(this.canvas);
+    this.endScreen = new EndGame(this.canvas, "./img/icons/game_over.png");
   }
 
   /**

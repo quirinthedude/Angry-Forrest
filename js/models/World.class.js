@@ -2,7 +2,7 @@
  * Coordinates the active game world and its rendering lifecycle.
  *
  * World connects the canvas, camera, character, level, thrown fruits,
- * collision checks, game-over rendering and the asset-loading boundary used
+ * collision checks, end-game rendering and the asset-loading boundary used
  * before gameplay starts.
  */
 class World {
@@ -54,7 +54,7 @@ class World {
   /**
    * Renders one frame in the established world, camera and UI order.
    *
-   * The next frame is scheduled after world objects and an optional game-over
+   * The next frame is scheduled after world objects and an optional end-game
    * overlay have been rendered.
    *
    * @returns {void}
@@ -78,9 +78,9 @@ class World {
     this.drawParallaxObjects(this.level.fruits);
     this.drawParallaxObjects(this.level.landscape.grass);
 
-    if (this.game.gameOver) {
-      this.game.gameOver.update();
-      this.game.gameOver.draw();
+    if (this.game.endScreen) {
+      this.game.endScreen.update();
+      this.game.endScreen.draw();
     }
 
     requestAnimationFrame(() => this.draw());

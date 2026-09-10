@@ -1,4 +1,4 @@
-class GameOver {
+class EndGame {
   state = "gameOverIn";
   x;
   y = 150;
@@ -8,22 +8,22 @@ class GameOver {
   waitStartedAt = 0;
   ready = false;
 
-  constructor(canvas) {
+  constructor(canvas, endGameImagePath) {
     this.canvas = canvas;
     this.ctx = canvas.getContext("2d");
 
-    this.gameOverImage = new Image();
-    this.gameOverImage.src = "./img/icons/game_over.png";
+    this.endGameImage = new Image();
+    this.endGameImage.src = endGameImagePath;
 
     this.pressEnterImage = new Image();
     this.pressEnterImage.src = "./img/icons/press_enter.png";
 
     this.x = canvas.width;
 
-    this.gameOverImage.onload = () => {
-      this.gameOverHeight =
-        this.width * (this.gameOverImage.height / this.gameOverImage.width);
-      this.gameOverReady = true;
+    this.endGameImage.onload = () => {
+      this.endGameHeight =
+        this.width * (this.endGameImage.height / this.endGameImage.width);
+      this.endGameReady = true;
       this.updateReadyState();
     };
     this.pressEnterImage.onload = () => {
@@ -35,7 +35,7 @@ class GameOver {
   }
 
   updateReadyState() {
-    this.ready = this.gameOverReady && this.pressEnterReady;
+    this.ready = this.endGameReady && this.pressEnterReady;
   }
 
   update() {
@@ -115,11 +115,11 @@ class GameOver {
 
     if (this.state.startsWith("gameOver")) {
       this.ctx.drawImage(
-        this.gameOverImage,
+        this.endGameImage,
         this.x,
         this.y,
         this.width,
-        this.gameOverHeight,
+        this.endGameHeight,
       );
     } else {
       this.drawPressEnter();
