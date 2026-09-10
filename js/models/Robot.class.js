@@ -145,7 +145,7 @@ class Robot extends MovableObject {
     this.animateOnce(this.IMAGES_DYING, 100);
 
     setTimeout(() => {
-      this.world.game.endGame();
+      this.world.game.winGame();
     }, 5000);
   }
 

@@ -11,7 +11,7 @@ class Game {
   /**
    * Current lifecycle state of the game.
    *
-   * @type {"intro"|"loading"|"playing"|"gameOver"}
+   * @type {"intro"|"loading"|"playing"|"gameOver"|"gameWon"}
    */
   state = "intro";
 
@@ -197,5 +197,16 @@ class Game {
 
     this.gameSong.loop = true;
     this.gameSong.play();
+  }
+
+  /**
+   * Transitions active gameplay to the victory state.
+   *
+   * @returns {void}
+   */
+  winGame() {
+    if (this.state !== "playing") return;
+
+    this.state = "gameWon";
   }
 }
