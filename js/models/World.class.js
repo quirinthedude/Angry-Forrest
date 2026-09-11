@@ -78,6 +78,10 @@ class World {
     this.drawParallaxObjects(this.level.fruits);
     this.drawParallaxObjects(this.level.landscape.grass);
 
+    if (this.game.victoryScene) {
+      this.game.victoryScene.update();
+    }
+
     if (this.game.endScreen) {
       this.game.endScreen.update();
       this.game.endScreen.draw();

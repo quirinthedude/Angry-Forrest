@@ -5,7 +5,6 @@ class VictoryScene {
   constructor(world) {
     this.world = world;
     this.character = world.character;
-    this.gameEndSong = "/audio/end_of_game.mp3";
 
     this.startBow();
   }

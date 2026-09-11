@@ -2,7 +2,7 @@
  * Coordinates the overarching lifecycle of the game.
  *
  * The normal lifecycle moves from `intro` to `loading`, then to `playing` and
- * finally to `gameOver`. An asset-loading error may leave the game in the
+ * finally to `gameOver` or `gameWon`. An asset-loading error may leave the game in the
  * `loading` state because it is handled within that phase. Game coordinates
  * the intro scene, world creation, asset loading, audio, gameplay UI and
  * keyboard input for these states.
@@ -51,6 +51,7 @@ class Game {
     this.titleSong = new Audio("/audio/title_song.mp3");
     this.gameSong = new Audio("./audio/game_song.mp3");
     this.funeralSong = new Audio("./audio/Mourning Brass - 2.mp3");
+    this.endOFGameSong = new Audio("./audio/end_of_game.mp3");
   }
 
   /**
@@ -214,6 +215,13 @@ class Game {
     if (this.state !== "playing") return;
 
     this.state = "gameWon";
+
+    this.gameSong.pause();
+    this.gameSong.currentTime = 0;
+
+    this.endOFGameSong.currentTime = 0;
+    this.endOFGameSong.play();
+
     this.victoryScene = new VictoryScene(this.world);
   }
 }
