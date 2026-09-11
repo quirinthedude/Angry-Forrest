@@ -1,10 +1,19 @@
 class VictoryScene {
   state = "bow";
   waitStartedAt = 0;
+  TREE_IMAGES = createAnimationImages("./img/growing_tree/tree_", 10);
 
   constructor(world) {
     this.world = world;
     this.character = world.character;
+
+    this.treeX =
+      this.character.x + this.world.cameraX + this.character.width / 2 - 175;
+
+    const characterGround =
+      this.character.y + this.character.height - this.character.bottomOffset;
+
+    this.treeY = characterGround - 350;
 
     this.startBow();
   }
@@ -31,16 +40,22 @@ class VictoryScene {
   waitAfterBow() {
     if (Date.now() - this.waitStartedAt >= 1500) {
       this.state = "sink";
-    } //else {
-    //   this.state = "finished";
-    // }
+    }
   }
 
   sinkCharacter() {
     this.character.y += 2;
 
-    if (this.character >= this.world.canvas.height) {
-      this.state = "finished";
+    if (this.character.y >= this.world.canvas.height) {
+      this.tree = new GrowingTree(this.treeX, this.treeY);
+      this.tree.grow();
+      this.state = "treeGrowing";
     }
+  }
+
+  draw() {
+    if (!this.tree) return;
+
+    this.world.drawObject(this.tree);
   }
 }
