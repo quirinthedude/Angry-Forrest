@@ -23,11 +23,23 @@ class VictoryScene {
   update() {
     if (this.state === "waitAfterBow") {
       this.waitAfterBow();
+    } else if (this.state === "sink") {
+      this.sinkCharacter();
     }
   }
 
   waitAfterBow() {
     if (Date.now() - this.waitStartedAt >= 1500) {
+      this.state = "sink";
+    } //else {
+    //   this.state = "finished";
+    // }
+  }
+
+  sinkCharacter() {
+    this.character.y += 2;
+
+    if (this.character >= this.world.canvas.height) {
       this.state = "finished";
     }
   }

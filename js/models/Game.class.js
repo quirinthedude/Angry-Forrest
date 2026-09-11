@@ -51,7 +51,7 @@ class Game {
     this.titleSong = new Audio("/audio/title_song.mp3");
     this.gameSong = new Audio("./audio/game_song.mp3");
     this.funeralSong = new Audio("./audio/Mourning Brass - 2.mp3");
-    this.endOFGameSong = new Audio("./audio/end_of_game.mp3");
+    this.endOfGameSong = new Audio("./audio/end_of_game.mp3");
   }
 
   /**
@@ -219,8 +219,8 @@ class Game {
     this.gameSong.pause();
     this.gameSong.currentTime = 0;
 
-    this.endOFGameSong.currentTime = 0;
-    this.endOFGameSong.play();
+    this.endOfGameSong.currentTime = 0;
+    this.endOfGameSong.play();
 
     this.victoryScene = new VictoryScene(this.world);
   }
