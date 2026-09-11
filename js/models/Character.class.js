@@ -14,10 +14,6 @@ class Character extends MovableObject {
     "./img/character/walk/animation_walk_",
     20,
   );
-  IMAGES_ATTACKING = createAnimationImages(
-    "./img/character/attack/animation_attack_",
-    20,
-  );
   IMAGES_HURT = createAnimationImages(
     "./img/character/hurt/animation_hurt_",
     20,
@@ -26,10 +22,7 @@ class Character extends MovableObject {
     "./img/character/jump/animation_jump_",
     12,
   );
-  IMAGES_LEAF = createAnimationImages(
-    "./img/character/leaf/animation_leaf_",
-    18,
-  );
+  IMAGES_BOW = createAnimationImages("./img/character/bow/idle_copy_", 12);
   DEAD_IMAGE = "./img/character/dead/6.png";
   currentImage = 0;
   wantsToWalk = false;
@@ -50,10 +43,9 @@ class Character extends MovableObject {
     this.loadImage(this.IMAGES_IDLE[0]);
     this.loadImages(this.IMAGES_WALKING);
     this.loadImages(this.IMAGES_IDLE);
-    this.loadImages(this.IMAGES_ATTACKING);
     this.loadImages(this.IMAGES_HURT);
     this.loadImages(this.IMAGES_JUMPING);
-    this.loadImages(this.IMAGES_LEAF);
+    this.loadImages(this.IMAGES_BOW);
     this.x = 240;
     this.y = 305;
 
@@ -343,5 +335,10 @@ class Character extends MovableObject {
     if (this.energy <= 0) {
       this.characterDies();
     }
+  }
+
+  bow() {
+    this.stopWalkingSound();
+    this.animateOnce(this.IMAGES_BOW, 100);
   }
 }
