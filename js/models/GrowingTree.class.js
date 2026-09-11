@@ -8,7 +8,7 @@ class GrowingTree extends MovableObject {
     super();
 
     this.x = x;
-    this.y = y;
+    this.y = y + 100;
 
     this.loadImage(this.IMAGES_GROWING[0]);
     this.loadImages(this.IMAGES_GROWING);

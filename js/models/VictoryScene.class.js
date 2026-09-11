@@ -47,9 +47,8 @@ class VictoryScene {
     this.character.y += 2;
 
     if (this.character.y >= this.world.canvas.height) {
-      this.tree = new GrowingTree(this.treeX, this.treeY);
-      this.tree.grow();
-      this.state = "treeGrowing";
+      this.state = "loadingTree";
+      this.startTreeGrowing();
     }
   }
 
@@ -57,5 +56,14 @@ class VictoryScene {
     if (!this.tree) return;
 
     this.world.drawObject(this.tree);
+  }
+
+  async startTreeGrowing() {
+    this.tree = new GrowingTree(this.treeX, this.treeY);
+
+    await this.tree.waitForImages();
+
+    this.state = "treeGrowing";
+    this.tree.grow();
   }
 }

@@ -80,6 +80,7 @@ class World {
 
     if (this.game.victoryScene) {
       this.game.victoryScene.update();
+      this.game.victoryScene.draw();
     }
 
     if (this.game.endScreen) {
