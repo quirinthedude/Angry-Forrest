@@ -1,17 +1,21 @@
 class VictoryScene {
   state = "bow";
   waitStartedAt = 0;
-  TREE_IMAGES = createAnimationImages("./img/growing_tree/tree_", 10);
 
   constructor(world) {
     this.world = world;
     this.character = world.character;
 
+    this.character.y = this.character.groundY;
+    this.character.speedY = 0;
+
     this.treeX =
       this.character.x + this.world.cameraX + this.character.width / 2 - 175;
 
     const characterGround =
-      this.character.y + this.character.height - this.character.bottomOffset;
+      this.character.groundY +
+      this.character.height -
+      this.character.bottomOffset;
 
     this.treeY = characterGround - 350;
 

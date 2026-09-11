@@ -1,6 +1,7 @@
 class GrowingTree extends MovableObject {
   width = 350;
   height = 350;
+  groundAlignmentOffset = 100;
 
   IMAGES_GROWING = createAnimationImages("/img/growing_tree/tree_", 10);
 
@@ -8,7 +9,7 @@ class GrowingTree extends MovableObject {
     super();
 
     this.x = x;
-    this.y = y + 100;
+    this.y = y + this.groundAlignmentOffset;
 
     this.loadImage(this.IMAGES_GROWING[0]);
     this.loadImages(this.IMAGES_GROWING);
