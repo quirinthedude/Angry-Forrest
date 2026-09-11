@@ -69,8 +69,9 @@ class Character extends MovableObject {
         !this.world.ready ||
         this.isDead ||
         this.world.game.state !== "playing"
-      )
+      ) {
         return;
+      }
       let wantsToWalk = this.world.keyboard.left || this.world.keyboard.right;
 
       this.handleHorizontalMovement();

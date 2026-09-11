@@ -29,6 +29,12 @@ class Game {
    */
   endScreen = null;
 
+  /** Active of the victory-Scene  overlay
+   *
+   * @type {null | VictoryScene}
+   */
+  victoryScene = null;
+
   /**
    * Creates the lifecycle coordinator for the supplied game canvas.
    *
@@ -208,5 +214,6 @@ class Game {
     if (this.state !== "playing") return;
 
     this.state = "gameWon";
+    this.victoryScene = new VictoryScene(this.world);
   }
 }
