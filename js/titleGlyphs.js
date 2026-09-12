@@ -62,6 +62,8 @@ const TITLE_GLYPHS = Object.freeze({
 const TITLE_GLYPH_ALIASES = Object.freeze({
   "←": "ArrowLeft",
   "→": "ArrowRight",
+  "↑": "ArrowUp",
+  "↓": "ArrowDown",
   "↵": "Enter",
-  " ": "Space",
+  "␠": "Space",
 });

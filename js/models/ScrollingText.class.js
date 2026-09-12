@@ -16,7 +16,9 @@ class ScrollingText {
     const paths = new Set();
 
     for (const character of this.text) {
-      const path = TITLE_GLYPHS[character];
+      if (character === " ") continue;
+
+      const path = this.getGlyphPath(character);
       if (path) paths.add(path);
     }
 
@@ -59,7 +61,7 @@ class ScrollingText {
         continue;
       }
 
-      const path = TITLE_GLYPHS[character];
+      const path = this.getGlyphPath(character);
       const image = this.images[path];
       if (!image) {
         drawX += this.height * 0.55;
@@ -83,7 +85,9 @@ class ScrollingText {
     return [...this.text].reduce((width, character) => {
       if (character === " ") return width + this.height * 0.55;
 
-      const image = this.images[TITLE_GLYPHS[character]];
+      const path = this.getGlyphPath(character);
+      const image = this.images[path];
+
       if (!image) return width + this.height * 0.55;
 
       return width + image.width * (this.height / image.height) + this.gap;
@@ -92,5 +96,10 @@ class ScrollingText {
 
   changeSpeed(amount) {
     this.speed = Math.max(20, Math.min(300, this.speed + amount));
+  }
+
+  getGlyphPath(character) {
+    const glyphKey = TITLE_GLYPH_ALIASES[character] ?? character;
+    return TITLE_GLYPHS[glyphKey];
   }
 }
