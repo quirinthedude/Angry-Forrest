@@ -64,7 +64,7 @@ class Character extends MovableObject {
   }
 
   moveCharacter() {
-    setInterval(() => {
+    this.movementInterval = setInterval(() => {
       if (
         !this.world.ready ||
         this.isDead ||
@@ -346,5 +346,11 @@ class Character extends MovableObject {
   bow() {
     this.stopWalkingSound();
     this.animateOnce(this.IMAGES_BOW, 100);
+  }
+
+  stop() {
+    clearInterval(this.movementInterval);
+    this.stopAnimation();
+    this.stopWalkingSound();
   }
 }

@@ -36,6 +36,9 @@ class World {
   /** @type {boolean} Whether all required world assets have loaded. */
   ready = false;
 
+  animationFrame = null;
+  isRunning = true;
+
   /**
    * Creates the world, its level and its player character.
    *
@@ -60,6 +63,7 @@ class World {
    * @returns {void}
    */
   draw() {
+    if (!this.isRunning) return;
     this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
 
     this.drawObject(this.level.sky);
@@ -304,6 +308,17 @@ class World {
       if (enemy instanceof Robot) {
         enemy.updateFightBehaviour();
       }
+    });
+  }
+
+  stop() {
+    this.isRunning = false;
+    cancelAnimationFrame(this.animationFrame);
+
+    this.character.stop?.();
+
+    this.level.enemies.forEach((enemy) => {
+      enemy.stop?.();
     });
   }
 }

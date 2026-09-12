@@ -37,7 +37,7 @@ class Gnome extends MovableObject {
   }
 
   moveGnome() {
-    setInterval(() => {
+    this.movementInterval = setInterval(() => {
       if (!this.world.ready || this.isKnockedOut) return;
 
       if (this.x < this.minX) {
@@ -72,5 +72,10 @@ class Gnome extends MovableObject {
     this.x += this.speedX * this.direction;
     this.y += this.speedY;
     this.speedY += this.acceleration;
+  }
+
+  stop() {
+    clearInterval(this.movementInterval);
+    this.stopAnimation();
   }
 }

@@ -243,4 +243,10 @@ class Robot extends MovableObject {
     this.attackSound.currentTime = 0;
     this.attackSound.play();
   }
+
+  stop() {
+    clearInterval(this.activationInterval);
+    clearInterval(this.entranceInterval);
+    this.stopAnimation();
+  }
 }

@@ -144,6 +144,14 @@ class Game {
       return;
     }
 
+    if (this.state === "gameOver" || this.state === "gameWon") {
+      if (event.key === "Enter") {
+        event.preventDefault();
+        this.returnToIntro();
+      }
+      return;
+    }
+
     if (this.state !== "playing") return;
 
     if (event.key === "ArrowLeft") this.world.keyboard.left = true;
@@ -223,5 +231,25 @@ class Game {
     this.endOfGameSong.play();
 
     this.victoryScene = new VictoryScene(this.world);
+  }
+
+  returnToIntro() {
+    this.world?.stop();
+
+    [this.gameSong, this.funeralSong, this.endOfGameSong].forEach((audio) => {
+      audio.pause();
+      audio.currentTime = 0;
+    });
+
+    this.setGameplayUiVisible(false);
+
+    this.world = null;
+    this.endScreen = null;
+    this.victoryScene = null;
+
+    this.intro = new IntroScene(this.canvas);
+    this.state = "intro";
+
+    this.start();
   }
 }
