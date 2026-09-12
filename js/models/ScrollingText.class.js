@@ -89,4 +89,8 @@ class ScrollingText {
       return width + image.width * (this.height / image.height) + this.gap;
     }, 0);
   }
+
+  changeSpeed(amount) {
+    this.speed = Math.max(20, Math.min(300, this.speed + amount));
+  }
 }

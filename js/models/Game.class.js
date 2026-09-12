@@ -136,11 +136,7 @@ class Game {
    */
   handleKeyDown(event) {
     if (this.state === "intro") {
-      if (event.key === "Enter") {
-        event.preventDefault();
-        this.playTitleSong();
-        this.startWorld();
-      }
+      this.handleIntroInput(event);
       return;
     }
 
@@ -251,5 +247,22 @@ class Game {
     this.state = "intro";
 
     this.start();
+  }
+
+  handleIntroInput(event) {
+    if (event.key === "Enter") {
+      event.preventDefault();
+      this.playTitleSong();
+      this.startWorld();
+      return;
+    }
+
+    if (event.key === "ArrowRight") {
+      this.intro.scrollingText.changeSpeed(20);
+    }
+
+    if (event.key === "ArrowLeft") {
+      this.intro.scrollingText.changeSpeed(-20);
+    }
   }
 }
