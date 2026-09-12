@@ -1,4 +1,4 @@
-class MiniRobot extends Enemy {
+class MiniRobot extends MovableObject {
   speed = 1.5; // schneller als Gnome
   jumpInterval = 2000;
   lastJumpTime = 0;
