@@ -4,6 +4,8 @@ function createLevel1(world) {
       new Gnome(Math.random() * 300 + 200, 360, 200, 520, world),
       new Gnome(Math.random() * 300 + 500, 360, 500, 850, world),
       new Gnome(Math.random() * 300 + 1200, 360, 1000, 1500, world),
+      new MiniRobot(1700, 2300),
+      new MiniRobot(2800, 3400),
       new Robot(1300, 292, world), //2300
     ],
     [
