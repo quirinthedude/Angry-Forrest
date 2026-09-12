@@ -1,8 +1,7 @@
 /**
  * Bildbasierter Zeichensatz für Titel- und Anleitungstexte.
  *
- * Die Dateipfade sind relativ zu index.html angegeben. Nicht unterstützte
- * Zeichen können vom Renderer als normaler Text dargestellt werden.
+ * Die Dateipfade sind relativ zu index.html angegeben.
  */
 const TITLE_GLYPHS = Object.freeze({
   A: "./img/title-glyphs/letters/A.png",
