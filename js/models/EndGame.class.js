@@ -8,24 +8,34 @@ class EndGame {
   waitStartedAt = 0;
   ready = false;
 
-  constructor(canvas, endGameImagePath) {
+  constructor(canvas, endGameImagePath = null, pressEnterOnly = false) {
     this.canvas = canvas;
     this.ctx = canvas.getContext("2d");
+    this.pressEnterOnly = pressEnterOnly;
 
-    this.endGameImage = new Image();
-    this.endGameImage.src = endGameImagePath;
+    // this.endGameImage = new Image();
+    // this.endGameImage.src = endGameImagePath;
 
     this.pressEnterImage = new Image();
     this.pressEnterImage.src = "./img/icons/press_enter.png";
 
     this.x = canvas.width;
 
-    this.endGameImage.onload = () => {
-      this.endGameHeight =
-        this.width * (this.endGameImage.height / this.endGameImage.width);
+    if (pressEnterOnly) {
+      this.state = "pressEnterIn";
       this.endGameReady = true;
-      this.updateReadyState();
-    };
+    } else {
+      this.endGameImage = new Image();
+      this.endGameImage.src = endGameImagePath;
+
+      this.endGameImage.onload = () => {
+        this.endGameHeight =
+          this.width * (this.endGameImage.height / this.endGameImage.width);
+        this.endGameReady = true;
+        this.updateReadyState();
+      };
+    }
+
     this.pressEnterImage.onload = () => {
       this.pressEnterHeight =
         this.width * (this.pressEnterImage.height / this.pressEnterImage.width);
@@ -105,7 +115,8 @@ class EndGame {
     this.x -= this.speed;
 
     if (this.x + this.width < 0) {
-      this.state = "gameOverIn";
+      this.state = this.pressEnterOnly ? "pressEnterIn" : "gameOverIn";
+
       this.x = this.canvas.width;
     }
   }

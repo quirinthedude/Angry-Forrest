@@ -92,6 +92,8 @@ class VictoryScene {
       },
     );
 
+    this.world.game.endScreen = new EndGame(this.world.canvas, null, true);
+
     this.state = "treeGrowing";
     this.tree.grow();
   }
