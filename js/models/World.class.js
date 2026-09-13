@@ -290,7 +290,6 @@ class World {
   }
 
   updateWorldObjects() {
-    if (this.game.state !== "playing") return;
     this.updateThrownFruits();
     this.updateBombs();
     this.checkThrownFruitCollisions();
