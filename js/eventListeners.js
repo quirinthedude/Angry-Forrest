@@ -43,3 +43,14 @@ function bindOptionControls() {
     window.game?.toggleFullscreen();
   });
 }
+
+function bindGameSurfaceProtection() {
+  const gameWrapper = document.querySelector(".game-wrapper");
+  if (!gameWrapper) return;
+
+  ["contextmenu", "dragstart"].forEach((eventName) => {
+    gameWrapper.addEventListener(eventName, (event) => {
+      event.preventDefault();
+    });
+  });
+}

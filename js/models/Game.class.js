@@ -244,7 +244,7 @@ class Game {
   }
 
   /**
-   * Keeps the fixed game stage proportional inside the fullscreen wrapper.
+   * Keeps the fixed game stage proportional inside the available wrapper.
    *
    * @returns {void}
    */
@@ -254,10 +254,11 @@ class Game {
 
     if (!wrapper || !stage) return;
 
-    const isFullscreen = document.fullscreenElement === wrapper;
-    const scale = isFullscreen
-      ? Math.min(window.innerWidth / 866, window.innerHeight / 618)
-      : 1;
+    const scale = Math.min(
+      wrapper.clientWidth / 866,
+      wrapper.clientHeight / 618,
+      1,
+    );
 
     stage.style.setProperty("--game-scale", scale);
   }

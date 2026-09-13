@@ -14,6 +14,7 @@ function init() {
 
   bindTouchControls();
   bindOptionControls();
+  bindGameSurfaceProtection();
   updatePreIntroOrientation();
   window.addEventListener("resize", updatePreIntroOrientation);
   window.addEventListener("orientationchange", updatePreIntroOrientation);
