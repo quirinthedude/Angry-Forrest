@@ -187,6 +187,7 @@ class Game {
     if (this.state === "gameOver") return;
 
     this.state = "gameOver";
+    this.world.resetActorsToGround();
 
     this.gameSong.pause();
     this.gameSong.currentTime = 0;
@@ -219,6 +220,7 @@ class Game {
     if (this.state !== "playing") return;
 
     this.state = "gameWon";
+    this.world.resetActorsToGround();
 
     this.gameSong.pause();
     this.gameSong.currentTime = 0;

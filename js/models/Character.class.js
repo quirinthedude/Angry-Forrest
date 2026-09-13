@@ -131,6 +131,7 @@ class Character extends MovableObject {
   }
 
   handleCollision() {
+    if (this.world.game.state !== "playing") return;
     const enemy = this.checkCollisions();
     const now = Date.now();
 

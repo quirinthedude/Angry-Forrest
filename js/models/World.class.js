@@ -324,4 +324,15 @@ class World {
       enemy.stop?.();
     });
   }
+
+  resetActorsToGround() {
+    const actors = [this.character, ...this.level.enemies];
+
+    actors.forEach((actor) => {
+      if (typeof actor.groundY !== "number") return;
+
+      actor.y = groundY;
+      actor.speedY = 0;
+    });
+  }
 }
