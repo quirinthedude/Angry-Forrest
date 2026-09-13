@@ -35,6 +35,9 @@ class Game {
    */
   victoryScene = null;
 
+  /** @type {boolean} Whether game audio is currently muted. */
+  isMuted = false;
+
   /**
    * Creates the lifecycle coordinator for the supplied game canvas.
    *
@@ -95,6 +98,7 @@ class Game {
 
     this.state = "loading";
     this.world = new World(this.canvas, this);
+    this.applyMutedState();
 
     try {
       await this.world.waitForAssets();
@@ -122,6 +126,67 @@ class Game {
     if (energyBar) energyBar.hidden = !visible;
     const energyBarR = document.querySelector(".robot-energy");
     if (energyBarR) energyBarR.hidden = !visible;
+  }
+
+  /**
+   * Applies the selected mute state to all currently created game sounds.
+   *
+   * @returns {void}
+   */
+  applyMutedState() {
+    this.getAudioObjects().forEach((audio) => {
+      audio.muted = this.isMuted;
+    });
+  }
+
+  /**
+   * Sets the mute state used by the sound control.
+   *
+   * @param {boolean} muted Whether game audio should be muted.
+   * @returns {void}
+   */
+  setMuted(muted) {
+    this.isMuted = muted;
+    this.applyMutedState();
+  }
+
+  /**
+   * Returns audio objects belonging to the game and active world actors.
+   *
+   * @returns {HTMLMediaElement[]} Currently available game audio objects.
+   */
+  getAudioObjects() {
+    const objects = [this.titleSong, this.gameSong, this.funeralSong, this.endOfGameSong];
+    const worldObjects = [
+      this.world?.character,
+      ...(this.world?.level?.enemies ?? []),
+      ...(this.world?.thrownFruits ?? []),
+      ...(this.world?.bombs ?? []),
+    ];
+
+    worldObjects.forEach((object) => {
+      Object.values(object ?? {}).forEach((value) => {
+        if (typeof HTMLMediaElement !== "undefined" && value instanceof HTMLMediaElement) {
+          objects.push(value);
+        }
+      });
+    });
+
+    return objects;
+  }
+
+  /**
+   * Enters or exits browser fullscreen mode for the game surface.
+   *
+   * @returns {Promise<void>} Resolves after the browser handles the request.
+   */
+  async toggleFullscreen() {
+    if (document.fullscreenElement) {
+      await document.exitFullscreen();
+      return;
+    }
+
+    await document.documentElement.requestFullscreen?.();
   }
 
   /**
