@@ -25,30 +25,50 @@ class MiniRobot extends MovableObject {
   constructor(x, y, minX, maxX, world) {
     super();
     this.world = world;
+    this.loadImage(this.IMAGES_RUNNING[0]);
     this.loadImages(this.IMAGES_JUMPING);
     this.loadImages(this.IMAGES_RUNNING);
     this.loadImages(this.IMAGES_HURT);
-    this.JumpingSound = new Audio("./audio/mini_robot_jump.mp3");
+
+    this.jumpingSound = new Audio("./audio/mini_robot_jump.mp3");
     this.deathSound = new Audio("./audio/mini_robot_hurt.mp3");
+
     this.x = x;
     this.y = y;
     this.minX = minX;
     this.maxX = maxX;
+
+    this.animate(this.IMAGES_RUNNING, 50);
+    this.moveMiniRobot();
   }
 
-  update() {
-    super.update();
-    this.updateJump();
+  moveMiniRobot() {
+    this.movementInterval = setInterval(() => {
+      if (!this.world.ready || this.isKnockedOut) return;
+
+      if (this.x < this.minX) {
+        this.direction = 1;
+      } else if (this.x > this.maxX) {
+        this.direction = -1;
+      }
+
+      this.move(this.speed);
+    }, 20);
   }
 
-  updateJump() {
-    const now = Date.now();
+  // update() {
+  //   super.update();
+  //   this.updateJump();
+  // }
 
-    if (this.isAboveGround() || now - this.lastJumpTime < this.jumpInterval) {
-      return;
-    }
+  // updateJump() {
+  //   const now = Date.now();
 
-    this.speedY = 16;
-    this.lastJumpTime = now;
-  }
+  //   if (this.isAboveGround() || now - this.lastJumpTime < this.jumpInterval) {
+  //     return;
+  //   }
+
+  //   this.speedY = 16;
+  //   this.lastJumpTime = now;
+  // }
 }
