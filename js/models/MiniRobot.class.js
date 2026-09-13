@@ -45,13 +45,6 @@ class MiniRobot extends MovableObject {
   }
 
   moveMiniRobot() {
-    if (
-      !this.world.ready ||
-      this.isKnockedOut ||
-      this.world.game.state !== "playing"
-    ) {
-      return;
-    }
     this.movementInterval = setInterval(() => {
       if (!this.world.ready || this.isKnockedOut) return;
 

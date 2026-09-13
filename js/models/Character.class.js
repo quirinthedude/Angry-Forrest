@@ -32,6 +32,7 @@ class Character extends MovableObject {
   isDead = false;
   maxFruitInventory = 3;
   fruitInventory = 0;
+  inInvulnerable = false;
 
   // lastFruitCollision = null;
 
@@ -333,6 +334,7 @@ class Character extends MovableObject {
   }
 
   takeDamage(damage) {
+    if (this.isInvulnerable) return;
     this.energy = Math.max(0, this.energy - damage);
     this.lastHit = Date.now();
 

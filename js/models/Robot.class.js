@@ -137,6 +137,7 @@ class Robot extends MovableObject {
     if (this.isDead) return;
 
     this.isDead = true;
+    this.world.character.isInvulnerable = true;
     this.stopAnimation();
 
     this.deathSound.currentTime = 0;

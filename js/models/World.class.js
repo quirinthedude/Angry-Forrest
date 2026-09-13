@@ -332,7 +332,7 @@ class World {
     actors.forEach((actor) => {
       if (typeof actor.groundY !== "number") return;
 
-      actor.y = groundY;
+      actor.y = actor.groundY;
       actor.speedY = 0;
     });
   }
