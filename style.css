@@ -46,6 +46,24 @@ body {
   height: 618px;
 }
 
+.game-stage {
+  position: relative;
+  width: 866px;
+  height: 618px;
+  flex: none;
+  transform: scale(var(--game-scale, 1));
+  transform-origin: center;
+}
+
+.game-wrapper:fullscreen {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100vw;
+  height: 100vh;
+  background: #000;
+}
+
 .top-controls {
   position: absolute;
   top: 14px;

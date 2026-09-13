@@ -55,6 +55,11 @@ class Game {
     this.gameSong = new Audio("./audio/game_song.mp3");
     this.funeralSong = new Audio("./audio/Mourning Brass - 2.mp3");
     this.endOfGameSong = new Audio("./audio/end_of_game.mp3");
+
+    document.addEventListener("fullscreenchange", () =>
+      this.updateFullscreenScale(),
+    );
+    window.addEventListener("resize", () => this.updateFullscreenScale());
   }
 
   /**
@@ -183,12 +188,35 @@ class Game {
    * @returns {Promise<void>} Resolves after the browser handles the request.
    */
   async toggleFullscreen() {
+    const wrapper = document.querySelector(".game-wrapper");
+
+    if (!wrapper) return;
+
     if (document.fullscreenElement) {
       await document.exitFullscreen();
       return;
     }
 
-    await document.documentElement.requestFullscreen?.();
+    await wrapper.requestFullscreen?.();
+  }
+
+  /**
+   * Keeps the fixed game stage proportional inside the fullscreen wrapper.
+   *
+   * @returns {void}
+   */
+  updateFullscreenScale() {
+    const wrapper = document.querySelector(".game-wrapper");
+    const stage = document.querySelector(".game-stage");
+
+    if (!wrapper || !stage) return;
+
+    const isFullscreen = document.fullscreenElement === wrapper;
+    const scale = isFullscreen
+      ? Math.min(window.innerWidth / 866, window.innerHeight / 618)
+      : 1;
+
+    stage.style.setProperty("--game-scale", scale);
   }
 
   /**
