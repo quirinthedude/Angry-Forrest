@@ -1,7 +1,40 @@
 class MiniRobot extends MovableObject {
+  height = 120;
+  width = 120;
+  leftOffset = 40;
+  rightOffset = 40;
+  topOffset = 35;
+  bottomOffset = 0;
+  nativeDirection = 1;
+  isKnockedOut = false;
+
   speed = 1.5; // schneller als Gnome
   jumpInterval = 2000;
   lastJumpTime = 0;
+
+  IMAGES_JUMPING = createAnimationImages(
+    "/img/mini_robot/Falling Down/mini-robot_",
+    6,
+  );
+  IMAGES_RUNNING = createAnimationImages(
+    "/img/mini_robot/Run Slashing/mini-robot_",
+    12,
+  );
+  IMAGES_HURT = createAnimationImages("/img/mini_robot/Hurt/mini-robot_", 12);
+
+  constructor(x, y, minX, maxX, world) {
+    super();
+    this.world = world;
+    this.loadImages(this.IMAGES_JUMPING);
+    this.loadImages(this.IMAGES_RUNNING);
+    this.loadImages(this.IMAGES_HURT);
+    this.JumpingSound = new Audio("./audio/mini_robot_jump.mp3");
+    this.deathSound = new Audio("./audio/mini_robot_hurt.mp3");
+    this.x = x;
+    this.y = y;
+    this.minX = minX;
+    this.maxX = maxX;
+  }
 
   update() {
     super.update();
