@@ -97,6 +97,7 @@ class Game {
     if (this.state === "loading") return;
 
     this.state = "loading";
+    this.startGameSong();
     this.world = new World(this.canvas, this);
     this.applyMutedState();
 
@@ -104,11 +105,12 @@ class Game {
       await this.world.waitForAssets();
     } catch (error) {
       console.error("Could not load game assets: ", error);
+      this.gameSong.pause();
+      this.gameSong.currentTime = 0;
       return;
     }
 
     this.intro.stop();
-    this.startGameSong();
 
     this.state = "playing";
     this.setGameplayUiVisible(true);
@@ -273,7 +275,9 @@ class Game {
     this.titleSong.currentTime = 0;
 
     this.gameSong.loop = true;
-    this.gameSong.play();
+    this.gameSong.play().catch(() => {
+      // Playback can still be blocked when startGameSong is called outside a user gesture.
+    });
   }
 
   /**
