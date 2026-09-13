@@ -57,9 +57,12 @@ class Game {
     this.endOfGameSong = new Audio("./audio/end_of_game.mp3");
 
     document.addEventListener("fullscreenchange", () =>
-      this.updateFullscreenScale(),
+      this.handleViewportChange(),
     );
-    window.addEventListener("resize", () => this.updateFullscreenScale());
+    window.addEventListener("resize", () => this.handleViewportChange());
+    window.addEventListener("orientationchange", () =>
+      this.handleViewportChange(),
+    );
   }
 
   /**
@@ -100,6 +103,10 @@ class Game {
    */
   async startWorld() {
     if (this.state === "loading") return;
+    if (!this.isLandscape()) {
+      this.updateOrientationPrompt();
+      return;
+    }
 
     this.state = "loading";
     this.startGameSong();
@@ -202,10 +209,38 @@ class Game {
 
     if (document.fullscreenElement) {
       await document.exitFullscreen();
+      screen.orientation?.unlock?.();
       return;
     }
 
     await wrapper.requestFullscreen?.();
+  }
+
+  /**
+   * Starts fullscreen and attempts to lock the game to landscape mode.
+   *
+   * Unsupported orientation locking falls back to the orientation prompt.
+   *
+   * @returns {Promise<void>} Resolves after supported requests are attempted.
+   */
+  async prepareLandscapeMode() {
+    const wrapper = document.querySelector(".game-wrapper");
+
+    try {
+      if (wrapper && !document.fullscreenElement) {
+        await wrapper.requestFullscreen?.();
+      }
+    } catch {
+      // Fullscreen is optional; the orientation fallback still remains active.
+    }
+
+    try {
+      await screen.orientation?.lock?.("landscape");
+    } catch {
+      // iOS and unsupported browsers use the orientation prompt instead.
+    }
+
+    this.handleViewportChange();
   }
 
   /**
@@ -225,6 +260,37 @@ class Game {
       : 1;
 
     stage.style.setProperty("--game-scale", scale);
+  }
+
+  /**
+   * Updates fullscreen scaling and the orientation fallback together.
+   *
+   * @returns {void}
+   */
+  handleViewportChange() {
+    this.updateFullscreenScale();
+    this.updateOrientationPrompt();
+  }
+
+  /**
+   * Returns whether the current viewport is landscape-oriented.
+   *
+   * @returns {boolean} Whether the viewport is wider than it is tall.
+   */
+  isLandscape() {
+    return window.matchMedia("(orientation: landscape)").matches;
+  }
+
+  /**
+   * Shows the fallback overlay whenever the game is viewed in portrait mode.
+   *
+   * @returns {void}
+   */
+  updateOrientationPrompt() {
+    const prompt = document.getElementById("orientation-prompt");
+    if (!prompt) return;
+
+    prompt.hidden = this.isLandscape();
   }
 
   /**

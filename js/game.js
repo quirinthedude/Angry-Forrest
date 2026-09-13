@@ -25,6 +25,7 @@ function init() {
       game = new Game(canvas);
       window.game = game;
       game.start();
+      game.prepareLandscapeMode();
     },
     { once: true },
   );
