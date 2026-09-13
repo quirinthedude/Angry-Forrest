@@ -308,6 +308,9 @@ class World {
       if (enemy instanceof Robot) {
         enemy.updateFightBehaviour();
       }
+      if (enemy instanceof MiniRobot) {
+        enemy.update();
+      }
     });
   }
 

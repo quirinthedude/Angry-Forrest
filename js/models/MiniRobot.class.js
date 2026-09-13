@@ -8,6 +8,7 @@ class MiniRobot extends MovableObject {
   nativeDirection = 1;
   isKnockedOut = false;
 
+  groundY = 360;
   speed = 1.5; // schneller als Gnome
   jumpInterval = 2000;
   lastJumpTime = 0;
@@ -37,8 +38,9 @@ class MiniRobot extends MovableObject {
     this.y = y;
     this.minX = minX;
     this.maxX = maxX;
+    this.lastJumpTime = Date.now();
 
-    this.animate(this.IMAGES_RUNNING, 50);
+    this.setAnimation(this.IMAGES_RUNNING, 50);
     this.moveMiniRobot();
   }
 
@@ -56,19 +58,47 @@ class MiniRobot extends MovableObject {
     }, 20);
   }
 
-  // update() {
-  //   super.update();
-  //   this.updateJump();
-  // }
+  update() {
+    if (!this.world.ready || this.isKnockedOut) return;
 
-  // updateJump() {
-  //   const now = Date.now();
+    const now = Date.now();
+    if (
+      !this.isInTheAir() &&
+      this.speedY === 0 &&
+      now - this.lastJumpTime >= this.jumpInterval
+    ) {
+      this.startJump();
+    }
 
-  //   if (this.isAboveGround() || now - this.lastJumpTime < this.jumpInterval) {
-  //     return;
-  //   }
+    this.updateVerticalMovement();
+  }
 
-  //   this.speedY = 16;
-  //   this.lastJumpTime = now;
-  // }
+  startJump() {
+    if (!this.isVisibleInCanvas()) return;
+    this.speedY = -16;
+    this.lastJumpTime = Date.now();
+
+    this.jumpingSound.currentTime = 0;
+    this.jumpingSound.play();
+
+    this.setAnimation(this.IMAGES_JUMPING, 100);
+  }
+
+  updateVerticalMovement() {
+    if (this.isInTheAir() || this.speedY < 0) {
+      this.applyGravity();
+
+      if (this.y >= this.groundY) {
+        this.y = this.groundY;
+        this.speedY = 0;
+        this.setAnimation(this.IMAGES_RUNNING, 50);
+      }
+    }
+  }
+
+  isVisibleInCanvas() {
+    const screenX = this.x + this.world.cameraX;
+
+    return screenX + this.width > 0 && screenX < this.world.canvas.width;
+  }
 }
