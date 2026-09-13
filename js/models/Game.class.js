@@ -163,7 +163,12 @@ class Game {
    * @returns {HTMLMediaElement[]} Currently available game audio objects.
    */
   getAudioObjects() {
-    const objects = [this.titleSong, this.gameSong, this.funeralSong, this.endOfGameSong];
+    const objects = [
+      this.titleSong,
+      this.gameSong,
+      this.funeralSong,
+      this.endOfGameSong,
+    ];
     const worldObjects = [
       this.world?.character,
       ...(this.world?.level?.enemies ?? []),
@@ -173,7 +178,10 @@ class Game {
 
     worldObjects.forEach((object) => {
       Object.values(object ?? {}).forEach((value) => {
-        if (typeof HTMLMediaElement !== "undefined" && value instanceof HTMLMediaElement) {
+        if (
+          typeof HTMLMediaElement !== "undefined" &&
+          value instanceof HTMLMediaElement
+        ) {
           objects.push(value);
         }
       });
@@ -248,7 +256,10 @@ class Game {
     if (event.key === "ArrowLeft") this.world.keyboard.left = true;
     if (event.key === "ArrowRight") this.world.keyboard.right = true;
     if (event.key === "ArrowUp") this.world.keyboard.jump = true;
-    if (event.code === "Space") this.world.keyboard.throw = true;
+    if (event.code === "Space") {
+      event.preventDefault();
+      this.world.keyboard.throw = true;
+    }
   }
 
   /**
