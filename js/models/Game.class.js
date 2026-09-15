@@ -97,8 +97,8 @@ class Game {
    */
   async startWorld() {
     if (this.state === "loading") return;
-    if (!this.isLandscape()) {
-      this.updateOrientationPrompt();
+    if (!this.display.isLandscape()) {
+      this.display.updateOrientationPrompt();
       return;
     }
 
