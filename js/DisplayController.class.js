@@ -63,4 +63,23 @@ class DisplayController {
   isLandscape() {
     return window.matchMedia("(orientation: landscape)").matches;
   }
+
+  /**
+   * Enters or exits browser fullscreen mode for the game surface.
+   *
+   * @returns {Promise<void>} Resolves after the browser handles the request.
+   */
+  async toggleFullscreen() {
+    const wrapper = document.querySelector(".game-wrapper");
+
+    if (!wrapper) return;
+
+    if (document.fullscreenElement) {
+      await document.exitFullscreen();
+      screen.orientation?.unlock?.();
+      return;
+    }
+
+    await wrapper.requestFullscreen?.();
+  }
 }

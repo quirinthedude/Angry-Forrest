@@ -40,7 +40,7 @@ function bindOptionControls() {
   });
 
   resizeButton?.addEventListener("click", () => {
-    window.game?.toggleFullscreen();
+    window.game?.display.toggleFullscreen();
   });
 }
 
