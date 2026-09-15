@@ -192,31 +192,6 @@ class Game {
   }
 
   /**
-   * Starts fullscreen and attempts to lock the game to landscape mode.
-   *
-   * Unsupported orientation locking falls back to the orientation prompt.
-   *
-   * @returns {Promise<void>} Resolves after supported requests are attempted.
-   */
-  async prepareLandscapeMode() {
-    const wrapper = document.querySelector(".game-wrapper");
-
-    try {
-      if (wrapper && !document.fullscreenElement) {
-        await wrapper.requestFullscreen?.();
-      }
-    } catch {
-      // Fullscreen is optional; the orientation fallback still remains active.
-    }
-
-    try {
-      await screen.orientation?.lock?.("landscape");
-    } catch {
-      // iOS and unsupported browsers use the orientation prompt instead.
-    }
-  }
-
-  /**
    * Handles keyboard input according to the current lifecycle state.
    *
    * During `intro`, only Enter starts the world. During `playing`, movement,
