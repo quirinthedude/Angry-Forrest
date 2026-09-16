@@ -46,8 +46,9 @@ class Game {
    *
    * @param {HTMLCanvasElement} canvas Canvas on which the game is rendered.
    */
-  constructor(canvas) {
+  constructor(canvas, display) {
     this.canvas = canvas;
+    this.display = display;
     this.intro = new IntroScene(canvas);
     this.setGameplayUiVisible(false);
 
@@ -55,8 +56,6 @@ class Game {
     this.gameSong = new Audio("./audio/game_song.mp3");
     this.funeralSong = new Audio("./audio/Mourning Brass - 2.mp3");
     this.endOfGameSong = new Audio("./audio/end_of_game.mp3");
-
-    this.display = new DisplayController();
   }
 
   /**

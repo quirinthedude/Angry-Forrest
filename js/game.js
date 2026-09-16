@@ -4,20 +4,11 @@ let game;
 function init() {
   const preIntro = document.getElementById("pre-intro");
   const canvasElement = document.getElementById("canvas");
-  const orientationPrompt = document.getElementById("orientation-prompt");
-
-  const updatePreIntroOrientation = () => {
-    orientationPrompt.hidden = window.matchMedia(
-      "(orientation: landscape)",
-    ).matches;
-  };
+  const display = new DisplayController();
 
   bindTouchControls();
   bindOptionControls();
   bindGameSurfaceProtection();
-  updatePreIntroOrientation();
-  window.addEventListener("resize", updatePreIntroOrientation);
-  window.addEventListener("orientationchange", updatePreIntroOrientation);
 
   const startWorldFromIntro = () => {
     if (window.game?.state !== "intro") return;
@@ -30,13 +21,13 @@ function init() {
   preIntro.addEventListener(
     "click",
     () => {
-      if (!window.matchMedia("(orientation: landscape)").matches) return;
+      if (!display.isLandscape()) return;
 
       preIntro.hidden = true;
-      orientationPrompt.hidden = true;
+      display.updateOrientationPrompt();
 
       canvas = canvasElement;
-      game = new Game(canvas);
+      game = new Game(canvas, display);
       window.game = game;
       game.start();
       game.display.prepareLandscapeMode();
