@@ -50,7 +50,7 @@ class Game {
     this.canvas = canvas;
     this.display = display;
     this.intro = new IntroScene(canvas);
-    this.setGameplayUiVisible(false);
+    this.display.setGameplayUiVisible(false);
 
     this.titleSong = new Audio("/audio/title_song.mp3");
     this.gameSong = new Audio("./audio/game_song.mp3");
@@ -118,21 +118,8 @@ class Game {
     this.intro.stop();
 
     this.state = "playing";
-    this.setGameplayUiVisible(true);
+    this.display.setGameplayUiVisible(true);
     this.world.draw();
-  }
-
-  /**
-   * Shows or hides the gameplay energy bars.
-   *
-   * @param {boolean} visible Whether the gameplay UI should be visible.
-   * @returns {void}
-   */
-  setGameplayUiVisible(visible) {
-    const energyBar = document.querySelector(".character-energy");
-    if (energyBar) energyBar.hidden = !visible;
-    const energyBarR = document.querySelector(".robot-energy");
-    if (energyBarR) energyBarR.hidden = !visible;
   }
 
   /**
@@ -310,7 +297,7 @@ class Game {
       audio.currentTime = 0;
     });
 
-    this.setGameplayUiVisible(false);
+    this.display.setGameplayUiVisible(false);
 
     this.world = null;
     this.endScreen = null;

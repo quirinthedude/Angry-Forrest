@@ -107,4 +107,17 @@ class DisplayController {
       // iOS and unsupported browsers use the orientation prompt instead.
     }
   }
+
+  /**
+   * Shows or hides the gameplay energy bars.
+   *
+   * @param {boolean} visible Whether the gameplay UI should be visible.
+   * @returns {void}
+   */
+  setGameplayUiVisible(visible) {
+    const energyBar = document.querySelector(".character-energy");
+    if (energyBar) energyBar.hidden = !visible;
+    const energyBarR = document.querySelector(".robot-energy");
+    if (energyBarR) energyBarR.hidden = !visible;
+  }
 }
