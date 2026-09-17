@@ -57,6 +57,8 @@ class Game {
     this.gameSong = new Audio("./audio/game_song.mp3");
     this.funeralSong = new Audio("./audio/Mourning Brass - 2.mp3");
     this.endOfGameSong = new Audio("./audio/end_of_game.mp3");
+
+    this.isMuted = JSON.parse(localStorage.getItem("isMuted")) ?? false;
   }
 
   /**
@@ -142,6 +144,7 @@ class Game {
    */
   setMuted(muted) {
     this.isMuted = muted;
+    localStorage.setItem("isMuted", JSON.stringify(this.isMuted));
     this.applyMutedState();
   }
 
