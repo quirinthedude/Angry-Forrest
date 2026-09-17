@@ -83,7 +83,7 @@ function bindCanvasTap() {
   canvas.addEventListener("pointerup", (event) => {
     const state = window.game?.state;
 
-    if (state === "gameOver" && state === "gameWon") {
+    if (state === "gameOver" || state === "gameWon") {
       event.preventDefault();
       window.game.returnToIntro();
       return;
