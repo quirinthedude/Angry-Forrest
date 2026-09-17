@@ -45,6 +45,7 @@ class Game {
    * creates the audio elements used throughout the lifecycle.
    *
    * @param {HTMLCanvasElement} canvas Canvas on which the game is rendered.
+   * @param {DisplayController} display
    */
   constructor(canvas, display) {
     this.canvas = canvas;

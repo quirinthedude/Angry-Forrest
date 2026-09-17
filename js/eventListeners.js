@@ -7,27 +7,49 @@ window.addEventListener("keyup", function (event) {
 });
 
 function bindTouchControls() {
+  const activePointers = new Map();
+  const activeControlCounts = new Map();
+
   document.querySelectorAll("[data-control]").forEach((button) => {
     const control = button.dataset.control;
 
-    const setControl = (active) => {
-      if (window.game?.state !== "playing") return;
-      window.game.world.keyboard[control] = active;
-    };
-
     button.addEventListener("pointerdown", (event) => {
+      if (window.game?.state !== "playing") return;
+
       event.preventDefault();
       button.setPointerCapture?.(event.pointerId);
-      setControl(true);
+
+      activePointers.set(event.pointerId, control);
+
+      const count = (activeControlCounts.get(control) || 0) + 1;
+      activeControlCounts.set(control, count);
+
+      window.game.world.keyboard[control] = true;
     });
 
-    const releaseControl = (event) => {
+    const releasePointer = (event) => {
       event.preventDefault();
-      setControl(false);
+
+      const releasedControl = activePointers.get(event.pointerId);
+      if (!releasedControl) return;
+
+      activePointers.delete(event.pointerId);
+
+      const count = (activeControlCounts.get(releasedControl) || 1) - 1;
+
+      if (count <= 0) {
+        activeControlCounts.delete(releasedControl);
+
+        if (window.game?.world) {
+          window.game.world.keyboard[releasedControl] = false;
+        }
+      } else {
+        activeControlCounts.set(releasedControl, count);
+      }
     };
 
-    button.addEventListener("pointerup", releaseControl);
-    button.addEventListener("pointercancel", releaseControl);
+    button.addEventListener("pointerup", releasePointer);
+    button.addEventListener("pointercancel", releasePointer);
   });
 }
 

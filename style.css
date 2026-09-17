@@ -157,8 +157,9 @@ body {
 }
 
 .control-button {
-  width: 58px;
-  height: 58px;
+  width: 80px;
+  height: 80px;
+  touch-action: none;
 }
 
 .control-button img {
