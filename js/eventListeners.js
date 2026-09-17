@@ -77,15 +77,21 @@ function bindGameSurfaceProtection() {
   });
 }
 
-function bindEndScreenTap() {
+function bindCanvasTap() {
   const canvas = document.getElementById("canvas");
 
   canvas.addEventListener("pointerup", (event) => {
     const state = window.game?.state;
 
-    if (state !== "gameOver" && state !== "gameWon") return;
+    if (state === "gameOver" && state === "gameWon") {
+      event.preventDefault();
+      window.game.returnToIntro();
+      return;
+    }
 
-    event.preventDefault;
-    window.game.returnToIntro();
+    if (state === "intro") {
+      event.preventDefault();
+      window.game.startWorld();
+    }
   });
 }

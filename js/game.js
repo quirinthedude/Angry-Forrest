@@ -9,15 +9,7 @@ function init() {
   bindTouchControls();
   bindOptionControls();
   bindGameSurfaceProtection();
-  bindEndScreenTap();
-
-  const startWorldFromIntro = () => {
-    if (window.game?.state !== "intro") return;
-    window.game.startWorld();
-  };
-
-  canvasElement.addEventListener("pointerup", startWorldFromIntro);
-  canvasElement.addEventListener("click", startWorldFromIntro);
+  bindCanvasTap();
 
   preIntro.addEventListener(
     "click",
