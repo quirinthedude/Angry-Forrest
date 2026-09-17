@@ -13,7 +13,9 @@ function init() {
 
   preIntro.addEventListener(
     "click",
-    () => {
+    (event) => {
+      if (event.target.closest("a")) return;
+
       if (!display.isLandscape()) return;
 
       preIntro.hidden = true;
