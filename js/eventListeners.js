@@ -76,3 +76,16 @@ function bindGameSurfaceProtection() {
     });
   });
 }
+
+function bindEndScreenTap() {
+  const canvas = document.getElementById("canvas");
+
+  canvas.addEventListener("pointerup", (event) => {
+    const state = window.game?.state;
+
+    if (state !== "gameOver" && state !== "gameWon") return;
+
+    event.preventDefault;
+    window.game.returnToIntro();
+  });
+}

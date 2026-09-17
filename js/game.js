@@ -9,6 +9,7 @@ function init() {
   bindTouchControls();
   bindOptionControls();
   bindGameSurfaceProtection();
+  bindEndScreenTap();
 
   const startWorldFromIntro = () => {
     if (window.game?.state !== "intro") return;
