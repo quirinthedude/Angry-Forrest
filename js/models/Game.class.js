@@ -69,6 +69,7 @@ class Game {
   start() {
     this.intro.start();
     this.titleSong.currentTime = 0;
+    this.applyMutedState();
     this.playTitleSong();
   }
 
