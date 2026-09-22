@@ -13,9 +13,6 @@ class EndGame {
     this.ctx = canvas.getContext("2d");
     this.pressEnterOnly = pressEnterOnly;
 
-    // this.endGameImage = new Image();
-    // this.endGameImage.src = endGameImagePath;
-
     this.pressEnterImage = new Image();
     this.pressEnterImage.src = "./img/icons/press_enter.png";
 

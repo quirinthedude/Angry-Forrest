@@ -11,8 +11,6 @@ class Robot extends MovableObject {
   isFighting = false;
   fightState = "inactive";
   chargeTargetX = null;
-  // isTurning = false;
-
   IMAGES_IDLE = createAnimationImages("./img/robot-boss/Idle/idle_", 9);
   IMAGES_WALKING = createAnimationImages("./img/robot-boss/Walk/Walk_", 12);
   IMAGES_RUNNING = createAnimationImages("./img/robot-boss/Run/Run_", 12);
@@ -189,25 +187,6 @@ class Robot extends MovableObject {
       this.fightState = "prepareAttack";
     }
   }
-
-  // startTurn() {
-  //   if (this.isTurning) return;
-
-  //   this.isTurning = true;
-  //   this.animateOnce(this.IMAGES_TURNING_TO_RUN, 200);
-
-  //   setTimeout(() => {
-  //     if (this.isDead) return;
-
-  //     this.direction *= -1;
-
-  //     this.isTurning = false;
-  //     this.fightState = "turned";
-  //     this.setAnimation(this.IMAGES_ATTACKING);
-
-  //     console.log("robot turned");
-  //   }, 900);
-  // }
 
   faceCharacter(character) {
     this.direction = character.x < this.x ? 1 : -1;

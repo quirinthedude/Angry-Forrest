@@ -1,189 +1,108 @@
 <!doctype html>
 <html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Angry Forrest</title>
-    <link
-      rel="icon"
-      type="image/png"
-      sizes="16x16"
-      href="./img/icons/AF-48.png"
-    />
-    <link
-      rel="icon"
-      type="image/png"
-      sizes="32x32"
-      href="./img/icons/AF-48.png"
-    />
-    <link
-      rel="icon"
-      type="image/png"
-      sizes="48x48"
-      href="./img/icons/AF-48.png"
-    />
-    <link rel="apple-touch-icon" href="./img/icons/AF-mac.png" />
-    <link rel="stylesheet" href="style.css" />
-  </head>
-  <body onload="init()">
-    <!-- <h1>Angry Forrest</h1> -->
-    <div id="pre-intro" class="pre-intro">
-      <img src="./img/icons/title_img.png" alt="Angry Forrest" />
-      <span>Click to Start!</span>
-      <a href="./impressum.html" class="pre-intro-link">Impressum</a>
-    </div>
 
-    <div
-      id="orientation-prompt"
-      class="orientation-prompt"
-      role="status"
-      aria-live="assertive"
-      hidden
-    >
-      <p>Please turn your device to landscape.</p>
-    </div>
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Angry Forrest</title>
+  <link rel="icon" type="image/png" sizes="16x16" href="./img/icons/AF-48.png" />
+  <link rel="icon" type="image/png" sizes="32x32" href="./img/icons/AF-48.png" />
+  <link rel="icon" type="image/png" sizes="48x48" href="./img/icons/AF-48.png" />
+  <link rel="apple-touch-icon" href="./img/icons/AF-mac.png" />
+  <link rel="stylesheet" href="style.css" />
+</head>
 
-    <div class="game-wrapper">
-      <div class="game-stage">
-        <div class="top-controls" aria-label="Spieloptionen">
-          <label
-            class="ui-button sound-toggle"
-            aria-label="Ton ein- oder ausschalten"
-          >
-            <input type="checkbox" class="sound-toggle-input" />
-            <img
-              class="sound-icon sound-icon-on"
-              src="./img/icons/sound_on.png"
-              alt="Ton eingeschaltet"
-            />
-            <img
-              class="sound-icon sound-icon-off"
-              src="./img/icons/silence.png"
-              alt="Ton ausgeschaltet"
-            />
-          </label>
-          <button
-            class="ui-button resize-button"
-            type="button"
-            aria-label="Spielfläche vergrößern"
-          >
-            <img src="./img/icons/resize.png" alt="Spielfläche vergrößern" />
+<body onload="init()">
+  <div id="pre-intro" class="pre-intro">
+    <h1>Angry Forrest</h1>
+    <img src="./img/icons/title_img.png" alt="Angry Forrest" />
+    <span>Click to Start!</span>
+    <a href="./impressum.html" class="pre-intro-link">Impressum</a>
+  </div>
+
+  <div id="orientation-prompt" class="orientation-prompt" role="status" aria-live="assertive" hidden>
+    <p>Please turn your device to landscape.</p>
+  </div>
+
+  <div class="game-wrapper">
+    <div class="game-stage">
+      <div class="top-controls" aria-label="Spieloptionen">
+        <label class="ui-button sound-toggle" aria-label="Ton ein- oder ausschalten">
+          <input type="checkbox" class="sound-toggle-input" />
+          <img class="sound-icon sound-icon-on" src="./img/icons/sound_on.png" alt="Ton eingeschaltet" />
+          <img class="sound-icon sound-icon-off" src="./img/icons/silence.png" alt="Ton ausgeschaltet" />
+        </label>
+        <button class="ui-button resize-button" type="button" aria-label="Spielfläche vergrößern">
+          <img src="./img/icons/resize.png" alt="Spielfläche vergrößern" />
+        </button>
+      </div>
+
+      <div class="character-energy">
+        <img id="character-energy-bar" src="img/char_energy/char_energy9.png" />
+      </div>
+
+      <div class="bottom-controls" aria-label="Touch-Steuerung">
+        <div class="action-controls" aria-label="Aktionen">
+          <button class="ui-button control-button" type="button" data-control="jump" aria-label="Springen">
+            <img src="./img/icons/jump_button.png" alt="Springen" />
+          </button>
+          <button class="ui-button control-button" type="button" data-control="throw" aria-label="Frucht werfen">
+            <img src="./img/icons/throw_button.png" alt="Frucht werfen" />
           </button>
         </div>
 
-        <div class="character-energy">
-          <img
-            id="character-energy-bar"
-            src="img/char_energy/char_energy9.png"
-          />
+        <div class="fruit-inventory" aria-label="Gesammelte Früchte">
+          <img class="fruit-slot" src="./img/objects/fruit_bw.png" alt="Fruchtplatz" />
+          <img class="fruit-slot" src="./img/objects/fruit_bw.png" alt="Fruchtplatz" />
+          <img class="fruit-slot" src="./img/objects/fruit_bw.png" alt="Fruchtplatz" />
         </div>
 
-        <div class="bottom-controls" aria-label="Touch-Steuerung">
-          <div class="action-controls" aria-label="Aktionen">
-            <button
-              class="ui-button control-button"
-              type="button"
-              data-control="jump"
-              aria-label="Springen"
-            >
-              <img src="./img/icons/jump_button.png" alt="Springen" />
-            </button>
-            <button
-              class="ui-button control-button"
-              type="button"
-              data-control="throw"
-              aria-label="Frucht werfen"
-            >
-              <img src="./img/icons/throw_button.png" alt="Frucht werfen" />
-            </button>
-          </div>
-
-          <div class="fruit-inventory" aria-label="Gesammelte Früchte">
-            <img
-              class="fruit-slot"
-              src="./img/objects/fruit_bw.png"
-              alt="Fruchtplatz"
-            />
-            <img
-              class="fruit-slot"
-              src="./img/objects/fruit_bw.png"
-              alt="Fruchtplatz"
-            />
-            <img
-              class="fruit-slot"
-              src="./img/objects/fruit_bw.png"
-              alt="Fruchtplatz"
-            />
-          </div>
-
-          <div class="direction-controls" aria-label="Bewegung">
-            <button
-              class="ui-button control-button"
-              type="button"
-              data-control="left"
-              aria-label="Nach links bewegen"
-            >
-              <img src="./img/icons/left_button.png" alt="Nach links" />
-            </button>
-            <button
-              class="ui-button control-button"
-              type="button"
-              data-control="right"
-              aria-label="Nach rechts bewegen"
-            >
-              <img src="./img/icons/right.button.png" alt="Nach rechts" />
-            </button>
-          </div>
-        </div>
-
-        <canvas width="720" height="480" id="canvas"></canvas>
-        <img
-          src="./img/landscape/canvas-frame.png"
-          alt=""
-          class="canvas-frame"
-        />
-        <div class="robot-energy">
-          <img
-            class="r-energy-frame"
-            src="/img/objects/robot_energy-meter.png"
-            alt=""
-          />
-          <img
-            class="r-energy"
-            id="robot"
-            src="/img/objects/robot_energy.png"
-            alt=""
-          />
+        <div class="direction-controls" aria-label="Bewegung">
+          <button class="ui-button control-button" type="button" data-control="left" aria-label="Nach links bewegen">
+            <img src="./img/icons/left_button.png" alt="Nach links" />
+          </button>
+          <button class="ui-button control-button" type="button" data-control="right" aria-label="Nach rechts bewegen">
+            <img src="./img/icons/right.button.png" alt="Nach rechts" />
+          </button>
         </div>
       </div>
+
+      <canvas width="720" height="480" id="canvas"></canvas>
+      <img src="./img/landscape/canvas-frame.png" alt="" class="canvas-frame" />
+      <div class="robot-energy">
+        <img class="r-energy-frame" src="/img/objects/robot_energy-meter.png" alt="" />
+        <img class="r-energy" id="robot" src="/img/objects/robot_energy.png" alt="" />
+      </div>
     </div>
-    <script src="./js/models/DrawableObject.class.js"></script>
-    <script src="./js/models/MovableObject.class.js"></script>
-    <script src="./js/models/Landscape.class.js"></script>
-    <script src="./js/helpers.js"></script>
-    <script src="./js/eventListeners.js"></script>
-    <script src="./js/models/Sky.class.js"></script>
-    <script src="./js/models/Character.class.js"></script>
-    <script src="./js/models/GrowingTree.class.js"></script>
-    <script src="./js/models/Gnome.class.js"></script>
-    <script src="./js/models/MiniRobot.class.js"></script>
-    <script src="./js/models/Fruit.class.js"></script>
-    <script src="./js/models/Bomb.class.js"></script>
-    <script src="./js/models/Robot.class.js"></script>
-    <script src="./js/models/Grass.class.js"></script>
-    <script src="./js/models/Thrownfruit.class.js"></script>
-    <script src="./js/models/BackgroundObject.class.js"></script>
-    <script src="./js/models/World.class.js"></script>
-    <script src="./js/models/Keyboard.class.js"></script>
-    <script src="./js/models/Level.class.js"></script>
-    <script src="./js/levels/level1.js"></script>
-    <script src="./js/DisplayController.class.js"></script>
-    <script src="./js/titleGlyphs.js"></script>
-    <script src="./js/models/ScrollingText.class.js"></script>
-    <script src="./js/models/IntroScene.class.js"></script>
-    <script src="./js/models/VictoryScene.class.js"></script>
-    <script src="./js/models/EndGame.class.js"></script>
-    <script src="./js/models/Game.class.js"></script>
-    <script src="./js/game.js"></script>
-  </body>
+  </div>
+  <script src="./js/models/DrawableObject.class.js"></script>
+  <script src="./js/models/MovableObject.class.js"></script>
+  <script src="./js/models/Landscape.class.js"></script>
+  <script src="./js/helpers.js"></script>
+  <script src="./js/eventListeners.js"></script>
+  <script src="./js/models/Sky.class.js"></script>
+  <script src="./js/models/Character.class.js"></script>
+  <script src="./js/models/GrowingTree.class.js"></script>
+  <script src="./js/models/Gnome.class.js"></script>
+  <script src="./js/models/MiniRobot.class.js"></script>
+  <script src="./js/models/Fruit.class.js"></script>
+  <script src="./js/models/Bomb.class.js"></script>
+  <script src="./js/models/Robot.class.js"></script>
+  <script src="./js/models/Grass.class.js"></script>
+  <script src="./js/models/Thrownfruit.class.js"></script>
+  <script src="./js/models/BackgroundObject.class.js"></script>
+  <script src="./js/models/World.class.js"></script>
+  <script src="./js/models/Keyboard.class.js"></script>
+  <script src="./js/models/Level.class.js"></script>
+  <script src="./js/levels/level1.js"></script>
+  <script src="./js/DisplayController.class.js"></script>
+  <script src="./js/titleGlyphs.js"></script>
+  <script src="./js/models/ScrollingText.class.js"></script>
+  <script src="./js/models/IntroScene.class.js"></script>
+  <script src="./js/models/VictoryScene.class.js"></script>
+  <script src="./js/models/EndGame.class.js"></script>
+  <script src="./js/models/Game.class.js"></script>
+  <script src="./js/game.js"></script>
+</body>
+
 </html>
