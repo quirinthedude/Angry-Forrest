@@ -3,6 +3,7 @@ let game;
 
 function init() {
   const preIntro = document.getElementById("pre-intro");
+  const startButton = document.getElementById("pre-intro-start");
   const canvasElement = document.getElementById("canvas");
   const display = new DisplayController();
 
@@ -11,24 +12,18 @@ function init() {
   bindGameSurfaceProtection();
   bindCanvasTap();
 
-  preIntro.addEventListener(
-    "click",
-    (event) => {
-      if (event.target.closest("a")) return;
+  startButton.addEventListener("click", () => {
+    if (game || !display.isLandscape()) return;
 
-      if (!display.isLandscape()) return;
+    preIntro.hidden = true;
+    display.updateOrientationPrompt();
 
-      preIntro.hidden = true;
-      display.updateOrientationPrompt();
+    canvas = canvasElement;
+    game = new Game(canvas, display);
+    window.game = game;
 
-      canvas = canvasElement;
-      game = new Game(canvas, display);
-      window.game = game;
-
-      display.updateMuteUI(game.isMuted);
-      game.start();
-      game.display.prepareLandscapeMode();
-    },
-    { once: true },
-  );
+    display.updateMuteUI(game.isMuted);
+    game.start();
+    game.display.prepareLandscapeMode();
+  });
 }
