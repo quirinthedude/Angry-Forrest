@@ -81,11 +81,37 @@ body {
   justify-content: center;
   align-items: center;
   gap: clamp(8px, 2dvh, 24px);
-  background: black;
+  background: transparent;
   color: white;
   cursor: pointer;
   overflow: auto;
   scrollbar-width: none;
+}
+
+.pre-intro::before {
+  content: "";
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  width: calc(100dvw - 16%);
+  height: calc(100dvh - 20px);
+  border-radius: 50%;
+  background: radial-gradient(
+    ellipse at center,
+    #000 0%,
+    #000 38%,
+    #063b13 63%,
+    #018d21 86%,
+    #01f92e 100%
+  );
+  transform: translate(-50%, -50%);
+  z-index: 0;
+  pointer-events: none;
+}
+
+.pre-intro > * {
+  position: relative;
+  z-index: 1;
 }
 
 .pre-intro::-webkit-scrollbar {
