@@ -35,9 +35,16 @@
         <button id="pre-intro-start" class="forest-button" type="button">
           START
         </button>
-        <button class="forest-button" type="button">HOW TO PLAY</button>
+        <button
+          id="how-to-play-button"
+          class="forest-button"
+          type="button"
+        >
+          HOW TO PLAY
+        </button>
       </div>
-      <div class="how-to-play-content">
+      <div id="how-to-play" class="how-to-play" hidden>
+        <div class="how-to-play-content">
         <h2>HOW TO PLAY</h2>
 
         <p>
@@ -47,47 +54,39 @@
 
         <h3>MOVE</h3>
 
-        <p>
+        <div class="how-to-play-line">
           Use <strong>← / →</strong>
           <span class="control-or">or</span>
-          <img
-            class="inline-control-icon"
-            src="./img/mobile-controls/left.png"
-            alt="Left button"
-          />
-          <img
-            class="inline-control-icon"
-            src="./img/mobile-controls/right.png"
-            alt="Right button"
-          />
+          <div class="inline-control-icon">
+            <img src="/img/icons/left_button.png" alt="Left button" />
+          </div>
+          <div class="inline-control-icon">
+            <img src="/img/icons/right.button.png" alt="Right button" />
+          </div>
           to move.
-        </p>
+        </div>
 
-        <p>
+        <div class="how-to-play-line">
           Press <strong>↑</strong>
           <span class="control-or">or</span>
-          <img
-            class="inline-control-icon"
-            src="./img/mobile-controls/jump.png"
-            alt="Jump button"
-          />
+          <div class="inline-control-icon">
+            <img src="/img/icons/jump_button.png" alt="Jump button" />
+          </div>
           to jump.
-        </p>
+        </div>
 
         <h3>COLLECT &amp; THROW</h3>
 
         <p>Collect the acorns hanging in the trees.</p>
 
-        <p>
+        <div class="how-to-play-line">
           Press <strong>SPACE</strong>
           <span class="control-or">or</span>
-          <img
-            class="inline-control-icon"
-            src="./img/mobile-controls/throw-fruit.png"
-            alt="Throw button"
-          />
+          <div class="inline-control-icon">
+            <img src="/img/icons/throw_button.png" alt="Throw button" />
+          </div>
           to throw an acorn at your enemies.
-        </p>
+        </div>
 
         <p>
           Missed your target? No problem — thrown acorns land on the ground and
@@ -118,6 +117,10 @@
         </p>
 
         <p>Good luck — the forest is counting on you.</p>
+        <button id="how-to-play-back" class="forest-button" type="button">
+          BACK
+        </button>
+        </div>
       </div>
     </div>
 

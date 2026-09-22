@@ -158,6 +158,13 @@ body {
   display: none;
 }
 
+.pre-intro > h1[hidden],
+.pre-intro > img[hidden],
+.pre-intro-actions[hidden],
+.how-to-play[hidden] {
+  display: none;
+}
+
 .pre-intro-actions {
   display: flex;
   flex-wrap: nowrap;
@@ -253,6 +260,53 @@ body {
 
 .forest-button:active {
   transform: translateY(1px);
+}
+
+.how-to-play {
+  position: fixed;
+  inset: 0;
+  z-index: 2;
+  display: grid;
+  place-items: center;
+}
+
+.how-to-play-content {
+  width: min(68vw, 680px);
+  max-height: calc(100dvh - 120px);
+  padding: 28px 36px;
+  box-sizing: border-box;
+  overflow-y: auto;
+  color: #f3e5b5;
+  text-align: center;
+  font-family: "Grenze Gotisch", "Comic Sans MS", cursive;
+}
+
+.how-to-play-content .forest-button {
+  display: block;
+  min-width: 150px;
+  margin: 24px auto 0;
+}
+
+.inline-control-icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 34px;
+  height: 34px;
+  vertical-align: middle;
+  margin: 0 4px;
+}
+
+.inline-control-icon img {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+}
+
+.control-or {
+  margin: 0 6px;
+  opacity: 0.8;
 }
 
 .orientation-prompt {
