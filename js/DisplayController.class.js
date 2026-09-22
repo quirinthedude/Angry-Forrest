@@ -134,7 +134,7 @@ class DisplayController {
   }
 
   updateMuteUI() {
-    const soundToggle = document.querySelector("sound-toggle-input");
+    const soundToggle = document.querySelector(".sound-toggle-input");
 
     if (soundToggle) {
       soundToggle.checked = isMuted;

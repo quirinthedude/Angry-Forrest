@@ -27,9 +27,7 @@ function init() {
   bindGameSurfaceProtection();
   bindCanvasTap();
 
-  howToPlayButton.addEventListener("click", () =>
-    setHowToPlayVisible(true),
-  );
+  howToPlayButton.addEventListener("click", () => setHowToPlayVisible(true));
   howToPlayBackButton.addEventListener("click", () =>
     setHowToPlayVisible(false),
   );
@@ -44,7 +42,6 @@ function init() {
     game = new Game(canvas, display);
     window.game = game;
 
-    display.updateMuteUI(game.isMuted);
     game.start();
     game.display.prepareLandscapeMode();
   });

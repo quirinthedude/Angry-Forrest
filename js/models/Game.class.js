@@ -59,6 +59,7 @@ class Game {
     this.endOfGameSong = new Audio("./audio/end_of_game.mp3");
 
     this.isMuted = JSON.parse(localStorage.getItem("isMuted")) ?? false;
+    this.display.updateMuteUI(this.isMuted);
   }
 
   /**
@@ -147,6 +148,7 @@ class Game {
     this.isMuted = muted;
     localStorage.setItem("isMuted", JSON.stringify(this.isMuted));
     this.applyMutedState();
+    this.display.updateMuteUI(this.isMuted);
   }
 
   /**
