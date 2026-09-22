@@ -120,4 +120,12 @@ class DisplayController {
     const energyBarR = document.querySelector(".robot-energy");
     if (energyBarR) energyBarR.hidden = !visible;
   }
+
+  updateMuteUI() {
+    const soundToggle = document.querySelector("sound-toggle-input");
+
+    if (soundToggle) {
+      soundToggle.checked = isMuted;
+    }
+  }
 }

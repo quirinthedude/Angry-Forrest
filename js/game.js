@@ -24,6 +24,8 @@ function init() {
       canvas = canvasElement;
       game = new Game(canvas, display);
       window.game = game;
+
+      display.updateMuteUI(game.isMuted);
       game.start();
       game.display.prepareLandscapeMode();
     },
