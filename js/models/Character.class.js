@@ -34,8 +34,6 @@ class Character extends MovableObject {
   fruitInventory = 0;
   inInvulnerable = false;
 
-  // lastFruitCollision = null;
-
   activeFruitCollision = new Set();
 
   constructor(world) {
@@ -58,9 +56,7 @@ class Character extends MovableObject {
     this.hurtSound = new Audio("/audio/ent_hurt.mp3");
     this.deathSound = new Audio("./audio/Mourning Brass - 2.mp3");
     this.currentAnimation = this.IMAGES_IDLE;
-    //remove in time
     this.collisionDebug = true;
-    //
     this.fruitSound = new Audio("./audio/fruit_louder.wav");
   }
 

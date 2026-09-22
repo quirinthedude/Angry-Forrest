@@ -31,9 +31,7 @@ class Gnome extends MovableObject {
     this.speed = 0.6 + Math.random() * 0.3;
     this.animate(this.IMAGES_WALKING, 25); // Start
     this.moveGnome();
-    //remove in time
     this.collisionDebug = true;
-    //
   }
 
   moveGnome() {
