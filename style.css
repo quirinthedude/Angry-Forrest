@@ -96,6 +96,8 @@ body {
   width: calc(100dvw - 16%);
   height: calc(100dvh - 20px);
   border-radius: 50%;
+  box-sizing: border-box;
+  border: 3px solid #9b7a45;
   background: radial-gradient(
     ellipse at center,
     #000 0%,
@@ -252,6 +254,12 @@ body {
 }
 
 .orientation-prompt[hidden] {
+  display: none;
+}
+
+.bottom-controls[hidden],
+.character-energy[hidden],
+.robot-energy[hidden] {
   display: none;
 }
 

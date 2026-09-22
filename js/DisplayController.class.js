@@ -115,10 +115,22 @@ class DisplayController {
    * @returns {void}
    */
   setGameplayUiVisible(visible) {
-    const energyBar = document.querySelector(".character-energy");
-    if (energyBar) energyBar.hidden = !visible;
-    const energyBarR = document.querySelector(".robot-energy");
-    if (energyBarR) energyBarR.hidden = !visible;
+    const selectors = [
+      ".character-energy",
+      ".robot-energy",
+      // ".top-controls",
+      ".bottom-controls",
+    ];
+
+    selectors.forEach((selector) => {
+      const element = document.querySelector(selector);
+      if (element) element.hidden = !visible;
+    });
+
+    // const energyBar = document.querySelector(".character-energy");
+    // if (energyBar) energyBar.hidden = !visible;
+    // const energyBarR = document.querySelector(".robot-energy");
+    // if (energyBarR) energyBarR.hidden = !visible;
   }
 
   updateMuteUI() {
