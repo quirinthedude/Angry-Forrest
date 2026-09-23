@@ -574,3 +574,10 @@ canvas {
   width: 32px;
   height: auto;
 }
+
+@media (hover: hover) and (pointer: fine) {
+  .action-controls,
+  .direction-controls {
+    display: none;
+  }
+}
