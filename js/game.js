@@ -33,7 +33,7 @@ function init() {
   );
 
   startButton.addEventListener("click", () => {
-    if (game || !display.isLandscape()) return;
+    if (game || display.requiresLandscape()) return;
 
     preIntro.hidden = true;
     display.updateOrientationPrompt();

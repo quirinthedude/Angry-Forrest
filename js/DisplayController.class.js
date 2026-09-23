@@ -34,11 +34,11 @@ class DisplayController {
 
     if (!wrapper || !stage) return;
 
-    const scale = Math.min(
-      wrapper.clientWidth / 866,
-      wrapper.clientHeight / 618,
-      1,
-    );
+    const isFullscreen = document.fullscreenElement === wrapper;
+
+    const scale = isFullscreen
+      ? Math.min(wrapper.clientWidth / 866, wrapper.clientHeight / 618)
+      : Math.min(wrapper.clientWidth / 866, wrapper.clientHeight / 618, 1);
 
     stage.style.setProperty("--game-scale", scale);
   }
@@ -91,6 +91,8 @@ class DisplayController {
    * @returns {Promise<void>} Resolves after supported requests are attempted.
    */
   async prepareLandscapeMode() {
+    if (!this.isMobileDevice()) return;
+
     const wrapper = document.querySelector(".game-wrapper");
 
     try {
@@ -133,11 +135,19 @@ class DisplayController {
     // if (energyBarR) energyBarR.hidden = !visible;
   }
 
-  updateMuteUI() {
+  updateMuteUI(isMuted) {
     const soundToggle = document.querySelector(".sound-toggle-input");
 
     if (soundToggle) {
       soundToggle.checked = isMuted;
     }
+  }
+
+  isMobileDevice() {
+    return window.matchMedia("(hover: none) and (pointer: none)").matches;
+  }
+
+  requiresLandscape() {
+    return this.isMobileDevice() && !this.isLandscape();
   }
 }
