@@ -66,33 +66,46 @@ class World {
     if (!this.isRunning) return;
     this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
 
+    this.drawBackground();
+    this.drawActors();
+    this.drawForeground();
+    this.drawOverlays();
+    requestAnimationFrame(() => this.draw());
+  }
+
+  /** Draws the sky and distant background layers. */
+  drawBackground() {
     this.drawObject(this.level.sky);
     this.drawParallaxObjects(this.level.landscape.backgroundobject);
+  }
 
+  /** Draws camera-translated actors and active projectiles. */
+  drawActors() {
     this.ctx.save();
     this.ctx.translate(this.cameraX, 0);
-
     this.drawObject(this.character);
     this.drawObjects(this.level.enemies);
     this.drawObjects(this.thrownFruits);
     this.drawObjects(this.bombs);
-
     this.ctx.restore();
+  }
 
+  /** Draws foreground parallax layers that appear above the actors. */
+  drawForeground() {
     this.drawParallaxObjects(this.level.fruits);
     this.drawParallaxObjects(this.level.landscape.grass);
+  }
 
+  /** Updates and draws active victory or game-over overlays. */
+  drawOverlays() {
     if (this.game.victoryScene) {
       this.game.victoryScene.update();
       this.game.victoryScene.draw();
     }
-
     if (this.game.endScreen) {
       this.game.endScreen.update();
       this.game.endScreen.draw();
     }
-
-    requestAnimationFrame(() => this.draw());
   }
 
   /**
@@ -103,28 +116,35 @@ class World {
    * @returns {void}
    */
   drawObject(object) {
-    if (!object.img || !object.img.complete || object.img.naturalWidth === 0) {
-      return;
-    }
-    if (
-      object.isHurt &&
-      object.isHurt() &&
-      Math.floor(Date.now() / 100) % 2 === 0
-    )
-      return;
+    if (this.shouldSkipObject(object)) return;
     if (object.shouldMirror()) {
       this.drawMirroredObject(object);
     } else {
-      this.ctx.drawImage(
-        object.img,
-        object.x,
-        object.y,
-        object.width,
-        object.height,
-      );
+      this.drawRegularObject(object);
     }
-
     if (this.collisionDebug) this.drawCollisionDebug(object);
+  }
+
+  /** Determines whether an object is not ready or should blink invisible.
+   * @param {DrawableObject} object Object considered for rendering.
+   * @returns {boolean} Whether drawing should be skipped.
+   */
+  shouldSkipObject(object) {
+    if (!object.img || !object.img.complete || object.img.naturalWidth === 0) {
+      return true;
+    }
+    return (
+      object.isHurt &&
+      object.isHurt() &&
+      Math.floor(Date.now() / 100) % 2 === 0
+    );
+  }
+
+  /** Draws an object without applying horizontal mirroring.
+   * @param {DrawableObject} object Object to render.
+   */
+  drawRegularObject(object) {
+    this.ctx.drawImage(object.img, object.x, object.y, object.width, object.height);
   }
 
   /**
@@ -219,28 +239,32 @@ class World {
       if (fruit.state !== "flying") continue;
 
       for (const enemy of this.level.enemies) {
-        if (fruit.isColliding(enemy)) {
-          console.log("enemy hit", enemy);
-
-          fruit.hit();
-
-          if (enemy instanceof Gnome) {
-            enemy.hitByFruit(fruit.direction);
-          } else if (enemy instanceof Robot) {
-            enemy.hitByFruit();
-          }
-
-          setTimeout(() => {
-            const index = this.thrownFruits.indexOf(fruit);
-            if (index !== -1) {
-              this.thrownFruits.splice(index, 1);
-            }
-          }, 240);
-
-          break;
-        }
+        if (this.handleThrownFruitCollision(fruit, enemy)) break;
       }
     }
+  }
+
+  /** Applies the appropriate enemy reaction to one colliding fruit.
+   * @param {ThrownFruit} fruit Flying fruit that hit an enemy.
+   * @param {MovableObject} enemy Enemy touched by the fruit.
+   * @returns {boolean} Whether a collision was handled.
+   */
+  handleThrownFruitCollision(fruit, enemy) {
+    if (!fruit.isColliding(enemy)) return false;
+    console.log("enemy hit", enemy);
+    fruit.hit();
+    if (enemy instanceof Gnome) enemy.hitByFruit(fruit.direction);
+    if (enemy instanceof Robot) enemy.hitByFruit();
+    setTimeout(() => this.removeThrownFruit(fruit), 240);
+    return true;
+  }
+
+  /** Removes a thrown fruit if it is still present after its hit animation.
+   * @param {ThrownFruit} fruit Fruit scheduled for removal.
+   */
+  removeThrownFruit(fruit) {
+    const index = this.thrownFruits.indexOf(fruit);
+    if (index !== -1) this.thrownFruits.splice(index, 1);
   }
 
   /**

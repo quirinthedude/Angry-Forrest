@@ -43,37 +43,40 @@ class Character extends MovableObject {
   constructor(world) {
     super();
     this.world = world;
+    this.loadCharacterImages();
+    this.x = 240;
+    this.y = 305;
+    this.animate(this.IMAGES_IDLE);
+    this.moveCharacter();
+    this.createCharacterSounds();
+    this.currentAnimation = this.IMAGES_IDLE;
+    this.collisionDebug = true;
+  }
+
+  /** Loads the player's initial sprite and animation frame collections. */
+  loadCharacterImages() {
     this.loadImage(this.IMAGES_IDLE[0]);
     this.loadImages(this.IMAGES_WALKING);
     this.loadImages(this.IMAGES_IDLE);
     this.loadImages(this.IMAGES_HURT);
     this.loadImages(this.IMAGES_JUMPING);
     this.loadImages(this.IMAGES_BOW);
-    this.x = 240;
-    this.y = 305;
+  }
 
-    this.animate(this.IMAGES_IDLE);
-    this.moveCharacter();
+  /** Creates and configures all sounds used by the player. */
+  createCharacterSounds() {
     this.walkingSound = new Audio("/audio/creaking.mp3");
     this.walkingSound.loop = true;
     this.jumpSound = new Audio("/audio/ent_jump.mp3");
     this.hurtSound = new Audio("/audio/ent_hurt.mp3");
     this.deathSound = new Audio("./audio/Mourning Brass - 2.mp3");
-    this.currentAnimation = this.IMAGES_IDLE;
-    this.collisionDebug = true;
     this.fruitSound = new Audio("./audio/fruit_louder.wav");
   }
 
   /** Runs the player's fixed-rate gameplay update loop. */
   moveCharacter() {
     this.movementInterval = setInterval(() => {
-      if (
-        !this.world.ready ||
-        this.isDead ||
-        this.world.game.state !== "playing"
-      ) {
-        return;
-      }
+      if (!this.canUpdateCharacter()) return;
       let wantsToWalk = this.world.keyboard.left || this.world.keyboard.right;
 
       this.handleHorizontalMovement();
@@ -82,25 +85,33 @@ class Character extends MovableObject {
       this.updateVerticalMovement();
       this.updateCamera();
       this.handleCollision();
-      const fruits = this.checkFruitCollision();
-      const currentCollisions = new Set(fruits);
-
-      for (const fruit of fruits) {
-        if (!this.activeFruitCollision.has(fruit)) {
-          this.collectFruit(fruit);
-        }
-      }
-      this.activeFruitCollision = currentCollisions;
-
+      this.updateFruitCollection();
       this.world.updateWorldObjects();
-
-      const landedFruit = this.checkLandedFruitCollision();
-
-      if (landedFruit) {
-        this.collectLandedFruit(landedFruit);
-      }
+      this.collectLandedFruitIfColliding();
       this.updateAnimation(wantsToWalk);
     }, 1000 / 60);
+  }
+
+  /** Determines whether the player update loop may process a frame.
+   * @returns {boolean} Whether gameplay updates are currently allowed.
+   */
+  canUpdateCharacter() {
+    return this.world.ready && !this.isDead && this.world.game.state === "playing";
+  }
+
+  /** Collects newly touched level fruits and records current collisions. */
+  updateFruitCollection() {
+    const fruits = this.checkFruitCollision();
+    for (const fruit of fruits) {
+      if (!this.activeFruitCollision.has(fruit)) this.collectFruit(fruit);
+    }
+    this.activeFruitCollision = new Set(fruits);
+  }
+
+  /** Collects a landed thrown fruit when the player is touching it. */
+  collectLandedFruitIfColliding() {
+    const landedFruit = this.checkLandedFruitCollision();
+    if (landedFruit) this.collectLandedFruit(landedFruit);
   }
 
   /** Applies horizontal input while respecting bounds and air speed. */
@@ -218,10 +229,22 @@ class Character extends MovableObject {
   updateAnimation(wantsToWalk) {
     if (this.isDead) return;
     if (this.isHurt()) {
-      this.setAnimation(this.IMAGES_HURT, 100);
-      this.stopWalkingSound();
+      this.showHurtAnimation();
       return;
     }
+    this.showMovementAnimation(wantsToWalk);
+  }
+
+  /** Shows the hurt animation and silences walking audio. */
+  showHurtAnimation() {
+    this.setAnimation(this.IMAGES_HURT, 100);
+    this.stopWalkingSound();
+  }
+
+  /** Chooses idle, walking or jumping animation from current movement state.
+   * @param {boolean} wantsToWalk Whether movement input is active.
+   */
+  showMovementAnimation(wantsToWalk) {
     if (this.y < this.groundY) {
       this.setAnimation(this.IMAGES_JUMPING, 100);
     } else if (wantsToWalk) {
@@ -231,7 +254,6 @@ class Character extends MovableObject {
     } else {
       this.setAnimation(this.IMAGES_IDLE, 100);
     }
-
     this.stopWalkingSound();
   }
 

@@ -47,6 +47,18 @@ class Robot extends MovableObject {
     super();
     this.world = world;
     this.loadImage(this.IMAGES_IDLE[0]);
+    this.loadRobotAnimations();
+    this.animate(this.IMAGES_IDLE, 100);
+    this.x = x;
+    this.y = y;
+    this.acceleration = 0.5;
+    this.createRobotSounds();
+    this.startActivationCheck();
+    this.energy = 100;
+  }
+
+  /** Loads every sprite collection used by the boss. */
+  loadRobotAnimations() {
     this.loadImages(this.IMAGES_IDLE);
     this.loadImages(this.IMAGES_WALKING);
     this.loadImages(this.IMAGES_RUNNING);
@@ -57,19 +69,21 @@ class Robot extends MovableObject {
     this.loadImages(this.IMAGES_TURNING_TO_RUN);
     this.loadImages(this.IMAGES_TURNING_TO_WALK);
     this.loadImages(this.IMAGES_DYING);
-    this.animate(this.IMAGES_IDLE, 100);
-    this.x = x;
-    this.y = y;
-    this.acceleration = 0.5;
+  }
+
+  /** Creates the audio elements used by boss actions. */
+  createRobotSounds() {
     this.damageSound = new Audio("/audio/robot_damage.mp3");
     this.deathSound = new Audio("/audio/robot_death.mp3");
     this.attackSound = new Audio("/audio/robot_attack.mp3");
     this.jumpSound = new Audio("/audio/robot_jump.mp3");
+  }
 
+  /** Starts polling for the player's boss activation distance. */
+  startActivationCheck() {
     this.activationInterval = setInterval(() => {
       this.checkActivation();
     }, 100);
-    this.energy = 100;
   }
 
   /** Activates the boss when the player reaches its trigger distance. */
@@ -101,16 +115,19 @@ class Robot extends MovableObject {
       this.y = this.groundY;
       this.speedY = 0;
       clearInterval(this.entranceInterval);
-
-      setTimeout(() => {
-        this.animateOnce(this.IMAGES_TURNING_TO_RUN, 200);
-
-        setTimeout(() => {
-          this.isFighting = true;
-          this.fightState = "prepareAttack";
-        }, 900);
-      }, 500);
+      this.startFightAfterEntrance();
     }
+  }
+
+  /** Schedules the transition from entrance animation to combat. */
+  startFightAfterEntrance() {
+    setTimeout(() => {
+      this.animateOnce(this.IMAGES_TURNING_TO_RUN, 200);
+      setTimeout(() => {
+        this.isFighting = true;
+        this.fightState = "prepareAttack";
+      }, 900);
+    }, 500);
   }
 
   /** Applies fruit damage and starts the death sequence when energy is empty. */
@@ -179,11 +196,7 @@ class Robot extends MovableObject {
 
     this.faceCharacter(character);
 
-    if (character.x < this.x) {
-      this.x -= 2;
-    } else {
-      this.x += 2;
-    }
+    this.moveTowardsCharacter(character);
 
     if (distance <= 80) {
       this.fightState = "waiting";
@@ -191,6 +204,13 @@ class Robot extends MovableObject {
 
       console.log("robot reached attack distance");
     }
+  }
+
+  /** Moves one frame toward the player's horizontal position.
+   * @param {Character} character Target player character.
+   */
+  moveTowardsCharacter(character) {
+    this.x += character.x < this.x ? -2 : 2;
   }
 
   /** Returns the boss to attack preparation after the player moves away. */

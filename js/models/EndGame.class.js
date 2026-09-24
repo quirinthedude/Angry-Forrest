@@ -18,31 +18,39 @@ class EndGame {
     this.canvas = canvas;
     this.ctx = canvas.getContext("2d");
     this.pressEnterOnly = pressEnterOnly;
+    this.x = canvas.width;
+    this.loadPressEnterImage();
+    this.loadEndGameImage(endGameImagePath, pressEnterOnly);
+  }
 
+  /** Loads the prompt image and calculates its display height. */
+  loadPressEnterImage() {
     this.pressEnterImage = new Image();
     this.pressEnterImage.src = "./img/icons/press_enter.png";
-
-    this.x = canvas.width;
-
-    if (pressEnterOnly) {
-      this.state = "pressEnterIn";
-      this.endGameReady = true;
-    } else {
-      this.endGameImage = new Image();
-      this.endGameImage.src = endGameImagePath;
-
-      this.endGameImage.onload = () => {
-        this.endGameHeight =
-          this.width * (this.endGameImage.height / this.endGameImage.width);
-        this.endGameReady = true;
-        this.updateReadyState();
-      };
-    }
-
     this.pressEnterImage.onload = () => {
       this.pressEnterHeight =
         this.width * (this.pressEnterImage.height / this.pressEnterImage.width);
       this.pressEnterReady = true;
+      this.updateReadyState();
+    };
+  }
+
+  /** Loads the optional game-over image or configures prompt-only mode.
+   * @param {string|null} endGameImagePath Game-over image path.
+   * @param {boolean} pressEnterOnly Whether only the prompt is needed.
+   */
+  loadEndGameImage(endGameImagePath, pressEnterOnly) {
+    if (pressEnterOnly) {
+      this.state = "pressEnterIn";
+      this.endGameReady = true;
+      return;
+    }
+    this.endGameImage = new Image();
+    this.endGameImage.src = endGameImagePath;
+    this.endGameImage.onload = () => {
+      this.endGameHeight =
+        this.width * (this.endGameImage.height / this.endGameImage.width);
+      this.endGameReady = true;
       this.updateReadyState();
     };
   }
@@ -135,33 +143,46 @@ class EndGame {
   /** Draws the currently active overlay image. */
   draw() {
     if (!this.ready) return;
-
     if (this.state.startsWith("gameOver")) {
-      this.ctx.drawImage(
-        this.endGameImage,
-        this.x,
-        this.y,
-        this.width,
-        this.endGameHeight,
-      );
+      this.drawGameOver();
     } else {
       this.drawPressEnter();
     }
   }
 
+  /** Draws the game-over image at its current position. */
+  drawGameOver() {
+    this.ctx.drawImage(
+      this.endGameImage,
+      this.x,
+      this.y,
+      this.width,
+      this.endGameHeight,
+    );
+  }
+
   /** Draws the press-enter prompt with its optional wobble effect. */
   drawPressEnter() {
     if (this.state !== "pressEnterWobble") {
-      this.ctx.drawImage(
-        this.pressEnterImage,
-        this.x,
-        this.y,
-        this.width,
-        this.pressEnterHeight,
-      );
+      this.drawStaticPressEnter();
       return;
     }
+    this.drawWobblingPressEnter();
+  }
 
+  /** Draws the prompt without rotation. */
+  drawStaticPressEnter() {
+    this.ctx.drawImage(
+      this.pressEnterImage,
+      this.x,
+      this.y,
+      this.width,
+      this.pressEnterHeight,
+    );
+  }
+
+  /** Draws the prompt rotated around its center. */
+  drawWobblingPressEnter() {
     const angle = Math.sin(Date.now() / 120) * 0.05;
     const centerX = this.x + this.width / 2;
     const centerY = this.y + this.pressEnterHeight / 2;

@@ -20,33 +20,41 @@ class ScrollingText {
 
   /** Loads each unique glyph required by the message. */
   loadGlyphs() {
-    const paths = new Set();
-
-    for (const character of this.text) {
-      if (character === " ") continue;
-
-      const path = this.getGlyphPath(character);
-      if (path) paths.add(path);
-    }
-
+    const paths = this.getGlyphPaths();
     if (paths.size === 0) {
       this.ready = true;
       return;
     }
-
     let loadedImages = 0;
-
-    paths.forEach((path) => {
-      const image = new Image();
-      image.onload = () => {
+    paths.forEach((path) =>
+      this.loadGlyph(path, () => {
         loadedImages++;
-        if (loadedImages === paths.size) {
-          this.ready = true;
-        }
-      };
-      image.src = path;
-      this.images[path] = image;
-    });
+        if (loadedImages === paths.size) this.ready = true;
+      }),
+    );
+  }
+
+  /** Collects the unique asset paths required by the configured text.
+   * @returns {Set<string>} Unique glyph asset paths.
+   */
+  getGlyphPaths() {
+    return new Set(
+      [...this.text]
+        .filter((character) => character !== " ")
+        .map((character) => this.getGlyphPath(character))
+        .filter(Boolean),
+    );
+  }
+
+  /** Loads one glyph and invokes a callback when it finishes loading.
+   * @param {string} path Glyph asset path.
+   * @param {Function} onLoad Completion callback.
+   */
+  loadGlyph(path, onLoad) {
+    const image = new Image();
+    image.onload = onLoad;
+    image.src = path;
+    this.images[path] = image;
   }
 
   /** Advances the message position and wraps it after it leaves the canvas.
@@ -63,49 +71,41 @@ class ScrollingText {
   /** Draws all loaded glyphs at the current horizontal position. */
   draw() {
     if (!this.ready) return;
-
     let drawX = this.x;
+    for (const character of this.text) drawX = this.drawCharacter(character, drawX);
+  }
 
-    for (const character of this.text) {
-      if (character === " ") {
-        drawX += this.height * 0.55;
-        continue;
-      }
-
-      const path = this.getGlyphPath(character);
-      const image = this.images[path];
-      if (!image) {
-        drawX += this.height * 0.55;
-        continue;
-      }
-
-      const scale = this.height / image.height;
-      const width = image.width * scale;
-      this.ctx.drawImage(
-        image,
-        drawX,
-        this.y - this.height,
-        width,
-        this.height,
-      );
-      drawX += width + this.gap;
-    }
+  /** Draws one glyph or advances over a space/unknown glyph.
+   * @param {string} character Character to draw.
+   * @param {number} drawX Current horizontal drawing position.
+   * @returns {number} Horizontal position for the following character.
+   */
+  drawCharacter(character, drawX) {
+    const image = this.images[this.getGlyphPath(character)];
+    if (character === " " || !image) return drawX + this.height * 0.55;
+    const width = image.width * (this.height / image.height);
+    this.ctx.drawImage(image, drawX, this.y - this.height, width, this.height);
+    return drawX + width + this.gap;
   }
 
   /** Calculates the rendered width of the message.
    * @returns {number} Approximate message width in pixels.
    */
   measureText() {
-    return [...this.text].reduce((width, character) => {
-      if (character === " ") return width + this.height * 0.55;
+    return [...this.text].reduce(
+      (width, character) => width + this.getCharacterWidth(character),
+      0,
+    );
+  }
 
-      const path = this.getGlyphPath(character);
-      const image = this.images[path];
-
-      if (!image) return width + this.height * 0.55;
-
-      return width + image.width * (this.height / image.height) + this.gap;
-    }, 0);
+  /** Calculates the rendered width contribution of one character.
+   * @param {string} character Character to measure.
+   * @returns {number} Character width including its spacing.
+   */
+  getCharacterWidth(character) {
+    const image = this.images[this.getGlyphPath(character)];
+    if (character === " " || !image) return this.height * 0.55;
+    return image.width * (this.height / image.height) + this.gap;
   }
 
   /** Adjusts scrolling speed within the supported range.

@@ -110,18 +110,28 @@ class Game {
     this.startGameSong();
     this.world = new World(this.canvas, this);
     this.applyMutedState();
+    if (!(await this.loadWorldAssets())) return;
+    this.intro.stop();
+    this.activateWorld();
+  }
 
+  /** Waits for world assets and restores audio when loading fails.
+   * @returns {Promise<boolean>} Whether all assets loaded successfully.
+   */
+  async loadWorldAssets() {
     try {
       await this.world.waitForAssets();
+      return true;
     } catch (error) {
       console.error("Could not load game assets: ", error);
       this.gameSong.pause();
       this.gameSong.currentTime = 0;
-      return;
+      return false;
     }
+  }
 
-    this.intro.stop();
-
+  /** Switches the loaded world into active gameplay. */
+  activateWorld() {
     this.state = "playing";
     this.display.setGameplayUiVisible(true);
     this.world.draw();
@@ -157,31 +167,42 @@ class Game {
    * @returns {HTMLMediaElement[]} Currently available game audio objects.
    */
   getAudioObjects() {
-    const objects = [
-      this.titleSong,
-      this.gameSong,
-      this.funeralSong,
-      this.endOfGameSong,
-    ];
-    const worldObjects = [
+    const objects = this.getGameAudioObjects();
+    this.getWorldAudioObjects().forEach((object) => {
+      this.addObjectAudio(objects, object);
+    });
+    return objects;
+  }
+
+  /** Returns audio elements owned directly by the game lifecycle.
+   * @returns {HTMLMediaElement[]} Game-level audio elements.
+   */
+  getGameAudioObjects() {
+    return [this.titleSong, this.gameSong, this.funeralSong, this.endOfGameSong];
+  }
+
+  /** Returns active world actors whose properties may contain audio.
+   * @returns {Object[]} Active world objects.
+   */
+  getWorldAudioObjects() {
+    return [
       this.world?.character,
       ...(this.world?.level?.enemies ?? []),
       ...(this.world?.thrownFruits ?? []),
       ...(this.world?.bombs ?? []),
     ];
+  }
 
-    worldObjects.forEach((object) => {
-      Object.values(object ?? {}).forEach((value) => {
-        if (
-          typeof HTMLMediaElement !== "undefined" &&
-          value instanceof HTMLMediaElement
-        ) {
-          objects.push(value);
-        }
-      });
+  /** Adds media-valued properties from one actor to an audio collection.
+   * @param {HTMLMediaElement[]} audioObjects Target audio collection.
+   * @param {Object|null|undefined} object Object to inspect.
+   */
+  addObjectAudio(audioObjects, object) {
+    Object.values(object ?? {}).forEach((value) => {
+      if (typeof HTMLMediaElement !== "undefined" && value instanceof HTMLMediaElement) {
+        audioObjects.push(value);
+      }
     });
-
-    return objects;
   }
 
   /**
@@ -201,15 +222,27 @@ class Game {
     }
 
     if (this.state === "gameOver" || this.state === "gameWon") {
-      if (event.key === "Enter") {
-        event.preventDefault();
-        this.returnToIntro();
-      }
+      this.handleFinishedGameInput(event);
       return;
     }
 
     if (this.state !== "playing") return;
+    this.handlePlayingKeyDown(event);
+  }
 
+  /** Returns a finished game to the intro after Enter is pressed.
+   * @param {KeyboardEvent} event Keyboard event received from the window.
+   */
+  handleFinishedGameInput(event) {
+    if (event.key !== "Enter") return;
+    event.preventDefault();
+    this.returnToIntro();
+  }
+
+  /** Applies a gameplay keydown event to the shared keyboard state.
+   * @param {KeyboardEvent} event Keyboard event received from the window.
+   */
+  handlePlayingKeyDown(event) {
     if (event.key === "ArrowLeft") this.world.keyboard.left = true;
     if (event.key === "ArrowRight") this.world.keyboard.right = true;
     if (event.key === "ArrowUp") this.world.keyboard.jump = true;
@@ -230,11 +263,18 @@ class Game {
    */
   handleKeyUp(event) {
     if (this.state !== "playing") return;
+    this.updateGameplayKey(event, false);
+  }
 
-    if (event.key === "ArrowLeft") this.world.keyboard.left = false;
-    if (event.key === "ArrowRight") this.world.keyboard.right = false;
-    if (event.key === "ArrowUp") this.world.keyboard.jump = false;
-    if (event.code === "Space") this.world.keyboard.throw = false;
+  /** Sets or clears a gameplay control for a keyboard event.
+   * @param {KeyboardEvent} event Keyboard event received from the window.
+   * @param {boolean} pressed Whether the control should be active.
+   */
+  updateGameplayKey(event, pressed) {
+    if (event.key === "ArrowLeft") this.world.keyboard.left = pressed;
+    if (event.key === "ArrowRight") this.world.keyboard.right = pressed;
+    if (event.key === "ArrowUp") this.world.keyboard.jump = pressed;
+    if (event.code === "Space") this.world.keyboard.throw = pressed;
   }
 
   /**
