@@ -1,4 +1,6 @@
+/** Represents the fixed sky background of the game world. */
 class Sky extends DrawableObject {
+  /** Creates and loads the sky background image. */
   constructor(img) {
     super();
     this.loadImage("./img/landscape/Sky.png");

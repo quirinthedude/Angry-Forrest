@@ -1,3 +1,4 @@
+/** Controls the animated game-over or press-enter overlay. */
 class EndGame {
   state = "gameOverIn";
   x;
@@ -8,6 +9,11 @@ class EndGame {
   waitStartedAt = 0;
   ready = false;
 
+  /** Creates an overlay and starts loading its required images.
+   * @param {HTMLCanvasElement} canvas Canvas used for rendering.
+   * @param {string|null} endGameImagePath Game-over image path.
+   * @param {boolean} pressEnterOnly Whether only the press-enter prompt is shown.
+   */
   constructor(canvas, endGameImagePath = null, pressEnterOnly = false) {
     this.canvas = canvas;
     this.ctx = canvas.getContext("2d");
@@ -41,10 +47,12 @@ class EndGame {
     };
   }
 
+  /** Updates readiness after overlay images finish loading. */
   updateReadyState() {
     this.ready = this.endGameReady && this.pressEnterReady;
   }
 
+  /** Advances the overlay state machine by one frame. */
   update() {
     if (!this.ready) return;
 
@@ -63,6 +71,7 @@ class EndGame {
     }
   }
 
+  /** Moves the game-over image into its centered position. */
   moveGameOverIn() {
     const targetX = (this.canvas.width - this.width) / 2;
 
@@ -75,12 +84,14 @@ class EndGame {
     }
   }
 
+  /** Waits for the configured game-over display duration. */
   waitGameOver() {
     if (Date.now() - this.waitStartedAt >= 3000) {
       this.state = "gameOverOut";
     }
   }
 
+  /** Moves the game-over image offscreen. */
   moveGameOverOut() {
     this.x -= this.speed;
 
@@ -90,6 +101,7 @@ class EndGame {
     }
   }
 
+  /** Moves the press-enter prompt into its centered position. */
   movePressEnterIn() {
     const targetX = (this.canvas.width - this.width) / 2;
 
@@ -102,12 +114,14 @@ class EndGame {
     }
   }
 
+  /** Waits for the configured press-enter display duration. */
   waitPressEnter() {
     if (Date.now() - this.waitStartedAt >= 3000) {
       this.state = "pressEnterOut";
     }
   }
 
+  /** Moves the press-enter prompt offscreen and selects the next phase. */
   movePressEnterOut() {
     this.x -= this.speed;
 
@@ -118,6 +132,7 @@ class EndGame {
     }
   }
 
+  /** Draws the currently active overlay image. */
   draw() {
     if (!this.ready) return;
 
@@ -134,6 +149,7 @@ class EndGame {
     }
   }
 
+  /** Draws the press-enter prompt with its optional wobble effect. */
   drawPressEnter() {
     if (this.state !== "pressEnterWobble") {
       this.ctx.drawImage(

@@ -1,4 +1,10 @@
+/** Renders a horizontally scrolling bitmap-glyph message on a canvas. */
 class ScrollingText {
+  /** Creates a scrolling message and begins loading its glyph images.
+   * @param {CanvasRenderingContext2D} ctx Canvas context used for rendering.
+   * @param {string} text Message to display.
+   * @param {{speed?: number, y?: number, height?: number, gap?: number}} options Display options.
+   */
   constructor(ctx, text, options = {}) {
     this.ctx = ctx;
     this.text = text.toUpperCase();
@@ -12,6 +18,7 @@ class ScrollingText {
     this.loadGlyphs();
   }
 
+  /** Loads each unique glyph required by the message. */
   loadGlyphs() {
     const paths = new Set();
 
@@ -42,6 +49,9 @@ class ScrollingText {
     });
   }
 
+  /** Advances the message position and wraps it after it leaves the canvas.
+   * @param {number} deltaTime Elapsed time since the previous update in ms.
+   */
   update(deltaTime) {
     this.x -= (this.speed * deltaTime) / 1000;
 
@@ -50,6 +60,7 @@ class ScrollingText {
     }
   }
 
+  /** Draws all loaded glyphs at the current horizontal position. */
   draw() {
     if (!this.ready) return;
 
@@ -81,6 +92,9 @@ class ScrollingText {
     }
   }
 
+  /** Calculates the rendered width of the message.
+   * @returns {number} Approximate message width in pixels.
+   */
   measureText() {
     return [...this.text].reduce((width, character) => {
       if (character === " ") return width + this.height * 0.55;
@@ -94,10 +108,17 @@ class ScrollingText {
     }, 0);
   }
 
+  /** Adjusts scrolling speed within the supported range.
+   * @param {number} amount Speed delta in pixels per second.
+   */
   changeSpeed(amount) {
     this.speed = Math.max(20, Math.min(300, this.speed + amount));
   }
 
+  /** Resolves a character to its bitmap glyph asset path.
+   * @param {string} character Character to resolve.
+   * @returns {string|undefined} Matching asset path when available.
+   */
   getGlyphPath(character) {
     const glyphKey = TITLE_GLYPH_ALIASES[character] ?? character;
     return TITLE_GLYPHS[glyphKey];

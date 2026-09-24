@@ -1,4 +1,6 @@
+/** Manages fullscreen scaling, orientation feedback and gameplay UI visibility. */
 class DisplayController {
+  /** Creates the display controller and registers viewport listeners. */
   constructor() {
     document.addEventListener("fullscreenchange", () =>
       this.handleViewportChange(),
@@ -135,6 +137,10 @@ class DisplayController {
     // if (energyBarR) energyBarR.hidden = !visible;
   }
 
+  /** Synchronizes the mute checkbox with the current audio state.
+   * @param {boolean} isMuted Whether the game audio is muted.
+   * @returns {void}
+   */
   updateMuteUI(isMuted) {
     const soundToggle = document.querySelector(".sound-toggle-input");
 
@@ -143,10 +149,16 @@ class DisplayController {
     }
   }
 
+  /** Determines whether the current device matches the touch-only mobile query.
+   * @returns {boolean} Whether the current device is treated as mobile.
+   */
   isMobileDevice() {
     return window.matchMedia("(hover: none) and (pointer: none)").matches;
   }
 
+  /** Determines whether the orientation prompt should block gameplay.
+   * @returns {boolean} Whether a mobile device is currently in portrait mode.
+   */
   requiresLandscape() {
     return this.isMobileDevice() && !this.isLandscape();
   }

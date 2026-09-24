@@ -273,6 +273,7 @@ class World {
     this.ready = true;
   }
 
+  /** Advances bombs, applies finished-bomb damage and removes them. */
   updateBombs() {
     for (let i = this.bombs.length - 1; i >= 0; i--) {
       const bomb = this.bombs[i];
@@ -289,6 +290,7 @@ class World {
     }
   }
 
+  /** Updates thrown fruits, bombs, collisions and enemy behavior. */
   updateWorldObjects() {
     this.updateThrownFruits();
     this.updateBombs();
@@ -296,10 +298,12 @@ class World {
     this.updateEnemies();
   }
 
+  /** Advances every thrown fruit managed by the world. */
   updateThrownFruits() {
     this.thrownFruits.forEach((fruit) => fruit.update());
   }
 
+  /** Advances each enemy according to its concrete behavior type. */
   updateEnemies() {
     this.level.enemies.forEach((enemy) => {
       if (enemy instanceof Gnome) {
@@ -314,6 +318,7 @@ class World {
     });
   }
 
+  /** Stops rendering and clears actor animation or movement timers. */
   stop() {
     this.isRunning = false;
     cancelAnimationFrame(this.animationFrame);
@@ -325,6 +330,7 @@ class World {
     });
   }
 
+  /** Places actors with a ground level back on that level and clears velocity. */
   resetActorsToGround() {
     const actors = [this.character, ...this.level.enemies];
 

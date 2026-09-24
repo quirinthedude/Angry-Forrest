@@ -1,4 +1,9 @@
+/** Represents a collectible fruit suspended in the level. */
 class Fruit extends MovableObject {
+  /** Creates a collectible at the supplied world position.
+   * @param {number} x Horizontal world position.
+   * @param {number} y Vertical world position.
+   */
   width = 50;
   height = 48;
 

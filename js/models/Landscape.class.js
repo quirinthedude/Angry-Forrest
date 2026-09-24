@@ -1,3 +1,4 @@
+/** Defines the tile dimensions and parallax layers of a level landscape. */
 class Landscape {
   tileWidth = 865;
   tileCount = 5;

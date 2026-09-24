@@ -29,7 +29,7 @@ class Game {
    */
   endScreen = null;
 
-  /** Active of the victory-Scene  overlay
+  /** Active victory-scene overlay.
    *
    * @type {null | VictoryScene}
    */
@@ -296,6 +296,7 @@ class Game {
     this.victoryScene = new VictoryScene(this.world);
   }
 
+  /** Stops active gameplay and recreates the intro scene. */
   returnToIntro() {
     this.world?.stop();
 
@@ -316,6 +317,9 @@ class Game {
     this.start();
   }
 
+  /** Handles Enter and scrolling-speed input while the intro is active.
+   * @param {KeyboardEvent} event Keyboard event received from the window.
+   */
   handleIntroInput(event) {
     if (event.key === "Enter") {
       event.preventDefault();

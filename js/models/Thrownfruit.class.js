@@ -1,3 +1,4 @@
+/** Represents a fruit in flight or resting after being thrown. */
 class ThrownFruit extends MovableObject {
   width = 50;
   height = 48;
@@ -20,6 +21,11 @@ class ThrownFruit extends MovableObject {
     "./img/objects/hit3.png",
   ];
 
+  /** Creates a thrown fruit with an initial trajectory.
+   * @param {number} x Horizontal start position.
+   * @param {number} y Vertical start position.
+   * @param {number} direction Horizontal direction multiplier.
+   */
   constructor(x, y, direction) {
     super();
     this.loadImage("/img/objects/fruit.png");
@@ -30,6 +36,7 @@ class ThrownFruit extends MovableObject {
     this.direction = direction;
   }
 
+  /** Advances flight and changes the state when the fruit lands. */
   update() {
     if (this.state !== "flying") return;
 
@@ -42,6 +49,7 @@ class ThrownFruit extends MovableObject {
     }
   }
 
+  /** Stops movement and marks the fruit as collectible on the ground. */
   land() {
     this.state = "landed";
     this.y = this.groundY;
@@ -49,6 +57,7 @@ class ThrownFruit extends MovableObject {
     this.speedY = 0;
   }
 
+  /** Marks the fruit as having hit an enemy and stops its flight. */
   hit() {
     if (this.state !== "flying") return;
 

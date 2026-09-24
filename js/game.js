@@ -1,6 +1,7 @@
 let canvas;
 let game;
 
+/** Initializes the intro UI, input bindings and game start controls. */
 function init() {
   const preIntro = document.getElementById("pre-intro");
   const howToPlay = document.getElementById("how-to-play");
@@ -15,6 +16,7 @@ function init() {
   const canvasElement = document.getElementById("canvas");
   const display = new DisplayController();
 
+  /** Shows either the intro actions or the how-to-play panel. */
   function setHowToPlayVisible(visible) {
     preIntroMainElements.forEach((element) => {
       element.hidden = visible;

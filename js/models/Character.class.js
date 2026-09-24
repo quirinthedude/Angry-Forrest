@@ -1,3 +1,4 @@
+/** Represents the player character and coordinates movement, combat and inventory. */
 class Character extends MovableObject {
   height = 180;
   width = 120;
@@ -36,6 +37,9 @@ class Character extends MovableObject {
 
   activeFruitCollision = new Set();
 
+  /** Creates the player and starts its movement update interval.
+   * @param {World} world World containing the player.
+   */
   constructor(world) {
     super();
     this.world = world;
@@ -60,6 +64,7 @@ class Character extends MovableObject {
     this.fruitSound = new Audio("./audio/fruit_louder.wav");
   }
 
+  /** Runs the player's fixed-rate gameplay update loop. */
   moveCharacter() {
     this.movementInterval = setInterval(() => {
       if (
@@ -98,6 +103,7 @@ class Character extends MovableObject {
     }, 1000 / 60);
   }
 
+  /** Applies horizontal input while respecting bounds and air speed. */
   handleHorizontalMovement() {
     let movementSpeed = this.isInTheAir() ? this.airSpeed : this.walkSpeed;
 
@@ -117,16 +123,19 @@ class Character extends MovableObject {
     }
   }
 
+  /** Starts a jump when the jump control is active. */
   handleJump() {
     if (this.world.keyboard.jump) {
       this.startJump();
     }
   }
 
+  /** Positions the camera relative to the player's horizontal position. */
   updateCamera() {
     this.world.cameraX = -this.x + 240; // Update the camera position based on the character's position
   }
 
+  /** Applies damage when the player contacts an enemy after the hit cooldown. */
   handleCollision() {
     const enemy = this.checkCollisions();
     const now = Date.now();
@@ -136,6 +145,9 @@ class Character extends MovableObject {
     }
   }
 
+  /** Finds level fruits whose adjusted bounds overlap the player.
+   * @returns {Fruit[]} Fruits currently colliding with the player.
+   */
   checkFruitCollision() {
     const collisions = [];
     const characterOffsets = this.getCollisionOffsets();
@@ -170,6 +182,7 @@ class Character extends MovableObject {
     return collisions;
   }
 
+  /** Stops player activity, switches to the death sprite and notifies the world. */
   characterDies() {
     if (this.isDead) return;
 
@@ -183,6 +196,7 @@ class Character extends MovableObject {
     this.world.characterDied();
   }
 
+  /** Updates the DOM energy-bar image to match current energy. */
   updateCharacterEnergyBar() {
     const index = Math.max(0, Math.ceil(this.energy / 10) - 1);
 
@@ -190,6 +204,7 @@ class Character extends MovableObject {
       `./img/char_energy/char_energy${index}.png`;
   }
 
+  /** Plays the hurt sound and records the visible hurt feedback. */
   characterHurt() {
     this.hurtSound.currentTime = 0;
     this.hurtSound.play();
@@ -197,11 +212,8 @@ class Character extends MovableObject {
     console.log("hurt!", this.energy);
   }
 
-  /**
-   *
-   * @param {boolean} wantsToWalk will change when more animations come
-   *
-   * compares the current intent with the stored animation state.
+  /** Selects the player animation and walking sound for the current state.
+   * @param {boolean} wantsToWalk Whether movement input is active.
    */
   updateAnimation(wantsToWalk) {
     if (this.isDead) return;
@@ -223,6 +235,7 @@ class Character extends MovableObject {
     this.stopWalkingSound();
   }
 
+  /** Starts a grounded jump and plays its sound. */
   startJump() {
     if (this.y === this.groundY) {
       this.speedY = -22;
@@ -231,6 +244,7 @@ class Character extends MovableObject {
     }
   }
 
+  /** Applies gravity while airborne and clamps the player to the ground. */
   updateVerticalMovement() {
     if (this.y < this.groundY || this.speedY < 0) {
       this.applyGravity();
@@ -242,21 +256,29 @@ class Character extends MovableObject {
     }
   }
 
+  /** Starts looping walking audio when it is currently paused. */
   startWalkingSound() {
     if (this.walkingSound.paused) {
       this.walkingSound.play();
     }
   }
 
+  /** Stops walking audio and rewinds it to the beginning. */
   stopWalkingSound() {
     this.walkingSound.pause();
     this.walkingSound.currentTime = 0;
   }
 
+  /** Determines whether the recent-hit invulnerability animation is active.
+   * @returns {boolean} Whether the hurt interval is still active.
+   */
   isHurt() {
     return Date.now() - this.lastHit < 1000;
   }
 
+  /** Removes a level fruit, adds it to inventory and updates UI/audio.
+   * @param {Fruit} fruit Fruit collected by the player.
+   */
   collectFruit(fruit) {
     if (this.fruitInventory >= this.maxFruitInventory) return;
 
@@ -275,6 +297,7 @@ class Character extends MovableObject {
     this.updateFruitInventory();
   }
 
+  /** Synchronizes inventory slot images with the collected fruit count. */
   updateFruitInventory() {
     const slots = document.querySelectorAll(".fruit-slot");
 
@@ -286,6 +309,7 @@ class Character extends MovableObject {
     });
   }
 
+  /** Creates a thrown fruit when requested and inventory is available. */
   throwFruit() {
     if (!this.world.keyboard.throw) return;
     if (this.fruitInventory <= 0) return;
@@ -303,6 +327,9 @@ class Character extends MovableObject {
     this.world.keyboard.throw = false;
   }
 
+  /** Finds a landed thrown fruit colliding with the player.
+   * @returns {ThrownFruit|null} Collectible landed fruit or null.
+   */
   checkLandedFruitCollision() {
     for (const fruit of this.world.thrownFruits) {
       if (fruit.state === "landed" && this.isColliding(fruit)) {
@@ -312,6 +339,9 @@ class Character extends MovableObject {
     return null;
   }
 
+  /** Collects a landed thrown fruit and removes it from the world.
+   * @param {ThrownFruit} fruit Landed fruit to collect.
+   */
   collectLandedFruit(fruit) {
     if (this.fruitInventory >= this.maxFruitInventory) return;
 
@@ -328,6 +358,9 @@ class Character extends MovableObject {
     this.fruitSound.play();
   }
 
+  /** Reduces energy, triggers hurt feedback and handles death if needed.
+   * @param {number} damage Amount of energy to remove.
+   */
   takeDamage(damage) {
     if (this.isInvulnerable) return;
     this.energy = Math.max(0, this.energy - damage);
@@ -341,11 +374,13 @@ class Character extends MovableObject {
     }
   }
 
+  /** Stops walking and plays the victory bow animation. */
   bow() {
     this.stopWalkingSound();
     this.animateOnce(this.IMAGES_BOW, 100);
   }
 
+  /** Clears player movement and animation timers. */
   stop() {
     clearInterval(this.movementInterval);
     this.stopAnimation();

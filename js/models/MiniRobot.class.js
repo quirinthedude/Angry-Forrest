@@ -1,3 +1,4 @@
+/** Represents a patrolling, jumping mini-robot enemy. */
 class MiniRobot extends MovableObject {
   height = 120;
   width = 120;
@@ -23,6 +24,13 @@ class MiniRobot extends MovableObject {
   );
   IMAGES_HURT = createAnimationImages("/img/mini_robot/Hurt/mini-robot_", 12);
 
+  /** Creates a mini-robot with patrol bounds.
+   * @param {number} x Initial horizontal position.
+   * @param {number} y Initial vertical position.
+   * @param {number} minX Left patrol boundary.
+   * @param {number} maxX Right patrol boundary.
+   * @param {World} world Owning game world.
+   */
   constructor(x, y, minX, maxX, world) {
     super();
     this.world = world;
@@ -44,6 +52,7 @@ class MiniRobot extends MovableObject {
     this.moveMiniRobot();
   }
 
+  /** Starts the mini-robot patrol interval. */
   moveMiniRobot() {
     this.movementInterval = setInterval(() => {
       if (!this.world.ready || this.isKnockedOut) return;
@@ -58,6 +67,7 @@ class MiniRobot extends MovableObject {
     }, 20);
   }
 
+  /** Evaluates jump timing and advances vertical movement. */
   update() {
     if (!this.world.ready || this.isKnockedOut) return;
 
@@ -73,6 +83,7 @@ class MiniRobot extends MovableObject {
     this.updateVerticalMovement();
   }
 
+  /** Starts a visible jump when the mini-robot is on screen. */
   startJump() {
     if (!this.isVisibleInCanvas()) return;
     this.speedY = -16;
@@ -84,6 +95,7 @@ class MiniRobot extends MovableObject {
     this.setAnimation(this.IMAGES_JUMPING, 100);
   }
 
+  /** Applies gravity and returns the robot to its ground level. */
   updateVerticalMovement() {
     if (this.isInTheAir() || this.speedY < 0) {
       this.applyGravity();
@@ -96,6 +108,9 @@ class MiniRobot extends MovableObject {
     }
   }
 
+  /** Determines whether the robot overlaps the visible canvas area.
+   * @returns {boolean} Whether any part of the robot is visible.
+   */
   isVisibleInCanvas() {
     const screenX = this.x + this.world.cameraX;
 

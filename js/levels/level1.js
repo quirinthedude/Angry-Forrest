@@ -1,7 +1,11 @@
+/** Creates the enemies, collectibles and scenery used by the first level.
+ * @param {World} world World instance shared by the level actors.
+ * @returns {Level} Configured level data.
+ */
 function createLevel1(world) {
   return new Level(
     [
-      new Gnome(Math.random() * 300 + 200, 360, 200, 520, world),
+      new Gnome(Math.random() * 300 + 400, 360, 200, 520, world),
       new Gnome(Math.random() * 300 + 500, 360, 500, 850, world),
       new Gnome(Math.random() * 300 + 1200, 360, 1000, 1500, world),
       new MiniRobot(1700, 360, 1600, 2100, world),

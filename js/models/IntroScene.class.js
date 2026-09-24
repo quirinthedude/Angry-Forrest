@@ -1,4 +1,8 @@
+/** Renders and animates the title screen scene. */
 class IntroScene {
+  /** Creates an intro scene for the supplied canvas.
+   * @param {HTMLCanvasElement} canvas Canvas used for rendering.
+   */
   constructor(canvas) {
     this.canvas = canvas;
     this.ctx = canvas.getContext("2d");
@@ -14,22 +18,31 @@ class IntroScene {
     );
   }
 
+  /** Creates an image element for a scene asset.
+   * @param {string} path Asset path.
+   * @returns {HTMLImageElement} Image element whose source is being loaded.
+   */
   loadImage(path) {
     const image = new Image();
     image.src = path;
     return image;
   }
 
+  /** Starts the requestAnimationFrame loop. */
   start() {
     this.lastTime = performance.now();
     this.animationFrame = requestAnimationFrame((time) => this.loop(time));
   }
 
+  /** Stops the current animation frame loop. */
   stop() {
     cancelAnimationFrame(this.animationFrame);
     this.animationFrame = null;
   }
 
+  /** Updates and renders one intro frame, then schedules the next one.
+   * @param {number} time Current animation timestamp.
+   */
   loop(time) {
     const deltaTime = time - this.lastTime;
     this.lastTime = time;
@@ -40,11 +53,15 @@ class IntroScene {
     );
   }
 
+  /** Advances time-dependent intro animations.
+   * @param {number} deltaTime Elapsed time since the previous frame in ms.
+   */
   update(deltaTime) {
     this.elapsedTime += deltaTime;
     this.scrollingText.update(deltaTime);
   }
 
+  /** Renders the intro background, title, prompt and scrolling text. */
   draw() {
     this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
     this.ctx.fillStyle = "#07120a";
@@ -55,6 +72,7 @@ class IntroScene {
     this.scrollingText.draw();
   }
 
+  /** Renders the animated press-enter prompt. */
   drawPressEnter() {
     const wobbleDuration = 1000;
     const wobbleInterval = 3000;
@@ -71,6 +89,13 @@ class IntroScene {
     this.drawCentered(this.pressEnterImage, 330, 105, 255, angle);
   }
 
+  /** Draws an image centered horizontally, optionally rotated around its center.
+   * @param {HTMLImageElement} image Image to draw.
+   * @param {number} width Render width.
+   * @param {number} height Render height.
+   * @param {number} y Vertical render position.
+   * @param {number} angle Rotation in radians.
+   */
   drawCentered(image, width, height, y = 52, angle = 0) {
     if (!image.complete) return;
 

@@ -1,7 +1,11 @@
+/** Coordinates the post-victory bow, sinking character and growing-tree scene. */
 class VictoryScene {
   state = "bow";
   waitStartedAt = 0;
 
+  /** Creates the victory scene for the completed world.
+   * @param {World} world Completed game world.
+   */
   constructor(world) {
     this.world = world;
     this.character = world.character;
@@ -25,6 +29,7 @@ class VictoryScene {
     this.startBow();
   }
 
+  /** Starts the character bow and schedules the following waiting state. */
   startBow() {
     this.character.bow();
 
@@ -36,6 +41,7 @@ class VictoryScene {
     }, bowDuration);
   }
 
+  /** Advances scene timing, character movement and ending text. */
   update() {
     const now = performance.now();
     const deltaTime = now - this.lastUpdatedAt;
@@ -52,12 +58,14 @@ class VictoryScene {
     }
   }
 
+  /** Switches from the bow wait to the character sinking phase. */
   waitAfterBow() {
     if (Date.now() - this.waitStartedAt >= 1500) {
       this.state = "sink";
     }
   }
 
+  /** Moves the character below the canvas and starts tree growth afterwards. */
   sinkCharacter() {
     this.character.y += 2;
 
@@ -67,6 +75,7 @@ class VictoryScene {
     }
   }
 
+  /** Draws the growing tree and optional scrolling ending text. */
   draw() {
     if (this.tree) {
       this.world.drawObject(this.tree);
@@ -77,6 +86,7 @@ class VictoryScene {
     }
   }
 
+  /** Loads the tree, creates the ending overlay and starts tree animation. */
   async startTreeGrowing() {
     this.tree = new GrowingTree(this.treeX, this.treeY);
 

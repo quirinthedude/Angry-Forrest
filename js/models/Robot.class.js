@@ -1,3 +1,4 @@
+/** Represents the boss robot with activation, combat and bomb attacks. */
 class Robot extends MovableObject {
   height = 260;
   width = 228;
@@ -37,6 +38,11 @@ class Robot extends MovableObject {
   activationInterval;
   groundY = 212;
 
+  /** Creates the boss and starts its activation polling interval.
+   * @param {number} x Initial horizontal position.
+   * @param {number} y Initial vertical position.
+   * @param {World} world Owning game world.
+   */
   constructor(x, y, world) {
     super();
     this.world = world;
@@ -66,6 +72,7 @@ class Robot extends MovableObject {
     this.energy = 100;
   }
 
+  /** Activates the boss when the player reaches its trigger distance. */
   checkActivation() {
     if (!this.world.ready) return;
     if (!this.isActivated && this.world.character.x >= this.x - 300) {
@@ -86,6 +93,7 @@ class Robot extends MovableObject {
     }
   }
 
+  /** Advances the boss entrance jump and schedules combat afterwards. */
   jumpEntrance() {
     this.applyGravity();
 
@@ -105,6 +113,7 @@ class Robot extends MovableObject {
     }
   }
 
+  /** Applies fruit damage and starts the death sequence when energy is empty. */
   hitByFruit() {
     this.energy = Math.max(0, this.energy - 34);
     this.updateRobotEnergyBar();
@@ -120,6 +129,7 @@ class Robot extends MovableObject {
     this.fightState = "prepareAttack";
   }
 
+  /** Updates the boss energy-bar element in the DOM. */
   updateRobotEnergyBar() {
     const energyBar = document.querySelector(".r-energy");
     const maxHeight = 170;
@@ -131,6 +141,7 @@ class Robot extends MovableObject {
     energyBar.style.top = `${bottom - height}px`;
   }
 
+  /** Stops combat, plays the death animation and schedules victory. */
   die() {
     if (this.isDead) return;
 
@@ -148,6 +159,7 @@ class Robot extends MovableObject {
     }, 5000);
   }
 
+  /** Advances the boss combat state machine. */
   updateFightBehaviour() {
     if (!this.isFighting || this.isDead) return;
 
@@ -160,6 +172,7 @@ class Robot extends MovableObject {
     }
   }
 
+  /** Moves the boss toward the player until attack distance is reached. */
   chargeTowardsTarget() {
     const character = this.world.character;
     const distance = Math.abs(this.x - character.x);
@@ -180,6 +193,7 @@ class Robot extends MovableObject {
     }
   }
 
+  /** Returns the boss to attack preparation after the player moves away. */
   checkNextAttack() {
     const distance = Math.abs(this.x - this.world.character.x);
 
@@ -188,15 +202,20 @@ class Robot extends MovableObject {
     }
   }
 
+  /** Turns the boss toward the player.
+   * @param {Character} character Player character to face.
+   */
   faceCharacter(character) {
     this.direction = character.x < this.x ? 1 : -1;
   }
 
+  /** Selects the running attack animation and moves toward the player. */
   runTowardsCharacter() {
     this.setAnimation(this.IMAGES_RUN_ATTACKING, 100);
     this.move(2);
   }
 
+  /** Throws a bomb when the boss cooldown has elapsed. */
   throwBomb() {
     const now = Date.now();
 
@@ -213,6 +232,7 @@ class Robot extends MovableObject {
     this.world.bombs.push(bomb);
   }
 
+  /** Faces the player, throws a bomb and starts a charge attack. */
   prepareAttack() {
     const character = this.world.character;
 
@@ -225,6 +245,7 @@ class Robot extends MovableObject {
     this.attackSound.play();
   }
 
+  /** Clears activation, entrance and animation timers. */
   stop() {
     clearInterval(this.activationInterval);
     clearInterval(this.entranceInterval);

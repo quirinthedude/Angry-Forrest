@@ -1,4 +1,9 @@
+/** Represents the animated tree shown after the player wins. */
 class GrowingTree extends MovableObject {
+  /** Creates a tree aligned to the supplied ground position.
+   * @param {number} x Horizontal world position.
+   * @param {number} y Reference vertical position.
+   */
   width = 350;
   height = 350;
   groundAlignmentOffset = 100;
@@ -15,6 +20,7 @@ class GrowingTree extends MovableObject {
     this.loadImages(this.IMAGES_GROWING);
   }
 
+  /** Starts the one-shot growth animation. */
   grow() {
     this.animateOnce(this.IMAGES_GROWING, 180);
   }
