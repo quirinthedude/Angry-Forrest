@@ -13,6 +13,8 @@ class StartScene {
   }
 
   update() {
+    const elapsed = performance.now() - this.startedAt;
+    const progress = Math.min(elapsed / this.duration);
     if (this.state === "rise") {
       this.raiseCharacter();
     }
