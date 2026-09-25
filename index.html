@@ -35,91 +35,87 @@
         <button id="pre-intro-start" class="forest-button" type="button">
           START
         </button>
-        <button
-          id="how-to-play-button"
-          class="forest-button"
-          type="button"
-        >
+        <button id="how-to-play-button" class="forest-button" type="button">
           HOW TO PLAY
         </button>
       </div>
       <div id="how-to-play" class="how-to-play" hidden>
         <div class="how-to-play-content">
-        <h2>HOW TO PLAY</h2>
+          <h2>HOW TO PLAY</h2>
 
-        <p>
-          You are Entie, a living tree fighting back against the machines and
-          their gnome servants.
-        </p>
+          <p>
+            You are Entie, a living tree fighting back against the machines and
+            their gnome servants.
+          </p>
 
-        <h3>MOVE</h3>
+          <h3>MOVE</h3>
 
-        <div class="how-to-play-line">
-          Use <strong>← / →</strong>
-          <span class="control-or">or</span>
-          <div class="inline-control-icon">
-            <img src="/img/icons/left_button.png" alt="Left button" />
+          <div class="how-to-play-line">
+            Use <strong>← / →</strong>
+            <span class="control-or">or</span>
+            <div class="inline-control-icon">
+              <img src="/img/icons/left_button.png" alt="Left button" />
+            </div>
+            <div class="inline-control-icon">
+              <img src="/img/icons/right.button.png" alt="Right button" />
+            </div>
+            to move.
           </div>
-          <div class="inline-control-icon">
-            <img src="/img/icons/right.button.png" alt="Right button" />
+
+          <div class="how-to-play-line">
+            Press <strong>↑</strong>
+            <span class="control-or">or</span>
+            <div class="inline-control-icon">
+              <img src="/img/icons/jump_button.png" alt="Jump button" />
+            </div>
+            to jump.
           </div>
-          to move.
-        </div>
 
-        <div class="how-to-play-line">
-          Press <strong>↑</strong>
-          <span class="control-or">or</span>
-          <div class="inline-control-icon">
-            <img src="/img/icons/jump_button.png" alt="Jump button" />
+          <h3>COLLECT &amp; THROW</h3>
+
+          <p>Collect the acorns hanging in the trees.</p>
+
+          <div class="how-to-play-line">
+            Press <strong>SPACE</strong>
+            <span class="control-or">or</span>
+            <div class="inline-control-icon">
+              <img src="/img/icons/throw_button.png" alt="Throw button" />
+            </div>
+            to throw an acorn at your enemies.
           </div>
-          to jump.
-        </div>
 
-        <h3>COLLECT &amp; THROW</h3>
+          <p>
+            Missed your target? No problem — thrown acorns land on the ground
+            and can be collected again.
+          </p>
 
-        <p>Collect the acorns hanging in the trees.</p>
+          <h3>SURVIVE</h3>
 
-        <div class="how-to-play-line">
-          Press <strong>SPACE</strong>
-          <span class="control-or">or</span>
-          <div class="inline-control-icon">
-            <img src="/img/icons/throw_button.png" alt="Throw button" />
-          </div>
-          to throw an acorn at your enemies.
-        </div>
+          <p>Avoid enemy attacks and keep an eye on your energy.</p>
 
-        <p>
-          Missed your target? No problem — thrown acorns land on the ground and
-          can be collected again.
-        </p>
+          <p>
+            Some enemies are stronger than others, so choose your moment to
+            attack.
+          </p>
 
-        <h3>SURVIVE</h3>
+          <p>
+            <strong>
+              Jumping gnomes are invulnerable while they are in the air.
+            </strong>
+            Wait until they land before attacking.
+          </p>
 
-        <p>Avoid enemy attacks and keep an eye on your energy.</p>
+          <h3>YOUR GOAL</h3>
 
-        <p>
-          Some enemies are stronger than others, so choose your moment to
-          attack.
-        </p>
+          <p>
+            Fight your way through the forest and stop the robot responsible for
+            its destruction.
+          </p>
 
-        <p>
-          <strong>
-            Jumping gnomes are invulnerable while they are in the air.
-          </strong>
-          Wait until they land before attacking.
-        </p>
-
-        <h3>YOUR GOAL</h3>
-
-        <p>
-          Fight your way through the forest and stop the robot responsible for
-          its destruction.
-        </p>
-
-        <p>Good luck — the forest is counting on you.</p>
-        <button id="how-to-play-back" class="forest-button" type="button">
-          BACK
-        </button>
+          <p>Good luck — the forest is counting on you.</p>
+          <button id="how-to-play-back" class="forest-button" type="button">
+            BACK
+          </button>
         </div>
       </div>
     </div>
@@ -272,6 +268,7 @@
     <script src="./js/titleGlyphs.js"></script>
     <script src="./js/models/ScrollingText.class.js"></script>
     <script src="./js/models/IntroScene.class.js"></script>
+    <script src="./js/models/StartScene.class.js"></script>
     <script src="./js/models/VictoryScene.class.js"></script>
     <script src="./js/models/EndGame.class.js"></script>
     <script src="./js/models/Game.class.js"></script>

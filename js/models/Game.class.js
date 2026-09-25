@@ -11,9 +11,15 @@ class Game {
   /**
    * Current lifecycle state of the game.
    *
-   * @type {"intro"|"loading"|"playing"|"gameOver"|"gameWon"}
+   * @type {"intro"|"loading"|"starting"|"playing"|"gameOver"|"gameWon"}
    */
   state = "intro";
+
+  /** Active game-start scene.
+   *
+   * @type {StartScene|null} Active game-start scene.
+   */
+  startScene = null;
 
   /**
    * Active game world, created when the game leaves the intro.
@@ -130,11 +136,18 @@ class Game {
     }
   }
 
-  /** Switches the loaded world into active gameplay. */
+  /** Switches the loaded world into start-scene. */
   activateWorld() {
+    this.state = "starting";
+    this.startScene = new StartScene(this.world);
+    this.world.draw();
+  }
+
+  /** Finishes the start scene and enables active gameplay. */
+  finishWorldActivation() {
+    this.startScene = null;
     this.state = "playing";
     this.display.setGameplayUiVisible(true);
-    this.world.draw();
   }
 
   /**
@@ -178,7 +191,12 @@ class Game {
    * @returns {HTMLMediaElement[]} Game-level audio elements.
    */
   getGameAudioObjects() {
-    return [this.titleSong, this.gameSong, this.funeralSong, this.endOfGameSong];
+    return [
+      this.titleSong,
+      this.gameSong,
+      this.funeralSong,
+      this.endOfGameSong,
+    ];
   }
 
   /** Returns active world actors whose properties may contain audio.
@@ -199,7 +217,10 @@ class Game {
    */
   addObjectAudio(audioObjects, object) {
     Object.values(object ?? {}).forEach((value) => {
-      if (typeof HTMLMediaElement !== "undefined" && value instanceof HTMLMediaElement) {
+      if (
+        typeof HTMLMediaElement !== "undefined" &&
+        value instanceof HTMLMediaElement
+      ) {
         audioObjects.push(value);
       }
     });

@@ -98,6 +98,10 @@ class World {
 
   /** Updates and draws active victory or game-over overlays. */
   drawOverlays() {
+    if (this.game.startScene) {
+      this.game.startScene.update();
+      this.game.startScene.draw();
+    }
     if (this.game.victoryScene) {
       this.game.victoryScene.update();
       this.game.victoryScene.draw();
@@ -134,9 +138,7 @@ class World {
       return true;
     }
     return (
-      object.isHurt &&
-      object.isHurt() &&
-      Math.floor(Date.now() / 100) % 2 === 0
+      object.isHurt && object.isHurt() && Math.floor(Date.now() / 100) % 2 === 0
     );
   }
 
@@ -144,7 +146,13 @@ class World {
    * @param {DrawableObject} object Object to render.
    */
   drawRegularObject(object) {
-    this.ctx.drawImage(object.img, object.x, object.y, object.width, object.height);
+    this.ctx.drawImage(
+      object.img,
+      object.x,
+      object.y,
+      object.width,
+      object.height,
+    );
   }
 
   /**
