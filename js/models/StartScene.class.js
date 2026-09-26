@@ -17,15 +17,15 @@ class StartScene {
   }
 
   update() {
-    const elapsed = performance.now() - this.startedAt;
-    const progress = Math.min(elapsed / this.duration);
     if (this.state === "rise") {
       this.raiseCharacter();
     } else if (this.state === "bannerIn") {
       if (this.getReady.moveIn()) {
         this.state = "wait";
-        this.waitStartdedAt = performance.now();
+        this.waitStartedAt = performance.now();
       }
+    } else if (this.state === "wait") {
+      this.wait();
     } else if (this.state === "bannerOut") {
       if (this.getReady.moveOut()) {
         this.world.game.finishWorldActivation();
@@ -38,7 +38,7 @@ class StartScene {
 
     if (this.character.y <= this.character.groundY) {
       this.character.y = this.character.groundY;
-      this.state = "ready";
+      this.state = "bannerIn";
       // this.world.game.finishWorldActivation();
     }
   }
@@ -48,8 +48,8 @@ class StartScene {
   }
 
   wait() {
-    if (performance.now() - this.waitStartdedAt >= 1000) {
-      this.state = bannerOut();
+    if (performance.now() - this.waitStartedAt >= 1000) {
+      this.state = "bannerOut";
     }
   }
 }
