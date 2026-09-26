@@ -100,7 +100,7 @@ class World {
   drawOverlays() {
     if (this.game.startScene) {
       this.game.startScene.update();
-      this.game.startScene.draw();
+      this.game.startScene?.draw();
     }
     if (this.game.victoryScene) {
       this.game.victoryScene.update();
