@@ -1,204 +1,91 @@
 /** Controls the animated game-over or press-enter overlay. */
 class EndGame {
-  state = "gameOverIn";
-  x;
-  y = 150;
-  width = 420;
-  height;
-  speed = 10;
+  state = "in";
+  currentIndex = 0;
   waitStartedAt = 0;
-  ready = false;
+  waitDuration = 3000;
 
-  /** Creates an overlay and starts loading its required images.
+  /** Creates an overlay and its banner sequence.
    * @param {HTMLCanvasElement} canvas Canvas used for rendering.
    * @param {string|null} endGameImagePath Game-over image path.
-   * @param {boolean} pressEnterOnly Whether only the press-enter prompt is shown.
+   * @param {boolean} pressEnterOnly Whether only the prompt is shown.
    */
   constructor(canvas, endGameImagePath = null, pressEnterOnly = false) {
     this.canvas = canvas;
-    this.ctx = canvas.getContext("2d");
-    this.pressEnterOnly = pressEnterOnly;
-    this.x = canvas.width;
-    this.loadPressEnterImage();
-    this.loadEndGameImage(endGameImagePath, pressEnterOnly);
+    this.banners = this.createBanners(endGameImagePath, pressEnterOnly);
   }
 
-  /** Loads the prompt image and calculates its display height. */
-  loadPressEnterImage() {
-    this.pressEnterImage = new Image();
-    this.pressEnterImage.src = "./img/icons/press_enter.png";
-    this.pressEnterImage.onload = () => {
-      this.pressEnterHeight =
-        this.width * (this.pressEnterImage.height / this.pressEnterImage.width);
-      this.pressEnterReady = true;
-      this.updateReadyState();
-    };
-  }
-
-  /** Loads the optional game-over image or configures prompt-only mode.
+  /** Creates the banners in the order in which they should be displayed.
    * @param {string|null} endGameImagePath Game-over image path.
-   * @param {boolean} pressEnterOnly Whether only the prompt is needed.
+   * @param {boolean} pressEnterOnly Whether only the prompt is shown.
+   * @returns {SlidingBanner[]} The configured banner sequence.
    */
-  loadEndGameImage(endGameImagePath, pressEnterOnly) {
-    if (pressEnterOnly) {
-      this.state = "pressEnterIn";
-      this.endGameReady = true;
-      return;
+  createBanners(endGameImagePath, pressEnterOnly) {
+    const banners = [];
+
+    if (!pressEnterOnly) {
+      banners.push(new SlidingBanner(this.canvas, endGameImagePath));
     }
-    this.endGameImage = new Image();
-    this.endGameImage.src = endGameImagePath;
-    this.endGameImage.onload = () => {
-      this.endGameHeight =
-        this.width * (this.endGameImage.height / this.endGameImage.width);
-      this.endGameReady = true;
-      this.updateReadyState();
-    };
+
+    banners.push(
+      new SlidingBanner(
+        this.canvas,
+        "./img/icons/press_enter.png",
+        420,
+        150,
+        10,
+        true,
+      ),
+      new SlidingBanner(
+        this.canvas,
+        "./img/icons/tap.png",
+        420,
+        150,
+        10,
+        true,
+      ),
+    );
+
+    return banners;
   }
 
-  /** Updates readiness after overlay images finish loading. */
-  updateReadyState() {
-    this.ready = this.endGameReady && this.pressEnterReady;
+  /** Returns the banner currently controlled by the sequence. */
+  currentBanner() {
+    return this.banners[this.currentIndex];
   }
 
-  /** Advances the overlay state machine by one frame. */
+  /** Advances the generic in, wait and out sequence by one frame. */
   update() {
-    if (!this.ready) return;
-
-    if (this.state === "gameOverIn") {
-      this.moveGameOverIn();
-    } else if (this.state === "gameOverWait") {
-      this.waitGameOver();
-    } else if (this.state === "gameOverOut") {
-      this.moveGameOverOut();
-    } else if (this.state === "pressEnterIn") {
-      this.movePressEnterIn();
-    } else if (this.state === "pressEnterWobble") {
-      this.waitPressEnter();
-    } else if (this.state === "pressEnterOut") {
-      this.movePressEnterOut();
+    if (this.state === "in") {
+      if (this.currentBanner().moveIn()) {
+        this.state = "wait";
+        this.waitStartedAt = performance.now();
+      }
+    } else if (this.state === "wait") {
+      this.wait();
+    } else if (this.state === "out") {
+      this.moveOut();
     }
   }
 
-  /** Moves the game-over image into its centered position. */
-  moveGameOverIn() {
-    const targetX = (this.canvas.width - this.width) / 2;
-
-    this.x -= this.speed;
-
-    if (this.x <= targetX) {
-      this.x = targetX;
-      this.state = "gameOverWait";
-      this.waitStartedAt = Date.now();
+  /** Switches to the out state after the display duration elapsed. */
+  wait() {
+    if (performance.now() - this.waitStartedAt >= this.waitDuration) {
+      this.state = "out";
     }
   }
 
-  /** Waits for the configured game-over display duration. */
-  waitGameOver() {
-    if (Date.now() - this.waitStartedAt >= 3000) {
-      this.state = "gameOverOut";
-    }
+  /** Moves the current banner out and prepares the next one. */
+  moveOut() {
+    if (!this.currentBanner().moveOut()) return;
+
+    this.currentIndex = (this.currentIndex + 1) % this.banners.length;
+    this.currentBanner().reset();
+    this.state = "in";
   }
 
-  /** Moves the game-over image offscreen. */
-  moveGameOverOut() {
-    this.x -= this.speed;
-
-    if (this.x + this.width < 0) {
-      this.state = "pressEnterIn";
-      this.x = this.canvas.width;
-    }
-  }
-
-  /** Moves the press-enter prompt into its centered position. */
-  movePressEnterIn() {
-    const targetX = (this.canvas.width - this.width) / 2;
-
-    this.x -= this.speed;
-
-    if (this.x <= targetX) {
-      this.x = targetX;
-      this.state = "pressEnterWobble";
-      this.waitStartedAt = Date.now();
-    }
-  }
-
-  /** Waits for the configured press-enter display duration. */
-  waitPressEnter() {
-    if (Date.now() - this.waitStartedAt >= 3000) {
-      this.state = "pressEnterOut";
-    }
-  }
-
-  /** Moves the press-enter prompt offscreen and selects the next phase. */
-  movePressEnterOut() {
-    this.x -= this.speed;
-
-    if (this.x + this.width < 0) {
-      this.state = this.pressEnterOnly ? "pressEnterIn" : "gameOverIn";
-
-      this.x = this.canvas.width;
-    }
-  }
-
-  /** Draws the currently active overlay image. */
+  /** Draws the currently active banner. */
   draw() {
-    if (!this.ready) return;
-    if (this.state.startsWith("gameOver")) {
-      this.drawGameOver();
-    } else {
-      this.drawPressEnter();
-    }
-  }
-
-  /** Draws the game-over image at its current position. */
-  drawGameOver() {
-    this.ctx.drawImage(
-      this.endGameImage,
-      this.x,
-      this.y,
-      this.width,
-      this.endGameHeight,
-    );
-  }
-
-  /** Draws the press-enter prompt with its optional wobble effect. */
-  drawPressEnter() {
-    if (this.state !== "pressEnterWobble") {
-      this.drawStaticPressEnter();
-      return;
-    }
-    this.drawWobblingPressEnter();
-  }
-
-  /** Draws the prompt without rotation. */
-  drawStaticPressEnter() {
-    this.ctx.drawImage(
-      this.pressEnterImage,
-      this.x,
-      this.y,
-      this.width,
-      this.pressEnterHeight,
-    );
-  }
-
-  /** Draws the prompt rotated around its center. */
-  drawWobblingPressEnter() {
-    const angle = Math.sin(Date.now() / 120) * 0.05;
-    const centerX = this.x + this.width / 2;
-    const centerY = this.y + this.pressEnterHeight / 2;
-
-    this.ctx.save();
-    this.ctx.translate(centerX, centerY);
-    this.ctx.rotate(angle);
-
-    this.ctx.drawImage(
-      this.pressEnterImage,
-      -this.width / 2,
-      -this.pressEnterHeight / 2,
-      this.width,
-      this.pressEnterHeight,
-    );
-
-    this.ctx.restore();
+    this.currentBanner().draw();
   }
 }
