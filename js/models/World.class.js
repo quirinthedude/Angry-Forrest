@@ -85,7 +85,9 @@ class World {
     this.ctx.translate(this.cameraX, 0);
     this.drawObject(this.character);
     this.drawObjects(this.level.enemies);
-    this.drawObjects(this.thrownFruits);
+    this.drawObjects(
+      this.thrownFruits.filter((fruit) => fruit.state !== "landed"),
+    );
     this.drawObjects(this.bombs);
     this.ctx.restore();
   }
@@ -93,6 +95,9 @@ class World {
   /** Draws foreground parallax layers that appear above the actors. */
   drawForeground() {
     this.drawParallaxObjects(this.level.fruits);
+    this.drawParallaxObjects(
+      this.thrownFruits.filter((fruit) => fruit.state === "landed"),
+    );
     this.drawParallaxObjects(this.level.landscape.grass);
   }
 
@@ -165,11 +170,11 @@ class World {
     const offsets = object.getCollisionOffsets
       ? object.getCollisionOffsets()
       : {
-          left: object.leftOffset ?? 0,
-          right: object.rightOffset ?? 0,
-          top: object.topOffset ?? 0,
-          bottom: object.bottomOffset ?? 0,
-        };
+        left: object.leftOffset ?? 0,
+        right: object.rightOffset ?? 0,
+        top: object.topOffset ?? 0,
+        bottom: object.bottomOffset ?? 0,
+      };
     this.ctx.beginPath();
     this.ctx.lineWidth = 2;
     this.ctx.strokeRect(object.x, object.y, object.width, object.height);
@@ -331,8 +336,21 @@ class World {
   }
 
   /** Advances every thrown fruit managed by the world. */
+  /** Advances every thrown fruit managed by the world. */
   updateThrownFruits() {
-    this.thrownFruits.forEach((fruit) => fruit.update());
+    const grassFactor =
+      this.level.landscape.grass[0]?.parallaxFactor ?? 1;
+
+    this.thrownFruits.forEach((fruit) => {
+      const wasFlying = fruit.state === "flying";
+
+      fruit.update();
+
+      if (wasFlying && fruit.state === "landed") {
+        fruit.x += this.cameraX * (1 - grassFactor);
+        fruit.parallaxFactor = grassFactor;
+      }
+    });
   }
 
   /** Advances each enemy according to its concrete behavior type. */
@@ -341,9 +359,11 @@ class World {
       if (enemy instanceof Gnome) {
         enemy.updateKnockout();
       }
+
       if (enemy instanceof Robot) {
         enemy.updateFightBehaviour();
       }
+
       if (enemy instanceof MiniRobot) {
         enemy.update();
       }

@@ -354,11 +354,36 @@ class Character extends MovableObject {
    */
   checkLandedFruitCollision() {
     for (const fruit of this.world.thrownFruits) {
-      if (fruit.state === "landed" && this.isColliding(fruit)) {
+      if (
+        fruit.state === "landed" &&
+        this.isCollidingWithLandedFruit(fruit)
+      ) {
         return fruit;
       }
     }
+
     return null;
+  }
+
+  isCollidingWithLandedFruit(fruit) {
+    const characterOffsets = this.getCollisionOffsets();
+    const fruitOffsets = fruit.getCollisionOffsets();
+
+    const characterX = this.x + this.world.cameraX;
+    const fruitX =
+      fruit.x +
+      this.world.cameraX * (fruit.parallaxFactor ?? 1);
+
+    return (
+      characterX + this.width - characterOffsets.right >
+      fruitX + fruitOffsets.left &&
+      characterX + characterOffsets.left <
+      fruitX + fruit.width - fruitOffsets.right &&
+      this.y + this.height - characterOffsets.bottom >
+      fruit.y + fruitOffsets.top &&
+      this.y + characterOffsets.top <
+      fruit.y + fruit.height - fruitOffsets.bottom
+    );
   }
 
   /** Collects a landed thrown fruit and removes it from the world.
