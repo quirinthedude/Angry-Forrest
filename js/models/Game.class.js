@@ -56,7 +56,7 @@ class Game {
   constructor(canvas, display) {
     this.canvas = canvas;
     this.display = display;
-    this.intro = new IntroScene(canvas);
+    this.intro = new IntroScene(canvas, display);
     this.display.setGameplayUiVisible(false);
 
     this.titleSong = new Audio("/audio/title_song.mp3");
@@ -372,7 +372,7 @@ class Game {
     this.endScreen = null;
     this.victoryScene = null;
 
-    this.intro = new IntroScene(this.canvas);
+    this.intro = new IntroScene(this.canvas, this.display);
     this.state = "intro";
 
     this.start();

@@ -153,7 +153,7 @@ class DisplayController {
    * @returns {boolean} Whether the current device is treated as mobile.
    */
   isMobileDevice() {
-    return window.matchMedia("(hover: none) and (pointer: none)").matches;
+    return window.matchMedia("(hover: none) and (pointer: coarse)").matches;
   }
 
   /** Determines whether the orientation prompt should block gameplay.

@@ -2,18 +2,21 @@
 class IntroScene {
   /** Creates an intro scene for the supplied canvas.
    * @param {HTMLCanvasElement} canvas Canvas used for rendering.
+   * @param {DisplayController} display Display and device controller.
    */
-  constructor(canvas) {
+  constructor(canvas, display) {
     this.canvas = canvas;
+    this.display = display;
     this.ctx = canvas.getContext("2d");
     this.lastTime = 0;
     this.elapsedTime = 0;
     this.animationFrame = null;
     this.titleImage = this.loadImage("./img/icons/title.png");
     this.pressEnterImage = this.loadImage("./img/icons/press_enter.png");
+    this.tapToStartImage = this.loadImage("./img/icons/tap.png");
     this.scrollingText = new ScrollingText(
       this.ctx,
-      "WELCOME TO ANGRY FORREST! USE ← AND → TO ADJUST TEXT SPEED. THIS IS THE STORY OF ENTIE, WHO CAME TO LIFE WHEN THE DESTRUCTION OF HIS FORMER WOODS ESCALATED. HELP ENTIE FIGHT BACK AGAINST THE ALIEN ROBOT AND HIS SLAVE GNOMES, AND AVENGE THE DAMAGE THEY HAVE ALREADY CAUSED. USE THE ARROW KEYS: ← TO GO LEFT, → TO GO RIGHT AND ↑ TO JUMP! COLLECT THE ACORNS HANGING IN THE TREES AND THROW THEM AT YOUR ENEMIES WITH ␠. DO NOT WORRY IF YOU MISS. THEY WILL SIMPLY LAND ON THE GROUND AND CAN BE COLLECTED AGAIN. PRESS ↵ TO START AND HAVE FUN! LET ME KNOW WHETHER YOU LIKED OR DISLIKED THIS LITTLE GAME, OR IF YOU HAVE ANY IDEAS FOR IMPROVEMENT.",
+      "WELCOME TO ANGRY FORREST! USE ← AND → TO ADJUST TEXT SPEED. THIS IS THE STORY OF ENTIE, WHO CAME TO LIFE WHEN THE DESTRUCTION OF HIS FORMER WOODS ESCALATED. HELP ENTIE FIGHT BACK AGAINST THE ALIEN ROBOT AND HIS SLAVE GNOMES, AND AVENGE THE DAMAGE THEY HAVE ALREADY CAUSED. USE THE ARROW KEYS: ← TO GO LEFT, → TO GO RIGHT AND ↑ TO JUMP! COLLECT THE ACORNS HANGING IN THE TREES AND THROW THEM AT YOUR ENEMIES WITH ␠. DO NOT WORRY IF YOU MISS. THEY WILL SIMPLY LAND ON THE GROUND AND CAN BE COLLECTED AGAIN. PRESS ↵ OR TAP TO START AND HAVE FUN! LET ME KNOW WHETHER YOU LIKED OR DISLIKED THIS LITTLE GAME, OR IF YOU HAVE ANY IDEAS FOR IMPROVEMENT.",
       { height: 38, speed: 140, y: this.canvas.height - 28 },
     );
   }
@@ -85,8 +88,11 @@ class IntroScene {
     const angle = isWobbling
       ? Math.sin(progress * Math.PI * 6) * 0.05 * (1 - progress)
       : 0;
+    const promptImage = this.display.isMobileDevice()
+      ? this.tapToStartImage
+      : this.pressEnterImage;
 
-    this.drawCentered(this.pressEnterImage, 330, 105, 255, angle);
+    this.drawCentered(promptImage, 330, 105, 255, angle);
   }
 
   /** Draws an image centered horizontally, optionally rotated around its center.
