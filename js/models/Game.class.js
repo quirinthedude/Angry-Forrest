@@ -257,7 +257,7 @@ class Game {
   handleFinishedGameInput(event) {
     if (event.key !== "Enter") return;
     event.preventDefault();
-    this.returnToIntro();
+    this.restart();
   }
 
   /** Applies a gameplay keydown event to the shared keyboard state.
@@ -396,5 +396,13 @@ class Game {
     if (event.key === "ArrowLeft") {
       this.intro.scrollingText.changeSpeed(-20);
     }
+  }
+
+  /** Stops the current run and starts a fresh game. */
+  restart() {
+    if (this.state === "loading") return;
+
+    this.returnToIntro();
+    this.startWorld();
   }
 }

@@ -62,6 +62,12 @@ function bindTouchControls() {
 function bindOptionControls() {
   const soundToggle = document.querySelector(".sound-toggle-input");
   const resizeButton = document.querySelector(".resize-button");
+  const restartButton = document.querySelector(".restart-button");
+
+  /** Restarts the current game. */
+  restartButton?.addEventListener("click", () => {
+    window.game?.restart();
+  });
 
   /** Applies the selected mute state to the game. */
   soundToggle?.addEventListener("change", (event) => {
@@ -97,7 +103,7 @@ function bindCanvasTap() {
 
     if (state === "gameOver" || state === "gameWon") {
       event.preventDefault();
-      window.game.returnToIntro();
+      window.game.restart();
       return;
     }
 
