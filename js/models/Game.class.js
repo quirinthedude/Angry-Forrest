@@ -21,6 +21,9 @@ class Game {
    */
   startScene = null;
 
+  /** Active loading scene shown while world assets are loading. */
+  loadingScene = null;
+
   /**
    * Active game world, created when the game leaves the intro.
    *
@@ -113,11 +116,22 @@ class Game {
     }
 
     this.state = "loading";
+
+    this.intro.stop();
+
+    this.loadingScene = new LoadingScene(this.canvas);
+    this.loadingScene.start();
+
     this.startGameSong();
     this.world = new World(this.canvas, this);
     this.applyMutedState();
+
     if (!(await this.loadWorldAssets())) return;
-    this.intro.stop();
+
+    this.loadingScene.stop();
+    this.loadingScene = null;
+
+    // this.intro.stop();
     this.activateWorld();
   }
 
