@@ -55,6 +55,7 @@ class Robot extends MovableObject {
     this.createRobotSounds();
     this.startActivationCheck();
     this.energy = 100;
+    this.updateRobotEnergyBar();
   }
 
   /** Loads every sprite collection used by the boss. */

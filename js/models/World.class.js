@@ -70,7 +70,7 @@ class World {
     this.drawActors();
     this.drawForeground();
     this.drawOverlays();
-    requestAnimationFrame(() => this.draw());
+    this.animationFrame = requestAnimationFrame(() => this.draw());
   }
 
   /** Draws the sky and distant background layers. */
@@ -170,11 +170,11 @@ class World {
     const offsets = object.getCollisionOffsets
       ? object.getCollisionOffsets()
       : {
-        left: object.leftOffset ?? 0,
-        right: object.rightOffset ?? 0,
-        top: object.topOffset ?? 0,
-        bottom: object.bottomOffset ?? 0,
-      };
+          left: object.leftOffset ?? 0,
+          right: object.rightOffset ?? 0,
+          top: object.topOffset ?? 0,
+          bottom: object.bottomOffset ?? 0,
+        };
     this.ctx.beginPath();
     this.ctx.lineWidth = 2;
     this.ctx.strokeRect(object.x, object.y, object.width, object.height);
@@ -338,8 +338,7 @@ class World {
   /** Advances every thrown fruit managed by the world. */
   /** Advances every thrown fruit managed by the world. */
   updateThrownFruits() {
-    const grassFactor =
-      this.level.landscape.grass[0]?.parallaxFactor ?? 1;
+    const grassFactor = this.level.landscape.grass[0]?.parallaxFactor ?? 1;
 
     this.thrownFruits.forEach((fruit) => {
       const wasFlying = fruit.state === "flying";

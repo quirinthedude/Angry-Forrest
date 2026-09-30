@@ -40,6 +40,7 @@ class Character extends MovableObject {
   /** Creates the player and starts its movement update interval.
    * @param {World} world World containing the player.
    */
+
   constructor(world) {
     super();
     this.world = world;
@@ -51,6 +52,8 @@ class Character extends MovableObject {
     this.createCharacterSounds();
     this.currentAnimation = this.IMAGES_IDLE;
     this.collisionDebug = true;
+    this.updateCharacterEnergyBar();
+    this.updateFruitInventory();
   }
 
   /** Loads the player's initial sprite and animation frame collections. */
@@ -96,7 +99,9 @@ class Character extends MovableObject {
    * @returns {boolean} Whether gameplay updates are currently allowed.
    */
   canUpdateCharacter() {
-    return this.world.ready && !this.isDead && this.world.game.state === "playing";
+    return (
+      this.world.ready && !this.isDead && this.world.game.state === "playing"
+    );
   }
 
   /** Collects newly touched level fruits and records current collisions. */
@@ -354,10 +359,7 @@ class Character extends MovableObject {
    */
   checkLandedFruitCollision() {
     for (const fruit of this.world.thrownFruits) {
-      if (
-        fruit.state === "landed" &&
-        this.isCollidingWithLandedFruit(fruit)
-      ) {
+      if (fruit.state === "landed" && this.isCollidingWithLandedFruit(fruit)) {
         return fruit;
       }
     }
@@ -370,19 +372,17 @@ class Character extends MovableObject {
     const fruitOffsets = fruit.getCollisionOffsets();
 
     const characterX = this.x + this.world.cameraX;
-    const fruitX =
-      fruit.x +
-      this.world.cameraX * (fruit.parallaxFactor ?? 1);
+    const fruitX = fruit.x + this.world.cameraX * (fruit.parallaxFactor ?? 1);
 
     return (
       characterX + this.width - characterOffsets.right >
-      fruitX + fruitOffsets.left &&
+        fruitX + fruitOffsets.left &&
       characterX + characterOffsets.left <
-      fruitX + fruit.width - fruitOffsets.right &&
+        fruitX + fruit.width - fruitOffsets.right &&
       this.y + this.height - characterOffsets.bottom >
-      fruit.y + fruitOffsets.top &&
+        fruit.y + fruitOffsets.top &&
       this.y + characterOffsets.top <
-      fruit.y + fruit.height - fruitOffsets.bottom
+        fruit.y + fruit.height - fruitOffsets.bottom
     );
   }
 

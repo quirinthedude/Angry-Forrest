@@ -116,4 +116,9 @@ class MiniRobot extends MovableObject {
 
     return screenX + this.width > 0 && screenX < this.world.canvas.width;
   }
+
+  stop() {
+    clearInterval(this.movementInterval);
+    this.stopAnimation();
+  }
 }
