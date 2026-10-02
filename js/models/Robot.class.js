@@ -96,8 +96,14 @@ class Robot extends MovableObject {
 
   /** Activates the boss when the player reaches its trigger distance. */
   checkActivation() {
-    return;
     if (!this.world.ready) return;
+
+    const allEnemiesDefeated = this.world.level.enemies.every(
+      (enemy) => enemy instanceof Robot || enemy.isKnockedOut,
+    );
+
+    if (!allEnemiesDefeated) return;
+
     if (!this.isActivated && this.world.character.x >= this.x - 300) {
       this.isActivated = true;
       this.chargeTargetX = this.world.character.x + 200;
