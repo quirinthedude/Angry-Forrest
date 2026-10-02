@@ -35,7 +35,14 @@ class Robot extends MovableObject {
   );
   IMAGES_DYING = createAnimationImages("./img/robot-boss/Death/Death_", 15);
   isActivated = false;
-  activationInterval;
+
+  activationInterval = null;
+  entranceInterval = null;
+
+  fightStartTimeout = null;
+  fightReadyTimeout = null;
+  victoryTimeout = null;
+
   groundY = 212;
 
   /** Creates the boss and starts its activation polling interval.
@@ -271,9 +278,9 @@ class Robot extends MovableObject {
     clearInterval(this.activationInterval);
     clearInterval(this.entranceInterval);
 
-    clearInterval(this.fightStartTimeout);
-    clearInterval(this.fightReadyTimeout);
-    clearInterval(this.victoryTimeout);
+    clearTimeout(this.fightStartTimeout);
+    clearTimeout(this.fightReadyTimeout);
+    clearTimeout(this.victoryTimeout);
 
     this.stopAnimation();
   }

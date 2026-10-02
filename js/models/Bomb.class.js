@@ -19,7 +19,7 @@ class Bomb extends MovableObject {
    * @param {number} y Vertical start position.
    * @param {number} flightDirection Horizontal direction multiplier.
    */
-  constructor(x, y, flightDirection) {
+  constructor(x, y, flightDirection, isMuted) {
     super();
 
     this.loadImage(this.IMAGES_FLYING[0]);

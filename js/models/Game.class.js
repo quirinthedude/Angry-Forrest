@@ -375,7 +375,7 @@ class Game {
   returnToIntro() {
     this.world?.stop();
 
-    this.getAudioObjects.forEach((audio) => {
+    this.getAudioObjects().forEach((audio) => {
       audio.pause();
       audio.currentTime = 0;
     });
