@@ -136,6 +136,7 @@ class MovableObject extends DrawableObject {
    */
   checkCollisions() {
     for (const enemy of this.world.level.enemies) {
+      if (enemy instanceof Robot && !enemy.isActivated) continue; // to delete, when ready
       if (this.isColliding(enemy)) {
         return enemy;
       }

@@ -69,7 +69,12 @@ class MiniRobot extends MovableObject {
 
   /** Evaluates jump timing and advances vertical movement. */
   update() {
-    if (!this.world.ready || this.isKnockedOut) return;
+    if (!this.world.ready) return;
+
+    if (this.isKnockedOut) {
+      this.updateKnockout();
+      return;
+    }
 
     const now = Date.now();
     if (
@@ -120,5 +125,62 @@ class MiniRobot extends MovableObject {
   stop() {
     clearInterval(this.movementInterval);
     this.stopAnimation();
+  }
+
+  handleCharacterCollision(character) {
+    if (this.isKnockedOut) return;
+
+    if (this.isStompedBy(character)) {
+      this.knockOut();
+      character.speedY = -12;
+      return;
+    }
+  }
+
+  isStompedBy(character) {
+    if (character.speedY <= 0) return false;
+
+    const characterOffsets = character.getCollisionOffsets();
+    const robotOffsets = this.getCollisionOffsets();
+
+    const characterBottom =
+      character.y + character.height - characterOffsets.bottom;
+
+    const robotTop = this.y + robotOffsets.top;
+
+    const previousCharacterBottom =
+      characterBottom - (character.speedY - character.acceleration);
+    return previousCharacterBottom <= robotTop;
+  }
+
+  knockOut() {
+    if (this.isKnockedOut) return;
+
+    this.isKnockedOut = true;
+
+    this.stopAnimation();
+    this.animateOnce(this.IMAGES_HURT, 50);
+
+    this.deathSound.currentTime = 0;
+    this.deathSound.play();
+    this.speedY = 4;
+    this.acceleration = 0.6;
+  }
+
+  updateKnockout() {
+    this.y += this.speedY;
+    this.speedY += this.acceleration;
+
+    if (this.y >= this.world.canvas.height) {
+      this.removeFromLevel();
+    }
+  }
+
+  removeFromLevel() {
+    const index = this.world.level.enemies.indexOf(this);
+
+    if (index !== -1) {
+      this.world.level.enemies.splice(index, 1);
+    }
   }
 }

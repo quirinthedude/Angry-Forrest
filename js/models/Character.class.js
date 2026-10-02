@@ -154,6 +154,13 @@ class Character extends MovableObject {
   /** Applies damage when the player contacts an enemy after the hit cooldown. */
   handleCollision() {
     const enemy = this.checkCollisions();
+
+    if (!enemy) return;
+
+    if (enemy instanceof MiniRobot) {
+      enemy.handleCharacterCollision(this);
+      return;
+    }
     const now = Date.now();
 
     if (enemy && now - this.lastHit > 1000) {
