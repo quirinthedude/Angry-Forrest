@@ -375,7 +375,7 @@ class Game {
   returnToIntro() {
     this.world?.stop();
 
-    [this.gameSong, this.funeralSong, this.endOfGameSong].forEach((audio) => {
+    this.getAudioObjects.forEach((audio) => {
       audio.pause();
       audio.currentTime = 0;
     });
@@ -385,6 +385,7 @@ class Game {
     this.world = null;
     this.endScreen = null;
     this.victoryScene = null;
+    this.startScene = null;
 
     this.intro = new IntroScene(this.canvas, this.display);
     this.state = "intro";

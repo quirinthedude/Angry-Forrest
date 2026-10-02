@@ -122,13 +122,13 @@ class Robot extends MovableObject {
 
   /** Schedules the transition from entrance animation to combat. */
   startFightAfterEntrance() {
-    setTimeout(() => {
+    this.fightStartTimeout = setTimeout(() => {
       this.animateOnce(this.IMAGES_TURNING_TO_RUN, 200);
-      setTimeout(() => {
+      this.fightReadyTimeout = setTimeout(() => {
         this.isFighting = true;
         this.fightState = "prepareAttack";
-      }, 900);
-    }, 500);
+      }, 200);
+    }, 200);
   }
 
   /** Applies fruit damage and starts the death sequence when energy is empty. */
@@ -172,9 +172,9 @@ class Robot extends MovableObject {
 
     this.animateOnce(this.IMAGES_DYING, 100);
 
-    setTimeout(() => {
+    this.victoryTimeout = setTimeout(() => {
       this.world.game.winGame();
-    }, 5000);
+    }, 1000);
   }
 
   /** Advances the boss combat state machine. */
@@ -270,6 +270,11 @@ class Robot extends MovableObject {
   stop() {
     clearInterval(this.activationInterval);
     clearInterval(this.entranceInterval);
+
+    clearInterval(this.fightStartTimeout);
+    clearInterval(this.fightReadyTimeout);
+    clearInterval(this.victoryTimeout);
+
     this.stopAnimation();
   }
 }
