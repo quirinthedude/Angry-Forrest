@@ -64,9 +64,9 @@ function bindOptionControls() {
   const resizeButton = document.querySelector(".resize-button");
   const restartButton = document.querySelector(".restart-button");
 
-  /** Restarts the current game. */
+  /** Returns from the active game to the pre-intro screen. */
   restartButton?.addEventListener("click", () => {
-    window.game?.restart();
+    window.location.href = "./index.html";
   });
 
   /** Applies the selected mute state to the game. */
