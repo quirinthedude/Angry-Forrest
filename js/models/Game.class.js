@@ -269,6 +269,16 @@ class Game {
    * @param {KeyboardEvent} event Keyboard event received from the window.
    */
   handleFinishedGameInput(event) {
+    if (
+      this.state === "gameWon" &&
+      (event.key === "ArrowLeft" || event.key === "ArrowRight")
+    ) {
+      event.preventDefault();
+      const speedChange = event.key === "ArrowRight" ? 20 : -20;
+      this.victoryScene?.endingText?.changeSpeed(speedChange);
+      return;
+    }
+
     if (event.key !== "Enter") return;
     event.preventDefault();
     this.restart();

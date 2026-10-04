@@ -1,7 +1,6 @@
 /** Coordinates the post-victory bow, sinking character and growing-tree scene. */
 class VictoryScene {
   state = "bow";
-  waitStartedAt = 0;
 
   /** Creates the victory scene for the completed world.
    * @param {World} world Completed game world.
@@ -36,8 +35,7 @@ class VictoryScene {
     const bowDuration = this.character.IMAGES_BOW.length * 100;
 
     setTimeout(() => {
-      this.state = "waitAfterBow";
-      this.waitStartedAt = Date.now();
+      this.state = "sink";
     }, bowDuration);
   }
 
@@ -47,21 +45,12 @@ class VictoryScene {
     const deltaTime = now - this.lastUpdatedAt;
     this.lastUpdatedAt = now;
 
-    if (this.state === "waitAfterBow") {
-      this.waitAfterBow();
-    } else if (this.state === "sink") {
+    if (this.state === "sink") {
       this.sinkCharacter();
     }
 
     if (this.endingText) {
       this.endingText.update(deltaTime);
-    }
-  }
-
-  /** Switches from the bow wait to the character sinking phase. */
-  waitAfterBow() {
-    if (Date.now() - this.waitStartedAt >= 1500) {
-      this.state = "sink";
     }
   }
 
@@ -94,10 +83,10 @@ class VictoryScene {
 
     this.endingText = new ScrollingText(
       this.world.ctx,
-      "CONGRATULATIONS! PEACE HAS RETURNED TO THE FOREST. ENTIE HAS FOUND PEACE AT LAST AND RETURNS TO HIS COMMUNITY IN THE WOODS.",
+      "USE ← TO SLOW DOWN AND → TO SPEED UP. CONGRATULATIONS! PEACE HAS RETURNED TO THE FOREST. ENTIE HAS FOUND PEACE AT LAST AND RETURNS TO HIS COMMUNITY IN THE WOODS.",
       {
         height: 32,
-        speed: 52,
+        speed: 156,
         y: this.world.canvas.height - 26,
       },
     );
