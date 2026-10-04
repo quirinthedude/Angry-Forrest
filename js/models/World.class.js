@@ -317,13 +317,18 @@ class World {
 
       bomb.update();
 
-      if (!bomb.isFinished()) continue;
-
-      if (bomb.isColliding(this.character)) {
-        this.character.takeDamage(20);
+      if (
+        bomb.isExploding() &&
+        !bomb.hasDamagedCharacter &&
+        bomb.isColliding(this.character)
+      ) {
+        this.character.takeDamage(bomb.damage);
+        bomb.hasDamagedCharacter = true;
       }
 
-      this.bombs.splice(i, 1);
+      if (bomb.isFinished()) {
+        this.bombs.splice(i, 1);
+      }
     }
   }
 

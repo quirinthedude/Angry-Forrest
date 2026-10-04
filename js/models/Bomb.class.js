@@ -2,9 +2,17 @@
 class Bomb extends MovableObject {
   width = 150;
   height = 150;
-  speedX = 5;
+
+  speedX = 8;
   speedY = -8;
   acceleration = 0.35;
+
+  fuseTime = 750;
+  damageDuration = 500;
+  damage = 34;
+
+  hasDamagedCharacter = false;
+
   frameTime = 100;
 
   leftOffset = 30;
@@ -50,9 +58,12 @@ class Bomb extends MovableObject {
    * @returns {boolean} Whether the bomb should be removed from the world.
    */
   isFinished() {
-    const lifeTime =
-      this.IMAGES_FLYING.length * this.frameTime + this.frameTime;
+    return Date.now() - this.createdAt >= this.fuseTime + this.damageDuration;
+  }
 
-    return Date.now() - this.createdAt >= lifeTime;
+  isExploding() {
+    const age = Date.now() - this.createdAt;
+
+    return age >= this.fuseTime && age < this.fuseTime + this.damageDuration;
   }
 }

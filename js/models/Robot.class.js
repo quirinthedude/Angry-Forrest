@@ -195,6 +195,8 @@ class Robot extends MovableObject {
   updateFightBehaviour() {
     if (!this.isFighting || this.isDead) return;
 
+    this.throwBomb();
+
     if (this.fightState === "prepareAttack") {
       this.prepareAttack();
     } else if (this.fightState === "charge") {
@@ -272,7 +274,6 @@ class Robot extends MovableObject {
     const character = this.world.character;
 
     this.faceCharacter(character);
-    this.throwBomb();
 
     this.fightState = "charge";
     this.setAnimation(this.IMAGES_RUN_ATTACKING, 100);
