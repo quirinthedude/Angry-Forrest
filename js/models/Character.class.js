@@ -440,4 +440,9 @@ class Character extends MovableObject {
     this.stopAnimation();
     this.stopWalkingSound();
   }
+
+  shouldMirror() {
+    if (this.isDead) return false;
+    return super.shouldMirror();
+  }
 }
