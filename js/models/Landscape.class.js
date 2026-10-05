@@ -4,7 +4,7 @@ class Landscape {
   tileWidth = 865;
 
   /** @type {number} Number of tiles created for every landscape layer. */
-  tileCount = 5;
+  tileCount = 8;
 
   /** @type {number} Horizontal world limit derived from the tiled scenery. */
   levelLength = 100 + this.tileCount * this.tileWidth;
@@ -30,7 +30,7 @@ class Landscape {
       this.tileCount,
       this.tileWidth,
       "/img/landscape/Foreground.png",
-      1.8,
+      1,
     ),
   ];
   /** @type {Grass[]} Foreground ground tiles. */
@@ -39,6 +39,6 @@ class Landscape {
     this.tileCount,
     this.tileWidth,
     "/img/landscape/Ground.png",
-    1.9,
+    1.1,
   );
 }

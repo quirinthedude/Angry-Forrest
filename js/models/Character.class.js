@@ -28,7 +28,7 @@ class Character extends MovableObject {
   currentImage = 0;
   wantsToWalk = false;
   groundY = 305;
-  walkSpeed = 1.5;
+  walkSpeed = 2.5;
   airSpeed = 5;
   isDead = false;
   maxFruitInventory = 3;

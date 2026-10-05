@@ -8,7 +8,7 @@ class Fruit extends MovableObject {
   topOffset = 0;
   bottomOffset = 10;
 
-  parallaxFactor = 1.8;
+  parallaxFactor = 1;
 
   collisionDebug = true;
 
