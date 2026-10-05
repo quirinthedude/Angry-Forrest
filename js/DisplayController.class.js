@@ -51,7 +51,7 @@ class DisplayController {
     const prompt = document.getElementById("orientation-prompt");
     if (!prompt) return;
 
-    prompt.hidden = this.isLandscape();
+    prompt.hidden = !this.requiresLandscape();
   }
 
   /**
