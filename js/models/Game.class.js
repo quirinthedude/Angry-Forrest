@@ -69,6 +69,9 @@ class Game {
 
     this.isMuted = JSON.parse(localStorage.getItem("isMuted")) ?? false;
     this.display.updateMuteUI(this.isMuted);
+
+    this.display.setGameplayUiVisible(false);
+    this.display.setOptionControlsVisible(true);
   }
 
   /**

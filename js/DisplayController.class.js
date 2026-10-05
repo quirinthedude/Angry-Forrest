@@ -157,4 +157,12 @@ class DisplayController {
   requiresLandscape() {
     return this.isMobileDevice() && !this.isLandscape();
   }
+
+  setOptionControlsVisible(visible) {
+    const topControls = document.querySelector(".top-controls");
+
+    if (topControls) {
+      topControls.hidden = !visible;
+    }
+  }
 }
