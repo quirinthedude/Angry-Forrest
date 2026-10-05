@@ -1,4 +1,6 @@
-/** Creates the enemies, collectibles and scenery used by the first level.
+/**
+ * Creates the enemies, collectibles and scenery used by the first level.
+ *
  * @param {World} world World instance shared by the level actors.
  * @returns {Level} Configured level data.
  */

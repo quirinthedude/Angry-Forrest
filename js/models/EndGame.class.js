@@ -7,8 +7,8 @@ class EndGame {
 
   /** Creates an overlay and its banner sequence.
    * @param {HTMLCanvasElement} canvas Canvas used for rendering.
-   * @param {string|null} endGameImagePath Game-over image path.
-   * @param {boolean} pressEnterOnly Whether only the prompt is shown.
+   * @param {string|null} [endGameImagePath=null] Game-over image path.
+   * @param {boolean} [pressEnterOnly=false] Whether only the prompt is shown.
    */
   constructor(canvas, endGameImagePath = null, pressEnterOnly = false) {
     this.canvas = canvas;
@@ -49,7 +49,11 @@ class EndGame {
     return banners;
   }
 
-  /** Returns the banner currently controlled by the sequence. */
+  /**
+   * Returns the banner currently controlled by the sequence.
+   *
+   * @returns {SlidingBanner} Active banner in the sequence.
+   */
   currentBanner() {
     return this.banners[this.currentIndex];
   }

@@ -48,7 +48,7 @@ class ScrollingText {
 
   /** Loads one glyph and invokes a callback when it finishes loading.
    * @param {string} path Glyph asset path.
-   * @param {Function} onLoad Completion callback.
+   * @param {function(): void} onLoad Completion callback.
    */
   loadGlyph(path, onLoad) {
     const image = new Image();

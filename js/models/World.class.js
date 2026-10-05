@@ -27,7 +27,7 @@ class World {
   /** @type {ThrownFruit[]} Thrown fruits currently managed by the world. */
   thrownFruits = [];
 
-  /** @type {Bomb[]} Thrown bombs*/
+  /** @type {Bomb[]} Boss bombs currently managed by the world. */
   bombs = [];
 
   /** @type {boolean} Whether collision bounds are drawn for debugging. */
@@ -36,7 +36,10 @@ class World {
   /** @type {boolean} Whether all required world assets have loaded. */
   ready = false;
 
+  /** @type {number|null} Identifier of the scheduled render frame. */
   animationFrame = null;
+
+  /** @type {boolean} Whether the render loop may schedule another frame. */
   isRunning = true;
 
   /**
@@ -60,7 +63,6 @@ class World {
    * The next frame is scheduled after world objects and an optional end-game
    * overlay have been rendered.
    *
-   * @returns {void}
    */
   draw() {
     if (!this.isRunning) return;
@@ -122,7 +124,6 @@ class World {
    * collision debugging.
    *
    * @param {DrawableObject} object Object to render.
-   * @returns {void}
    */
   drawObject(object) {
     if (this.shouldSkipObject(object)) return;
@@ -164,7 +165,6 @@ class World {
    * Draws the outer and collision-adjusted bounds of an object.
    *
    * @param {DrawableObject} object Object whose bounds should be visualized.
-   * @returns {void}
    */
   drawCollisionDebug(object) {
     const offsets = object.getCollisionOffsets
@@ -192,7 +192,6 @@ class World {
    * Draws an object mirrored horizontally at its world position.
    *
    * @param {DrawableObject} object Object to render in mirrored orientation.
-   * @returns {void}
    */
   drawMirroredObject(object) {
     this.ctx.save();
@@ -206,7 +205,6 @@ class World {
    * Draws each object in a collection.
    *
    * @param {DrawableObject[]} objects Objects to render.
-   * @returns {void}
    */
   drawObjects(objects) {
     objects.forEach((obj) => {
@@ -217,8 +215,7 @@ class World {
   /**
    * Draws objects using their individual parallax factors and the camera.
    *
-   * @param {Array} objects Parallax objects to render.
-   * @returns {void}
+   * @param {Array<DrawableObject & {parallaxFactor: number}>} objects Parallax objects to render.
    */
   drawParallaxObjects(objects) {
     objects.forEach((object) => {
@@ -232,7 +229,6 @@ class World {
   /**
    * Notifies the game lifecycle when the character has died.
    *
-   * @returns {void}
    */
   characterDied() {
     this.game.endGame();
@@ -244,7 +240,6 @@ class World {
    * The existing Gnome- and Robot-specific hit reactions are applied before
    * the collided fruit is removed after its hit animation delay.
    *
-   * @returns {void}
    */
   checkThrownFruitCollisions() {
     for (let fruits = this.thrownFruits.length - 1; fruits >= 0; fruits--) {
@@ -340,7 +335,6 @@ class World {
     this.updateEnemies();
   }
 
-  /** Advances every thrown fruit managed by the world. */
   /** Advances every thrown fruit managed by the world. */
   updateThrownFruits() {
     const grassFactor = this.level.landscape.grass[0]?.parallaxFactor ?? 1;

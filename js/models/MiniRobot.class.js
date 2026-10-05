@@ -122,11 +122,17 @@ class MiniRobot extends MovableObject {
     return screenX + this.width > 0 && screenX < this.world.canvas.width;
   }
 
+  /** Stops patrol and sprite animation timers. */
   stop() {
     clearInterval(this.movementInterval);
     this.stopAnimation();
   }
 
+  /**
+   * Handles contact with the character and applies a successful stomp.
+   *
+   * @param {Character} character Colliding player character.
+   */
   handleCharacterCollision(character) {
     if (this.isKnockedOut) return;
 
@@ -137,6 +143,12 @@ class MiniRobot extends MovableObject {
     }
   }
 
+  /**
+   * Determines whether a descending character crossed the robot's top edge.
+   *
+   * @param {Character} character Colliding player character.
+   * @returns {boolean} Whether the collision is a stomp from above.
+   */
   isStompedBy(character) {
     if (character.speedY <= 0) return false;
 
@@ -153,6 +165,7 @@ class MiniRobot extends MovableObject {
     return previousCharacterBottom <= robotTop;
   }
 
+  /** Starts the hurt animation and downward knockout movement. */
   knockOut() {
     if (this.isKnockedOut) return;
 
@@ -167,6 +180,7 @@ class MiniRobot extends MovableObject {
     this.acceleration = 0.6;
   }
 
+  /** Advances knockout movement and removes the robot below the canvas. */
   updateKnockout() {
     this.y += this.speedY;
     this.speedY += this.acceleration;
@@ -176,6 +190,7 @@ class MiniRobot extends MovableObject {
     }
   }
 
+  /** Removes this robot from the active level enemy collection. */
   removeFromLevel() {
     const index = this.world.level.enemies.indexOf(this);
 

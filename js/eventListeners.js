@@ -1,9 +1,17 @@
-/** Forwards global keydown events to the active game instance. */
+/**
+ * Forwards global keydown events to the active game instance.
+ *
+ * @param {KeyboardEvent} event Keyboard event received from the window.
+ */
 window.addEventListener("keydown", function (event) {
   if (window.game) this.window.game.handleKeyDown(event);
 });
 
-/** Forwards global keyup events to the active game instance. */
+/**
+ * Forwards global keyup events to the active game instance.
+ *
+ * @param {KeyboardEvent} event Keyboard event received from the window.
+ */
 window.addEventListener("keyup", function (event) {
   if (window.game) window.game.handleKeyUp(event);
 });
@@ -16,7 +24,11 @@ function bindTouchControls() {
   document.querySelectorAll("[data-control]").forEach((button) => {
     const control = button.dataset.control;
 
-    /** Activates the control represented by the pressed touch button. */
+    /**
+     * Activates the control represented by the pressed touch button.
+     *
+     * @param {PointerEvent} event Pointer press on the control.
+     */
     button.addEventListener("pointerdown", (event) => {
       if (window.game?.state !== "playing") return;
 
@@ -31,7 +43,11 @@ function bindTouchControls() {
       window.game.world.keyboard[control] = true;
     });
 
-    /** Releases one pointer without clearing a control held by another pointer. */
+    /**
+     * Releases one pointer without clearing a control held by another pointer.
+     *
+     * @param {PointerEvent} event Pointer release or cancellation.
+     */
     const releasePointer = (event) => {
       event.preventDefault();
 
@@ -69,7 +85,11 @@ function bindOptionControls() {
     window.location.href = "./index.html";
   });
 
-  /** Applies the selected mute state to the game. */
+  /**
+   * Applies the selected mute state to the game.
+   *
+   * @param {Event} event Change event emitted by the mute checkbox.
+   */
   soundToggle?.addEventListener("change", (event) => {
     window.game?.setMuted(event.target.checked);
   });
@@ -86,7 +106,11 @@ function bindGameSurfaceProtection() {
   if (!gameWrapper) return;
 
   ["contextmenu", "dragstart"].forEach((eventName) => {
-    /** Cancels the browser action that would interfere with the game surface. */
+    /**
+     * Cancels the browser action that would interfere with the game surface.
+     *
+     * @param {Event} event Context-menu or drag-start event.
+     */
     gameWrapper.addEventListener(eventName, (event) => {
       event.preventDefault();
     });
@@ -97,7 +121,11 @@ function bindGameSurfaceProtection() {
 function bindCanvasTap() {
   const canvas = document.getElementById("canvas");
 
-  /** Handles the action associated with a tap in the current game state. */
+  /**
+   * Handles the action associated with a tap in the current game state.
+   *
+   * @param {PointerEvent} event Pointer release on the game canvas.
+   */
   canvas.addEventListener("pointerup", (event) => {
     const state = window.game?.state;
 

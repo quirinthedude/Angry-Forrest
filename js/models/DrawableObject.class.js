@@ -6,10 +6,19 @@
  * for all required assets before rendering starts.
  */
 class DrawableObject {
+  /** @type {number|undefined} Horizontal render position. */
   x;
+
+  /** @type {number|undefined} Vertical render position. */
   y;
+
+  /** @type {number|undefined} Rendered width. */
   width;
+
+  /** @type {number|undefined} Rendered height. */
   height;
+
+  /** @type {HTMLImageElement|undefined} Currently displayed image. */
   img;
 
   /**
@@ -29,7 +38,6 @@ class DrawableObject {
    * the asset can be included when {@link World} waits for required images.
    *
    * @param {string} path Path to the image asset.
-   * @returns {void}
    */
   loadImage(path) {
     this.img = new Image();
@@ -46,7 +54,6 @@ class DrawableObject {
    *
    * @param {HTMLImageElement} image Image element to track.
    * @param {string} path Path used for the error message if loading fails.
-   * @returns {void}
    */
   trackImage(image, path) {
     const promise = new Promise((resolve, reject) => {

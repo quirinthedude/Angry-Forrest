@@ -53,7 +53,7 @@ class Gnome extends MovableObject {
         this.direction = -1;
       }
       this.move(this.speed);
-    }, 20); // Move every 2 milliseconds
+    }, 20); // Move every 20 milliseconds.
   }
 
   /** Starts the gnome knockout reaction after a fruit hit.

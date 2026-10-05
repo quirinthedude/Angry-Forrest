@@ -1,7 +1,9 @@
 /**
- * Bildbasierter Zeichensatz für Titel- und Anleitungstexte.
+ * Maps supported title, instruction and control glyphs to image paths.
  *
- * Die Dateipfade sind relativ zu index.html angegeben.
+ * Paths are relative to `index.html`.
+ *
+ * @type {Readonly<Record<string, string>>}
  */
 const TITLE_GLYPHS = Object.freeze({
   A: "./img/title-glyphs/letters/A.png",
@@ -58,6 +60,11 @@ const TITLE_GLYPHS = Object.freeze({
   Space: "./img/title-glyphs/controls/space.png",
 });
 
+/**
+ * Maps displayed control symbols to keys in {@link TITLE_GLYPHS}.
+ *
+ * @type {Readonly<Record<string, string>>}
+ */
 const TITLE_GLYPH_ALIASES = Object.freeze({
   "←": "ArrowLeft",
   "→": "ArrowRight",

@@ -18,7 +18,6 @@ class DisplayController {
   /**
    * Updates fullscreen scaling and the orientation fallback together.
    *
-   * @returns {void}
    */
   handleViewportChange() {
     this.updateFullscreenScale();
@@ -28,7 +27,6 @@ class DisplayController {
   /**
    * Keeps the fixed game stage proportional inside the available wrapper.
    *
-   * @returns {void}
    */
   updateFullscreenScale() {
     const wrapper = document.querySelector(".game-wrapper");
@@ -48,7 +46,6 @@ class DisplayController {
   /**
    * Shows the fallback overlay whenever the game is viewed in portrait mode.
    *
-   * @returns {void}
    */
   updateOrientationPrompt() {
     const prompt = document.getElementById("orientation-prompt");
@@ -116,7 +113,6 @@ class DisplayController {
    * Shows or hides the gameplay energy bars.
    *
    * @param {boolean} visible Whether the gameplay UI should be visible.
-   * @returns {void}
    */
   setGameplayUiVisible(visible) {
     const selectors = [
@@ -139,7 +135,6 @@ class DisplayController {
 
   /** Synchronizes the mute checkbox with the current audio state.
    * @param {boolean} isMuted Whether the game audio is muted.
-   * @returns {void}
    */
   updateMuteUI(isMuted) {
     const soundToggle = document.querySelector(".sound-toggle-input");

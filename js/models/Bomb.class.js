@@ -22,10 +22,13 @@ class Bomb extends MovableObject {
 
   IMAGES_FLYING = createAnimationImages("/img/robot-boss/bomb/bomb_", 10);
 
-  /** Creates and starts a bomb at the supplied position.
+  /**
+   * Creates and starts a bomb at the supplied position.
+   *
    * @param {number} x Horizontal start position.
    * @param {number} y Vertical start position.
    * @param {number} flightDirection Horizontal direction multiplier.
+   * @param {boolean} isMuted Whether the explosion sound starts muted.
    */
   constructor(x, y, flightDirection, isMuted) {
     super();
@@ -61,6 +64,11 @@ class Bomb extends MovableObject {
     return Date.now() - this.createdAt >= this.fuseTime + this.damageDuration;
   }
 
+  /**
+   * Determines whether the bomb is within its collision-damage window.
+   *
+   * @returns {boolean} Whether the bomb is currently exploding.
+   */
   isExploding() {
     const age = Date.now() - this.createdAt;
 

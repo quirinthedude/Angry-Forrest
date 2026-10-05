@@ -75,7 +75,11 @@ class VictoryScene {
     }
   }
 
-  /** Loads the tree, creates the ending overlay and starts tree animation. */
+  /**
+   * Loads the tree, creates the ending overlay and starts tree animation.
+   *
+   * @returns {Promise<void>} Resolves after the tree images have loaded.
+   */
   async startTreeGrowing() {
     this.tree = new GrowingTree(this.treeX, this.treeY);
 

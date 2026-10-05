@@ -1,5 +1,10 @@
 /** Renders a loading indicator while the world assets are being prepared. */
 class LoadingScene {
+  /**
+   * Creates a loading scene for the supplied canvas.
+   *
+   * @param {HTMLCanvasElement} canvas Canvas used for rendering.
+   */
   constructor(canvas) {
     this.canvas = canvas;
     this.ctx = canvas.getContext("2d");
@@ -19,7 +24,11 @@ class LoadingScene {
     this.animationFrame = null;
   }
 
-  /** Updates and renders one loading frame. */
+  /**
+   * Updates and renders one loading frame.
+   *
+   * @param {number} time Current animation timestamp in milliseconds.
+   */
   loop(time) {
     const deltaTime = time - this.lastTime;
     this.lastTime = time;

@@ -1,4 +1,7 @@
+/** @type {HTMLCanvasElement|undefined} Canvas used by the active game. */
 let canvas;
+
+/** @type {Game|undefined} Active game lifecycle controller. */
 let game;
 
 /** Initializes the intro UI, input bindings and game start controls. */
@@ -16,7 +19,11 @@ function init() {
   const canvasElement = document.getElementById("canvas");
   const display = new DisplayController();
 
-  /** Shows either the intro actions or the how-to-play panel. */
+  /**
+   * Shows either the intro actions or the how-to-play panel.
+   *
+   * @param {boolean} visible Whether the how-to-play panel should be visible.
+   */
   function setHowToPlayVisible(visible) {
     preIntroMainElements.forEach((element) => {
       element.hidden = visible;

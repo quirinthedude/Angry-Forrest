@@ -1,15 +1,27 @@
 /** Base class for drawable objects that move, animate and collide. */
 class MovableObject extends DrawableObject {
+  /** @type {number} Native horizontal orientation of the sprite artwork. */
+  nativeDirection = -1;
+
+  /** @type {number} Current horizontal movement direction multiplier. */
+  direction = 1;
+
+  /** @type {Object.<string, HTMLImageElement>} Cached animation frames by path. */
+  imageCache = {};
+
+  /** @type {number} Index of the next animation frame. */
+  currentImage = 0;
+
+  /** @type {string[]|undefined} Reference identifying the active animation. */
+  currentAnimation;
+
+  /** @type {number|undefined} Active sprite-animation interval identifier. */
+  animationInterval;
+
   x;
   y;
   img;
-  nativeDirection = -1;
-  direction = 1;
-  imageCache = {};
-  currentImage = 0;
-  currentAnimation;
   speed = 0.32; // default speed
-  animationInterval;
   walkingSound;
   speedY = 0;
   acceleration = 0.8;
@@ -22,8 +34,7 @@ class MovableObject extends DrawableObject {
 
   /** Cycles through the supplied sprite frames until stopped.
    * @param {string[]} images Image paths whose cached frames are displayed.
-   * @param {number} speed Interval between frames in milliseconds.
-   * @returns {void}
+   * @param {number} [speed=100] Interval between frames in milliseconds.
    */
   animate(images, speed = 100) {
     this.animationInterval = setInterval(() => {
@@ -41,8 +52,7 @@ class MovableObject extends DrawableObject {
 
   /** Plays the supplied sprite frames once and then stops.
    * @param {string[]} images Image paths whose cached frames are displayed.
-   * @param {number} speed Interval between frames in milliseconds.
-   * @returns {void}
+   * @param {number} [speed=400] Interval between frames in milliseconds.
    */
   animateOnce(images, speed = 400) {
     this.stopAnimation();
@@ -61,7 +71,6 @@ class MovableObject extends DrawableObject {
 
   /** Loads and caches a collection of sprite images.
    * @param {string[]} arr Image paths to load.
-   * @returns {void}
    */
   loadImages(arr) {
     arr.forEach((path) => {

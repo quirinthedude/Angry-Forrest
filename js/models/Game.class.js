@@ -21,7 +21,7 @@ class Game {
    */
   startScene = null;
 
-  /** Active loading scene shown while world assets are loading. */
+  /** @type {LoadingScene|null} Active scene shown while assets are loading. */
   loadingScene = null;
 
   /**
@@ -54,7 +54,7 @@ class Game {
    * creates the audio elements used throughout the lifecycle.
    *
    * @param {HTMLCanvasElement} canvas Canvas on which the game is rendered.
-   * @param {DisplayController} display
+   * @param {DisplayController} display Display and device controller.
    */
   constructor(canvas, display) {
     this.canvas = canvas;
@@ -74,7 +74,6 @@ class Game {
   /**
    * Starts the intro phase and its title music.
    *
-   * @returns {void}
    */
   start() {
     this.intro.start();
@@ -89,7 +88,6 @@ class Game {
    * Browsers may reject playback until the user interacts with the document;
    * that rejection is intentionally handled without interrupting the game.
    *
-   * @returns {void}
    */
   playTitleSong() {
     this.titleSong.play().catch(() => {
@@ -101,9 +99,9 @@ class Game {
    * Creates the world and transitions from the intro to active gameplay.
    *
    * The game first enters `loading`, creates the world and waits
-   * asynchronously for all world assets. Only after that wait succeeds are
-   * the intro stopped, gameplay music started, the state set to `playing`,
-   * the gameplay UI shown and rendering started.
+   * asynchronously for all world assets. After that wait succeeds, the start
+   * scene and rendering begin; the start scene later enables `playing` and
+   * reveals the gameplay UI.
    *
    * @returns {Promise<void>} Promise that resolves after loading succeeds or
    * after a load failure has been handled within the method.
@@ -167,7 +165,6 @@ class Game {
   /**
    * Applies the selected mute state to all currently created game sounds.
    *
-   * @returns {void}
    */
   applyMutedState() {
     this.getAudioObjects().forEach((audio) => {
@@ -179,7 +176,6 @@ class Game {
    * Sets the mute state used by the sound control.
    *
    * @param {boolean} muted Whether game audio should be muted.
-   * @returns {void}
    */
   setMuted(muted) {
     this.isMuted = muted;
@@ -214,7 +210,7 @@ class Game {
   }
 
   /** Returns active world actors whose properties may contain audio.
-   * @returns {Object[]} Active world objects.
+   * @returns {MovableObject[]} Active world actors and projectiles.
    */
   getWorldAudioObjects() {
     return [
@@ -227,7 +223,7 @@ class Game {
 
   /** Adds media-valued properties from one actor to an audio collection.
    * @param {HTMLMediaElement[]} audioObjects Target audio collection.
-   * @param {Object|null|undefined} object Object to inspect.
+   * @param {MovableObject|null|undefined} object Object to inspect.
    */
   addObjectAudio(audioObjects, object) {
     Object.values(object ?? {}).forEach((value) => {
@@ -248,7 +244,6 @@ class Game {
    * Input is ignored in all other states.
    *
    * @param {KeyboardEvent} event Keyboard event received from the window.
-   * @returns {void}
    */
   handleKeyDown(event) {
     if (this.state === "intro") {
@@ -265,7 +260,7 @@ class Game {
     this.handlePlayingKeyDown(event);
   }
 
-  /** Returns a finished game to the intro after Enter is pressed.
+  /** Handles restart input and victory-text speed changes after a game ends.
    * @param {KeyboardEvent} event Keyboard event received from the window.
    */
   handleFinishedGameInput(event) {
@@ -304,7 +299,6 @@ class Game {
    * other states they are ignored.
    *
    * @param {KeyboardEvent} event Keyboard event received from the window.
-   * @returns {void}
    */
   handleKeyUp(event) {
     if (this.state !== "playing") return;
@@ -329,7 +323,6 @@ class Game {
    * music is stopped, the funeral music starts and the end-game overlay is
    * created for the world to render.
    *
-   * @returns {void}
    */
   endGame() {
     if (this.state === "gameOver") return;
@@ -349,7 +342,6 @@ class Game {
   /**
    * Stops the title music and starts looping gameplay music.
    *
-   * @returns {void}
    */
   startGameSong() {
     this.titleSong.pause();
@@ -364,7 +356,6 @@ class Game {
   /**
    * Transitions active gameplay to the victory state.
    *
-   * @returns {void}
    */
   winGame() {
     if (this.state !== "playing") return;

@@ -35,6 +35,7 @@ class Character extends MovableObject {
   fruitInventory = 0;
   inInvulnerable = false;
 
+  /** @type {Set<Fruit>} Fruits touching the character in the previous update. */
   activeFruitCollision = new Set();
 
   /** Creates the player and starts its movement update interval.
@@ -374,6 +375,12 @@ class Character extends MovableObject {
     return null;
   }
 
+  /**
+   * Tests collision against a landed fruit in its parallax coordinate space.
+   *
+   * @param {ThrownFruit} fruit Landed thrown fruit to test.
+   * @returns {boolean} Whether the player and fruit bounds overlap.
+   */
   isCollidingWithLandedFruit(fruit) {
     const characterOffsets = this.getCollisionOffsets();
     const fruitOffsets = fruit.getCollisionOffsets();
@@ -441,6 +448,11 @@ class Character extends MovableObject {
     this.stopWalkingSound();
   }
 
+  /**
+   * Keeps the death sprite unmirrored and otherwise uses movement direction.
+   *
+   * @returns {boolean} Whether the current sprite should be mirrored.
+   */
   shouldMirror() {
     if (this.isDead) return false;
     return super.shouldMirror();

@@ -101,8 +101,8 @@ class IntroScene {
    * @param {HTMLImageElement} image Image to draw.
    * @param {number} width Render width.
    * @param {number} height Render height.
-   * @param {number} y Vertical render position.
-   * @param {number} angle Rotation in radians.
+   * @param {number} [y=52] Vertical render position.
+   * @param {number} [angle=0] Rotation in radians.
    */
   drawCentered(image, width, height, y = 52, angle = 0) {
     if (!image.complete) return;

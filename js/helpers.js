@@ -1,4 +1,6 @@
-/** Creates the numbered image paths used by a sprite animation.
+/**
+ * Creates the numbered image paths used by a sprite animation.
+ *
  * @param {string} path Path prefix up to (and including) the underscore before the frame number.
  * @param {number} amount Number of frame paths to generate.
  * @returns {string[]} Array containing the generated image paths.
@@ -10,13 +12,15 @@ function createAnimationImages(path, amount) {
   );
 }
 
-/** Creates and positions a row of parallax tiles.
- * @param {Function} TileClass class used to create the tiles
+/**
+ * Creates and positions a row of parallax tiles.
+ *
+ * @param {typeof BackgroundObject|typeof Grass} TileClass Tile class to instantiate.
  * @param {number} count Number of tiles to create.
  * @param {number} tileWidth Width used to position each successive tile.
  * @param {string} path Image path passed to each tile constructor.
  * @param {number} speed Parallax factor passed to each tile constructor.
- * @returns {Array} The generated tile instances.
+ * @returns {(BackgroundObject|Grass)[]} The generated tile instances.
  */
 function createTiles(TileClass, count, tileWidth, path, speed) {
   const tiles = [];
