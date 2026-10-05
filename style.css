@@ -577,6 +577,13 @@ canvas {
   height: auto;
 }
 
+.top-controls[hidden],
+.bottom-controls[hidden],
+.character-energy[hidden],
+.robot-energy[hidden] {
+  display: none;
+}
+
 @media (hover: hover) and (pointer: fine) {
   .action-controls,
   .direction-controls {
