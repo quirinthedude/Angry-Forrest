@@ -158,10 +158,10 @@ class Character extends MovableObject {
 
     if (!enemy) return;
 
-    if (enemy instanceof MiniRobot) {
-      enemy.handleCharacterCollision(this);
+    if (enemy instanceof MiniRobot && enemy.handleCharacterCollision(this)) {
       return;
     }
+
     const now = Date.now();
 
     if (enemy && now - this.lastHit > 1000) {
