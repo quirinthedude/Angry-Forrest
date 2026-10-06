@@ -139,7 +139,7 @@ class MiniRobot extends MovableObject {
     if (!this.isStompedBy(character)) return false;
     this.knockOut();
     character.speedY = -12;
-    return;
+    return true;
   }
 
   /**
