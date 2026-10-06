@@ -85,8 +85,8 @@ class World {
   drawActors() {
     this.ctx.save();
     this.ctx.translate(this.cameraX, 0);
-    this.drawObject(this.character);
     this.drawObjects(this.level.enemies);
+    this.drawObject(this.character);
     this.drawObjects(
       this.thrownFruits.filter((fruit) => fruit.state !== "landed"),
     );
