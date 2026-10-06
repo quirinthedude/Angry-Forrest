@@ -134,13 +134,12 @@ class MiniRobot extends MovableObject {
    * @param {Character} character Colliding player character.
    */
   handleCharacterCollision(character) {
-    if (this.isKnockedOut) return;
+    if (this.isKnockedOut) return true;
 
-    if (this.isStompedBy(character)) {
-      this.knockOut();
-      character.speedY = -12;
-      return;
-    }
+    if (!this.isStompedBy(character)) return false;
+    this.knockOut();
+    character.speedY = -12;
+    return;
   }
 
   /**
