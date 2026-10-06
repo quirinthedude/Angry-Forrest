@@ -161,7 +161,17 @@ class MiniRobot extends MovableObject {
 
     const previousCharacterBottom =
       characterBottom - (character.speedY - character.acceleration);
-    return previousCharacterBottom <= robotTop;
+
+    const previousRobotTop = robotTop - (this.speedY - this.acceleration);
+
+    console.log({
+      speedY: character.speedY,
+      characterBottom,
+      previousCharacterBottom,
+      robotTop,
+      difference: previousCharacterBottom - robotTop,
+    });
+    return previousCharacterBottom <= previousRobotTop;
   }
 
   /** Starts the hurt animation and downward knockout movement. */
