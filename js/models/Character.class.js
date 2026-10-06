@@ -38,9 +38,6 @@ class Character extends MovableObject {
   /** @type {Set<Fruit>} Fruits touching the character in the previous update. */
   activeFruitCollision = new Set();
 
-  /** @type {Set<MiniRobot>} MiniRobots colliding currently with character. */
-  activeMiniRobotCollisions = new Set();
-
   /** Creates the player and starts its movement update interval.
    * @param {World} world World containing the player.
    */
