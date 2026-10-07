@@ -218,8 +218,6 @@ class Robot extends MovableObject {
     if (distance <= 80) {
       this.fightState = "waiting";
       this.setAnimation(this.IMAGES_ATTACKING, 100);
-
-      console.log("robot reached attack distance");
     }
   }
 

@@ -233,8 +233,6 @@ class Character extends MovableObject {
   characterHurt() {
     this.hurtSound.currentTime = 0;
     this.hurtSound.play();
-
-    console.log("hurt!", this.energy);
   }
 
   /** Selects the player animation and walking sound for the current state.
@@ -329,7 +327,6 @@ class Character extends MovableObject {
     this.fruitSound.currentTime = 0;
     this.fruitSound.play();
 
-    console.log("fruit inventory:", this.fruitInventory);
     this.updateFruitInventory();
   }
 

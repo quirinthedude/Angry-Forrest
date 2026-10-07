@@ -164,13 +164,6 @@ class MiniRobot extends MovableObject {
 
     const previousRobotTop = robotTop - (this.speedY - this.acceleration);
 
-    console.log({
-      speedY: character.speedY,
-      characterBottom,
-      previousCharacterBottom,
-      robotTop,
-      difference: previousCharacterBottom - robotTop,
-    });
     return previousCharacterBottom <= previousRobotTop;
   }
 

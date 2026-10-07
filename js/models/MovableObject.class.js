@@ -92,7 +92,6 @@ class MovableObject extends DrawableObject {
 
   /** Applies the legacy instant upward movement used by this object. */
   jump() {
-    console.log("Jumping");
     this.y -= 10; // Move the character up by 10 pixels
   }
 
