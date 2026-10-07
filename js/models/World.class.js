@@ -259,7 +259,7 @@ class World {
    */
   handleThrownFruitCollision(fruit, enemy) {
     if (!fruit.isColliding(enemy)) return false;
-    console.log("enemy hit", enemy);
+    if (enemy instanceof Robot && !enemy.isActivated) return false;
     fruit.hit();
     if (enemy instanceof Gnome) enemy.hitByFruit(fruit.direction);
     if (enemy instanceof Robot) enemy.hitByFruit();
