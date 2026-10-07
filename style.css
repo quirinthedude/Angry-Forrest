@@ -467,14 +467,14 @@ body {
   object-fit: contain;
 }
 
-.restart-button,
+.home-button,
 .resize-button,
 .sound-toggle {
   width: 42px;
   height: 42px;
 }
 
-.restart-button img,
+.home-button img,
 .resize-button img,
 .sound-icon {
   width: 100%;

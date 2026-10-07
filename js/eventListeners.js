@@ -78,7 +78,7 @@ function bindTouchControls() {
 function bindOptionControls() {
   const soundToggle = document.querySelector(".sound-toggle-input");
   const resizeButton = document.querySelector(".resize-button");
-  const restartButton = document.querySelector(".restart-button");
+  const restartButton = document.querySelector(".home-button");
 
   /** Returns from the active game to the pre-intro screen. */
   restartButton?.addEventListener("click", () => {
