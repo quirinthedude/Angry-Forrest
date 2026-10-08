@@ -24,29 +24,54 @@ class EndGame {
     const banners = [];
 
     if (!pressEnterOnly) {
-      banners.push(new SlidingBanner(this.canvas, endGameImagePath));
+      banners.push(this.createGameOverBanner(endGameImagePath));
     }
 
-    banners.push(
-      new SlidingBanner(
-        this.canvas,
-        "./img/icons/press_enter.png",
-        420,
-        150,
-        10,
-        true,
-      ),
-      new SlidingBanner(
-        this.canvas,
-        "./img/icons/tap.png",
-        420,
-        150,
-        10,
-        true,
-      ),
-    );
-
+    banners.push(...this.createPromptBanners());
     return banners;
+  }
+
+  /** Creates the optional banner showing the game-over image.
+   * @param {string|null} imagePath Game-over image path.
+   * @returns {SlidingBanner} Configured game-over banner.
+   */
+  createGameOverBanner(imagePath) {
+    return new SlidingBanner(this.canvas, imagePath);
+  }
+
+  /** Creates the prompt banners in their fixed display order.
+   * @returns {SlidingBanner[]} Press-enter and tap prompt banners.
+   */
+  createPromptBanners() {
+    return [this.createPressEnterBanner(), this.createTapBanner()];
+  }
+
+  /** Creates the keyboard prompt banner.
+   * @returns {SlidingBanner} Configured press-enter banner.
+   */
+  createPressEnterBanner() {
+    return new SlidingBanner(
+      this.canvas,
+      "./img/icons/press_enter.png",
+      420,
+      150,
+      10,
+      true,
+    );
+  }
+
+  /** Creates the touch prompt banner.
+   * @returns {SlidingBanner} Configured tap banner.
+   */
+  createTapBanner() {
+    return new SlidingBanner(
+      this.canvas,
+      "./img/icons/tap.png",
+      420,
+      150,
+      10,
+      true,
+    );
   }
 
   /**
