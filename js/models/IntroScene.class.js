@@ -79,6 +79,18 @@ class IntroScene {
 
   /** Renders the animated press-enter prompt. */
   drawPressEnter() {
+    const angle = this.getPressEnterWobbleAngle();
+    const promptImage = this.getPressEnterImage();
+
+    this.drawCentered(promptImage, 330, 105, 255, angle);
+  }
+
+  /**
+   * Calculates the current rotation angle for the periodic prompt wobble.
+   *
+   * @returns {number} Rotation angle in radians for the current intro time.
+   */
+  getPressEnterWobbleAngle() {
     const wobbleDuration = 1000;
     const wobbleInterval = 3000;
     const wobbleTime = this.elapsedTime - wobbleInterval;
@@ -87,14 +99,21 @@ class IntroScene {
     const progress = isWobbling
       ? (wobbleTime % wobbleInterval) / wobbleDuration
       : 0;
-    const angle = isWobbling
+
+    return isWobbling
       ? Math.sin(progress * Math.PI * 6) * 0.05 * (1 - progress)
       : 0;
-    const promptImage = this.display.isMobileDevice()
+  }
+
+  /**
+   * Selects the prompt image appropriate for the current input device.
+   *
+   * @returns {HTMLImageElement} Prompt image shown below the title.
+   */
+  getPressEnterImage() {
+    return this.display.isMobileDevice()
       ? this.tapToStartImage
       : this.pressEnterImage;
-
-    this.drawCentered(promptImage, 330, 105, 255, angle);
   }
 
   /** Draws an image centered horizontally, optionally rotated around its center.
