@@ -167,7 +167,18 @@ class World {
    * @param {DrawableObject} object Object whose bounds should be visualized.
    */
   drawCollisionDebug(object) {
-    const offsets = object.getCollisionOffsets
+    const offsets = this.getCollisionDebugOffsets(object);
+    this.drawDebugBounds(object, offsets);
+  }
+
+  /**
+   * Resolves the collision offsets used by the debug overlay.
+   *
+   * @param {DrawableObject} object Object whose offsets should be resolved.
+   * @returns {{left: number, right: number, top: number, bottom: number}} Effective collision offsets.
+   */
+  getCollisionDebugOffsets(object) {
+    return object.getCollisionOffsets
       ? object.getCollisionOffsets()
       : {
           left: object.leftOffset ?? 0,
@@ -175,6 +186,15 @@ class World {
           top: object.topOffset ?? 0,
           bottom: object.bottomOffset ?? 0,
         };
+  }
+
+  /**
+   * Draws the outer and collision-adjusted rectangles for an object.
+   *
+   * @param {DrawableObject} object Object whose bounds should be drawn.
+   * @param {{left: number, right: number, top: number, bottom: number}} offsets Effective collision offsets.
+   */
+  drawDebugBounds(object, offsets) {
     this.ctx.beginPath();
     this.ctx.lineWidth = 2;
     this.ctx.strokeRect(object.x, object.y, object.width, object.height);
