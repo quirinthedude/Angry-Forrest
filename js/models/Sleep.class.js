@@ -3,7 +3,7 @@
  */
 class Sleep {
   delay = 15000;
-  holdDuraction = 3000;
+  holdDuration = 3000;
   animationSpeed = 100;
 
   lastActivityAt = null;
