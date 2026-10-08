@@ -56,7 +56,11 @@ class DisplayController {
     return document.fullscreenElement === document.querySelector(".game-wrapper");
   }
 
-  /** Applies the mobile-only stretched fullscreen layout class. */
+  /**
+   * Applies the mobile-only stretched fullscreen layout class.
+   *
+   * @param {boolean} stretched Whether the stretched mobile layout is active.
+   */
   setMobileFullscreenClass(stretched) {
     const wrapper = document.querySelector(".game-wrapper");
     wrapper?.classList.toggle("mobile-fullscreen-stretch", stretched);
