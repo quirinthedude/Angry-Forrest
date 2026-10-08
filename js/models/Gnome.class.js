@@ -25,18 +25,40 @@ class Gnome extends MovableObject {
    */
   constructor(x, y, minX, maxX, world) {
     super();
+    this.initializeGnomeAssets(world);
+    this.initializePatrol(x, y, minX, maxX);
+    this.startGnomeBehavior();
+  }
+
+  /** Loads the gnome assets and creates its death sound after world assignment.
+   * @param {World} world World owning the gnome.
+   */
+  initializeGnomeAssets(world) {
     this.world = world;
     this.loadImage(this.IMAGES_IDLE[0]);
     this.loadImages(this.IMAGES_IDLE);
     this.loadImages(this.IMAGES_WALKING);
     this.loadImages(this.IMAGES_HURT);
     this.deathSound = new Audio("./audio/gnome_death.mp3");
+  }
+
+  /** Initializes patrol bounds and the gnome's instance-specific speed.
+   * @param {number} x Initial horizontal position.
+   * @param {number} y Initial vertical position.
+   * @param {number} minX Left patrol boundary.
+   * @param {number} maxX Right patrol boundary.
+   */
+  initializePatrol(x, y, minX, maxX) {
     this.x = x;
     this.y = y;
     this.minX = minX;
     this.maxX = maxX;
     // Jede Gnome-Instanz erhält beim Erzeugen eine eigene, konstante Laufgeschwindigkeit.
     this.speed = 0.6 + Math.random() * 0.3;
+  }
+
+  /** Starts the walking animation, patrol interval and collision debugging. */
+  startGnomeBehavior() {
     this.animate(this.IMAGES_WALKING, 25); // Start
     this.moveGnome();
     this.collisionDebug = true;
