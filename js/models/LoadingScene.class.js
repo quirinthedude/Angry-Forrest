@@ -46,11 +46,24 @@ class LoadingScene {
     const centerX = this.canvas.width / 2;
     const centerY = this.canvas.height / 2;
 
+    this.drawBackground();
+    this.drawSpinner(centerX, centerY);
+    this.drawLoadingText(centerX, centerY);
+  }
+
+  /** Clears the previous frame and paints the loading background. */
+  drawBackground() {
     this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
 
     this.ctx.fillStyle = "#07120a";
     this.ctx.fillRect(0, 0, this.canvas.width, this.canvas.height);
+  }
 
+  /** Draws the rotated arc used as the loading spinner.
+   * @param {number} centerX Horizontal canvas center.
+   * @param {number} centerY Vertical canvas center.
+   */
+  drawSpinner(centerX, centerY) {
     this.ctx.save();
     this.ctx.translate(centerX, centerY - 20);
     this.ctx.rotate(this.angle);
@@ -62,7 +75,13 @@ class LoadingScene {
     this.ctx.stroke();
 
     this.ctx.restore();
+  }
 
+  /** Draws the loading label below the spinner.
+   * @param {number} centerX Horizontal canvas center.
+   * @param {number} centerY Vertical canvas center.
+   */
+  drawLoadingText(centerX, centerY) {
     this.ctx.fillStyle = "#f3e5b5";
     this.ctx.font = '32px "Grenze Gotisch"';
     this.ctx.textAlign = "center";
