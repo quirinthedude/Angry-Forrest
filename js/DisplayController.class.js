@@ -2,6 +2,8 @@
 class DisplayController {
   /** Creates the display controller and registers viewport listeners. */
   constructor() {
+    this.mobileFullscreenStretched = false;
+
     document.addEventListener("fullscreenchange", () =>
       this.handleViewportChange(),
     );
@@ -20,8 +22,14 @@ class DisplayController {
    *
    */
   handleViewportChange() {
+    if (!this.isFullscreen()) {
+      this.mobileFullscreenStretched = false;
+      this.setMobileFullscreenClass(false);
+    }
+
     this.updateFullscreenScale();
     this.updateOrientationPrompt();
+    this.updateFullscreenButton();
   }
 
   /**
@@ -34,13 +42,39 @@ class DisplayController {
 
     if (!wrapper || !stage) return;
 
-    const isFullscreen = document.fullscreenElement === wrapper;
+    const isFullscreen = this.isFullscreen();
 
-    const scale = isFullscreen
+    const scale = isFullscreen && !this.mobileFullscreenStretched
       ? Math.min(wrapper.clientWidth / 866, wrapper.clientHeight / 618)
       : Math.min(wrapper.clientWidth / 866, wrapper.clientHeight / 618, 1);
 
     stage.style.setProperty("--game-scale", scale);
+  }
+
+  /** Returns whether the game wrapper currently owns browser fullscreen. */
+  isFullscreen() {
+    return document.fullscreenElement === document.querySelector(".game-wrapper");
+  }
+
+  /** Applies the mobile-only stretched fullscreen layout class. */
+  setMobileFullscreenClass(stretched) {
+    const wrapper = document.querySelector(".game-wrapper");
+    wrapper?.classList.toggle("mobile-fullscreen-stretch", stretched);
+  }
+
+  /** Keeps the fullscreen button label aligned with the active mobile mode. */
+  updateFullscreenButton() {
+    const button = document.querySelector(".resize-button");
+    if (!button) return;
+
+    const isMobileFullscreen = this.isMobileDevice() && this.isFullscreen();
+    const label = !isMobileFullscreen
+      ? "Spielfläche vergrößern"
+      : this.mobileFullscreenStretched
+        ? "Proportionalen Fullscreen aktivieren"
+        : "Gestreckten Fullscreen aktivieren";
+
+    button.setAttribute("aria-label", label);
   }
 
   /**
@@ -73,12 +107,21 @@ class DisplayController {
 
     if (!wrapper) return;
 
+    if (this.isFullscreen() && this.isMobileDevice()) {
+      this.mobileFullscreenStretched = !this.mobileFullscreenStretched;
+      this.setMobileFullscreenClass(this.mobileFullscreenStretched);
+      this.handleViewportChange();
+      return;
+    }
+
     if (document.fullscreenElement) {
       await document.exitFullscreen();
       screen.orientation?.unlock?.();
       return;
     }
 
+    this.mobileFullscreenStretched = false;
+    this.setMobileFullscreenClass(false);
     await wrapper.requestFullscreen?.();
   }
 

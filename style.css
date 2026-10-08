@@ -388,6 +388,15 @@ body {
   background: #000;
 }
 
+/* Experiment: stretch the complete game surface across the fullscreen viewport. */
+.game-wrapper:fullscreen.mobile-fullscreen-stretch .game-stage {
+  width: 100dvw;
+  height: 100dvh;
+  max-width: none;
+  max-height: none;
+  transform: none;
+}
+
 .top-controls {
   position: absolute;
   top: 14px;
@@ -555,6 +564,12 @@ canvas {
   height: 480px;
 }
 
+.game-wrapper:fullscreen.mobile-fullscreen-stretch canvas {
+  inset: 0;
+  width: 100%;
+  height: 100%;
+}
+
 .canvas-frame {
   position: absolute;
   inset: 0;
@@ -564,6 +579,10 @@ canvas {
 
   pointer-events: none;
   z-index: 10;
+}
+
+.game-wrapper:fullscreen.mobile-fullscreen-stretch .canvas-frame {
+  display: none;
 }
 
 .fruit-inventory {
