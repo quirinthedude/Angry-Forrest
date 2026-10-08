@@ -112,18 +112,38 @@ class DisplayController {
     if (!wrapper) return;
 
     if (this.isFullscreen() && this.isMobileDevice()) {
-      this.mobileFullscreenStretched = !this.mobileFullscreenStretched;
-      this.setMobileFullscreenClass(this.mobileFullscreenStretched);
-      this.handleViewportChange();
+      this.toggleMobileFullscreenStretch();
       return;
     }
 
     if (document.fullscreenElement) {
-      await document.exitFullscreen();
-      screen.orientation?.unlock?.();
+      await this.exitFullscreen();
       return;
     }
 
+    await this.enterFullscreen(wrapper);
+  }
+
+  /** Toggles the stretched layout while mobile fullscreen remains active. */
+  toggleMobileFullscreenStretch() {
+    this.mobileFullscreenStretched = !this.mobileFullscreenStretched;
+    this.setMobileFullscreenClass(this.mobileFullscreenStretched);
+    this.handleViewportChange();
+  }
+
+  /** Exits browser fullscreen and releases any orientation lock.
+   * @returns {Promise<void>} Resolves after fullscreen exit completes.
+   */
+  async exitFullscreen() {
+    await document.exitFullscreen();
+    screen.orientation?.unlock?.();
+  }
+
+  /** Enters browser fullscreen with the proportional mobile layout.
+   * @param {HTMLElement} wrapper Game wrapper requesting fullscreen.
+   * @returns {Promise<void>} Resolves after the fullscreen request completes.
+   */
+  async enterFullscreen(wrapper) {
     this.mobileFullscreenStretched = false;
     this.setMobileFullscreenClass(false);
     await wrapper.requestFullscreen?.();
