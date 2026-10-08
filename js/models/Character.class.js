@@ -46,6 +46,7 @@ class Character extends MovableObject {
     super();
     this.world = world;
     this.loadCharacterImages();
+    this.sleep = new Sleep(this);
     this.x = 240;
     this.y = 305;
     this.animate(this.IMAGES_IDLE);
@@ -214,6 +215,7 @@ class Character extends MovableObject {
     this.isDead = true;
     this.energy = 0;
 
+    this.sleep.stop();
     this.stopWalkingSound();
     this.stopAnimation();
     this.loadImage(this.DEAD_IMAGE);
@@ -241,10 +243,20 @@ class Character extends MovableObject {
   updateAnimation(wantsToWalk) {
     if (this.isDead) return;
     if (this.isHurt()) {
+      this.sleep.reset();
       this.showHurtAnimation();
       return;
     }
-    this.showMovementAnimation(wantsToWalk);
+    if (this.y < this.groundY || wantsToWalk) {
+      this.sleep.reset();
+      this.showMovementAnimation(wantsToWalk);
+      return;
+    }
+    if (this.sleep.update()) {
+      this.stopWalkingSound();
+      return;
+    }
+    this.showMovementAnimation(false);
   }
 
   /** Shows the hurt animation and silences walking audio. */
@@ -345,6 +357,7 @@ class Character extends MovableObject {
   /** Creates a thrown fruit when requested and inventory is available. */
   throwFruit() {
     if (!this.world.keyboard.throw) return;
+    this.sleep.reset();
     if (this.fruitInventory <= 0) return;
     this.fruitInventory--;
     this.updateFruitInventory();
@@ -422,6 +435,7 @@ class Character extends MovableObject {
    */
   takeDamage(damage) {
     if (this.isInvulnerable) return;
+    this.sleep.reset();
     this.energy = Math.max(0, this.energy - damage);
     this.lastHit = Date.now();
 
@@ -435,6 +449,7 @@ class Character extends MovableObject {
 
   /** Stops walking and plays the victory bow animation. */
   bow() {
+    this.sleep.stop();
     this.stopWalkingSound();
     this.animateOnce(this.IMAGES_BOW, 100);
   }
@@ -442,6 +457,7 @@ class Character extends MovableObject {
   /** Clears player movement and animation timers. */
   stop() {
     clearInterval(this.movementInterval);
+    this.sleep.stop();
     this.stopAnimation();
     this.stopWalkingSound();
   }
