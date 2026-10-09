@@ -97,29 +97,44 @@ class Robot extends MovableObject {
   /** Activates the boss when the player reaches its trigger distance. */
   checkActivation() {
     if (!this.world.ready) return;
+    if (!this.areAllEnemiesDefeated()) return;
+    if (!this.isInActivationRange()) return;
 
-    const allEnemiesDefeated = this.world.level.enemies.every(
+    this.activateBoss();
+  }
+
+  /** Checks whether every non-boss enemy has been knocked out.
+   * @returns {boolean} Whether the boss activation prerequisite is met.
+   */
+  areAllEnemiesDefeated() {
+    return this.world.level.enemies.every(
       (enemy) => enemy instanceof Robot || enemy.isKnockedOut,
     );
+  }
 
-    if (!allEnemiesDefeated) return;
+  /** Checks whether the not-yet-activated boss is within trigger distance.
+   * @returns {boolean} Whether the player can activate the boss now.
+   */
+  isInActivationRange() {
+    return !this.isActivated && this.world.character.x >= this.x - 300;
+  }
 
-    if (!this.isActivated && this.world.character.x >= this.x - 300) {
-      this.isActivated = true;
-      this.chargeTargetX = this.world.character.x + 200;
+  /** Starts the boss entrance animation and its frame-timed jump updates. */
+  activateBoss() {
+    this.isActivated = true;
+    this.chargeTargetX = this.world.character.x + 200;
 
-      this.animateOnce(this.IMAGES_JUMPING, 100);
-      this.jumpSound.currentTime = 0;
-      this.jumpSound.play();
+    this.animateOnce(this.IMAGES_JUMPING, 100);
+    this.jumpSound.currentTime = 0;
+    this.jumpSound.play();
 
-      // TODO: Boss polish — create a "Matrix effect" near the jump apex by
-      // temporarily lowering acceleration, as if the robot manipulates gravity.
-      this.speedY = -12;
+    // TODO: Boss polish — create a "Matrix effect" near the jump apex by
+    // temporarily lowering acceleration, as if the robot manipulates gravity.
+    this.speedY = -12;
 
-      this.entranceInterval = setInterval(() => {
-        this.jumpEntrance();
-      }, 1000 / 60);
-    }
+    this.entranceInterval = setInterval(() => {
+      this.jumpEntrance();
+    }, 1000 / 60);
   }
 
   /** Advances the boss entrance jump and schedules combat afterwards. */
