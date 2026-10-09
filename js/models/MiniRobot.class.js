@@ -33,21 +33,40 @@ class MiniRobot extends MovableObject {
    */
   constructor(x, y, minX, maxX, world) {
     super();
+    this.initializeMiniRobotAssets(world);
+    this.initializePatrol(x, y, minX, maxX);
+    this.startMiniRobotBehavior();
+  }
+
+  /** Loads mini-robot images and creates its jump and death sounds.
+   * @param {World} world World owning the mini-robot.
+   */
+  initializeMiniRobotAssets(world) {
     this.world = world;
     this.loadImage(this.IMAGES_RUNNING[0]);
     this.loadImages(this.IMAGES_JUMPING);
     this.loadImages(this.IMAGES_RUNNING);
     this.loadImages(this.IMAGES_HURT);
-
     this.jumpingSound = new Audio("./audio/mini_robot_jump.mp3");
     this.deathSound = new Audio("./audio/mini_robot_hurt.mp3");
+  }
 
+  /** Initializes patrol bounds and the first jump timestamp.
+   * @param {number} x Initial horizontal position.
+   * @param {number} y Initial vertical position.
+   * @param {number} minX Left patrol boundary.
+   * @param {number} maxX Right patrol boundary.
+   */
+  initializePatrol(x, y, minX, maxX) {
     this.x = x;
     this.y = y;
     this.minX = minX;
     this.maxX = maxX;
     this.lastJumpTime = Date.now();
+  }
 
+  /** Starts the running animation and patrol interval. */
+  startMiniRobotBehavior() {
     this.setAnimation(this.IMAGES_RUNNING, 50);
     this.moveMiniRobot();
   }
