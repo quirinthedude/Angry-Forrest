@@ -331,19 +331,25 @@ class World {
       const bomb = this.bombs[i];
 
       bomb.update();
-
-      if (
-        bomb.isExploding() &&
-        !bomb.hasDamagedCharacter &&
-        bomb.isColliding(this.character)
-      ) {
-        this.character.takeDamage(bomb.damage);
-        bomb.hasDamagedCharacter = true;
-      }
+      this.handleBombExplosion(bomb);
 
       if (bomb.isFinished()) {
         this.bombs.splice(i, 1);
       }
+    }
+  }
+
+  /** Applies one explosion's damage when its collision window is active.
+   * @param {Bomb} bomb Bomb whose explosion should be checked.
+   */
+  handleBombExplosion(bomb) {
+    if (
+      bomb.isExploding() &&
+      !bomb.hasDamagedCharacter &&
+      bomb.isColliding(this.character)
+    ) {
+      this.character.takeDamage(bomb.damage);
+      bomb.hasDamagedCharacter = true;
     }
   }
 
