@@ -62,12 +62,14 @@ class Game {
     this.intro = new IntroScene(canvas, display);
     this.display.setGameplayUiVisible(false);
 
-    this.titleSong = new Audio("/audio/title_song.mp3");
-    this.gameSong = new Audio("./audio/game_song.mp3");
-    this.funeralSong = new Audio("./audio/Mourning Brass - 2.mp3");
-    this.endOfGameSong = new Audio("./audio/end_of_game.mp3");
+    this.audioManager = new AudioManager();
+    this.titleSong = this.audioManager.createAudio("/audio/title_song.mp3");
+    this.gameSong = this.audioManager.createAudio("./audio/game_song.mp3");
+    this.funeralSong = this.audioManager.createAudio("./audio/Mourning Brass - 2.mp3");
+    this.endOfGameSong = this.audioManager.createAudio("./audio/end_of_game.mp3");
 
     this.isMuted = JSON.parse(localStorage.getItem("isMuted")) ?? false;
+    this.audioManager.setMuted(this.isMuted);
     this.display.updateMuteUI(this.isMuted);
 
     this.display.setGameplayUiVisible(false);
@@ -173,10 +175,14 @@ class Game {
   }
 
   /**
-   * Applies the selected mute state to all currently created game sounds.
+   * Applies the selected mute state to registered music and legacy actor sounds.
+   *
+   * Actor audio remains discoverable through object inspection until its later
+   * migration to the audio manager.
    *
    */
   applyMutedState() {
+    this.audioManager.setMuted(this.isMuted);
     this.getAudioObjects().forEach((audio) => {
       audio.muted = this.isMuted;
     });
