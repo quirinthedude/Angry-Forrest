@@ -1,0 +1,63 @@
+.bottom-controls[hidden],
+.character-energy[hidden],
+.robot-energy[hidden] {
+  display: none;
+}
+
+.character-energy {
+  position: absolute;
+  left: 10px;
+  top: 50%;
+  transform: translateY(-50%);
+
+  width: 72px;
+  height: 217px;
+
+  z-index: 20;
+}
+
+.robot-energy {
+  position: absolute;
+  right: 5px;
+  top: 50%;
+  transform: translateY(-50%);
+  z-index: 10;
+}
+
+.r-energy-frame {
+  position: relative;
+  z-index: 60;
+}
+
+.r-energy {
+  position: absolute;
+  right: 24px;
+  top: 32px;
+  height: 170px;
+  width: 31px;
+  z-index: 50;
+}
+
+.character-energy img {
+  width: 72px;
+  height: 217px;
+  display: block;
+}
+
+.fruit-inventory {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.fruit-inventory img {
+  width: 32px;
+  height: auto;
+}
+
+.top-controls[hidden],
+.bottom-controls[hidden],
+.character-energy[hidden],
+.robot-energy[hidden] {
+  display: none;
+}
