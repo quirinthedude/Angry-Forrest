@@ -116,16 +116,8 @@ class Game {
       return;
     }
 
-    this.state = "loading";
-
-    this.intro.stop();
-
-    this.loadingScene = new LoadingScene(this.canvas);
-    this.loadingScene.start();
-
-    this.startGameSong();
-    this.world = new World(this.canvas, this);
-    this.applyMutedState();
+    this.startLoadingPhase();
+    this.initializeWorld();
 
     if (!(await this.loadWorldAssets())) return;
 
@@ -134,6 +126,21 @@ class Game {
 
     // this.intro.stop();
     this.activateWorld();
+  }
+
+  /** Enters loading state, stops the intro and starts the loading scene. */
+  startLoadingPhase() {
+    this.state = "loading";
+    this.intro.stop();
+    this.loadingScene = new LoadingScene(this.canvas);
+    this.loadingScene.start();
+  }
+
+  /** Starts game audio and creates the world before asset loading begins. */
+  initializeWorld() {
+    this.startGameSong();
+    this.world = new World(this.canvas, this);
+    this.applyMutedState();
   }
 
   /** Waits for world assets and restores audio when loading fails.
