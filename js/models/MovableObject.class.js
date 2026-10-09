@@ -118,25 +118,29 @@ class MovableObject extends DrawableObject {
    * @returns {boolean} Whether the adjusted bounds overlap.
    */
   isColliding(mo) {
-    const thisOffsets = this.getCollisionOffsets();
-    const moOffsets = mo.getCollisionOffsets();
-
-    const thisLeft = this.x + thisOffsets.left;
-    const thisRight = this.x + this.width - thisOffsets.right;
-    const thisTop = this.y + thisOffsets.top;
-    const thisBottom = this.y + this.height - thisOffsets.bottom;
-
-    const moLeft = mo.x + moOffsets.left;
-    const moRight = mo.x + mo.width - moOffsets.right;
-    const moTop = mo.y + moOffsets.top;
-    const moBottom = mo.y + mo.height - moOffsets.bottom;
+    const thisBounds = this.getCollisionBounds();
+    const moBounds = mo.getCollisionBounds();
 
     return (
-      thisRight > moLeft &&
-      thisLeft < moRight &&
-      thisBottom > moTop &&
-      thisTop < moBottom
+      thisBounds.right > moBounds.left &&
+      thisBounds.left < moBounds.right &&
+      thisBounds.bottom > moBounds.top &&
+      thisBounds.top < moBounds.bottom
     );
+  }
+
+  /** Calculates collision bounds from this object's orientation-aware offsets.
+   * @returns {{left: number, right: number, top: number, bottom: number}} Adjusted collision bounds.
+   */
+  getCollisionBounds() {
+    const offsets = this.getCollisionOffsets();
+
+    return {
+      left: this.x + offsets.left,
+      right: this.x + this.width - offsets.right,
+      top: this.y + offsets.top,
+      bottom: this.y + this.height - offsets.bottom,
+    };
   }
 
   /** Finds the first level enemy colliding with this object.
