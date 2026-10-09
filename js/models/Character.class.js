@@ -176,36 +176,49 @@ class Character extends MovableObject {
    */
   checkFruitCollision() {
     const collisions = [];
-    const characterOffsets = this.getCollisionOffsets();
-
-    const characterScreenX = this.x + this.world.cameraX;
-
-    const characterLeft = characterScreenX + characterOffsets.left;
-    const characterRight =
-      characterScreenX + this.width - characterOffsets.right;
-    const characterTop = this.y + characterOffsets.top;
-    const characterBottom = this.y + this.height - characterOffsets.bottom;
+    const characterBounds = this.getCharacterFruitBounds();
 
     for (const fruit of this.world.level.fruits) {
-      const fruitOffsets = fruit.getCollisionOffsets();
-      const fruitScreenX = fruit.x + this.world.cameraX * fruit.parallaxFactor;
-
-      const fruitLeft = fruitScreenX + fruitOffsets.left;
-      const fruitRight = fruitScreenX + fruit.width - fruitOffsets.right;
-      const fruitTop = fruit.y + fruitOffsets.top;
-      const fruitBottom = fruit.y + fruit.height - fruitOffsets.bottom;
-
-      if (
-        characterRight > fruitLeft &&
-        characterLeft < fruitRight &&
-        characterBottom > fruitTop &&
-        characterTop < fruitBottom
-      ) {
-        collisions.push(fruit);
-      }
+      if (this.isFruitColliding(fruit, characterBounds)) collisions.push(fruit);
     }
 
     return collisions;
+  }
+
+  /** Calculates the player's adjusted bounds in the fruit collision space.
+   * @returns {{left: number, right: number, top: number, bottom: number}} Character collision bounds.
+   */
+  getCharacterFruitBounds() {
+    const offsets = this.getCollisionOffsets();
+    const screenX = this.x + this.world.cameraX;
+
+    return {
+      left: screenX + offsets.left,
+      right: screenX + this.width - offsets.right,
+      top: this.y + offsets.top,
+      bottom: this.y + this.height - offsets.bottom,
+    };
+  }
+
+  /** Checks one fruit against the player's adjusted collision bounds.
+   * @param {Fruit} fruit Fruit to test.
+   * @param {{left: number, right: number, top: number, bottom: number}} characterBounds Player collision bounds.
+   * @returns {boolean} Whether the fruit overlaps the player.
+   */
+  isFruitColliding(fruit, characterBounds) {
+    const offsets = fruit.getCollisionOffsets();
+    const screenX = fruit.x + this.world.cameraX * fruit.parallaxFactor;
+    const fruitLeft = screenX + offsets.left;
+    const fruitRight = screenX + fruit.width - offsets.right;
+    const fruitTop = fruit.y + offsets.top;
+    const fruitBottom = fruit.y + fruit.height - offsets.bottom;
+
+    return (
+      characterBounds.right > fruitLeft &&
+      characterBounds.left < fruitRight &&
+      characterBounds.bottom > fruitTop &&
+      characterBounds.top < fruitBottom
+    );
   }
 
   /** Stops player activity, switches to the death sprite and notifies the world. */
