@@ -242,21 +242,36 @@ class Character extends MovableObject {
    */
   updateAnimation(wantsToWalk) {
     if (this.isDead) return;
-    if (this.isHurt()) {
-      this.sleep.reset();
-      this.showHurtAnimation();
-      return;
-    }
-    if (this.y < this.groundY || wantsToWalk) {
-      this.sleep.reset();
-      this.showMovementAnimation(wantsToWalk);
-      return;
-    }
+    if (this.tryUpdateHurtAnimation()) return;
+    if (this.tryUpdateMovementAnimation(wantsToWalk)) return;
     if (this.sleep.update()) {
       this.stopWalkingSound();
       return;
     }
     this.showMovementAnimation(false);
+  }
+
+  /** Applies the higher-priority hurt animation when damage is active.
+   * @returns {boolean} Whether the hurt state handled this update.
+   */
+  tryUpdateHurtAnimation() {
+    if (!this.isHurt()) return false;
+
+    this.sleep.reset();
+    this.showHurtAnimation();
+    return true;
+  }
+
+  /** Applies movement animation when airborne or movement input is active.
+   * @param {boolean} wantsToWalk Whether movement input is active.
+   * @returns {boolean} Whether movement state handled this update.
+   */
+  tryUpdateMovementAnimation(wantsToWalk) {
+    if (this.y >= this.groundY && !wantsToWalk) return false;
+
+    this.sleep.reset();
+    this.showMovementAnimation(wantsToWalk);
+    return true;
   }
 
   /** Shows the hurt animation and silences walking audio. */
