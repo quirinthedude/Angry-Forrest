@@ -116,6 +116,14 @@ class AudioManager {
     });
   }
 
+  /** Pauses and rewinds every registered audio element without releasing it. */
+  pauseAndResetAll() {
+    this.audioObjects.forEach((audio) => {
+      audio.pause();
+      audio.currentTime = 0;
+    });
+  }
+
   /**
    * Applies a mute state to the manager and every registered audio element.
    *

@@ -175,17 +175,10 @@ class Game {
   }
 
   /**
-   * Applies the selected mute state to registered music and legacy actor sounds.
-   *
-   * Actor audio remains discoverable through object inspection until its later
-   * migration to the audio manager.
-   *
+   * Applies the selected mute state to every registered audio element.
    */
   applyMutedState() {
     this.audioManager.setMuted(this.isMuted);
-    this.getAudioObjects().forEach((audio) => {
-      audio.muted = this.isMuted;
-    });
   }
 
   /**
@@ -198,58 +191,6 @@ class Game {
     localStorage.setItem("isMuted", JSON.stringify(this.isMuted));
     this.applyMutedState();
     this.display.updateMuteUI(this.isMuted);
-  }
-
-  /**
-   * Returns audio objects belonging to the game and active world actors.
-   *
-   * @returns {HTMLMediaElement[]} Currently available game audio objects.
-   */
-  getAudioObjects() {
-    const objects = this.getGameAudioObjects();
-    this.getWorldAudioObjects().forEach((object) => {
-      this.addObjectAudio(objects, object);
-    });
-    return objects;
-  }
-
-  /** Returns audio elements owned directly by the game lifecycle.
-   * @returns {HTMLMediaElement[]} Game-level audio elements.
-   */
-  getGameAudioObjects() {
-    return [
-      this.titleSong,
-      this.gameSong,
-      this.funeralSong,
-      this.endOfGameSong,
-    ];
-  }
-
-  /** Returns active world actors whose properties may contain audio.
-   * @returns {MovableObject[]} Active world actors and projectiles.
-   */
-  getWorldAudioObjects() {
-    return [
-      this.world?.character,
-      ...(this.world?.level?.enemies ?? []),
-      ...(this.world?.thrownFruits ?? []),
-      ...(this.world?.bombs ?? []),
-    ];
-  }
-
-  /** Adds media-valued properties from one actor to an audio collection.
-   * @param {HTMLMediaElement[]} audioObjects Target audio collection.
-   * @param {MovableObject|null|undefined} object Object to inspect.
-   */
-  addObjectAudio(audioObjects, object) {
-    Object.values(object ?? {}).forEach((value) => {
-      if (
-        typeof HTMLMediaElement !== "undefined" &&
-        value instanceof HTMLMediaElement
-      ) {
-        audioObjects.push(value);
-      }
-    });
   }
 
   /**
@@ -390,13 +331,9 @@ class Game {
 
   /** Stops active gameplay and recreates the intro scene. */
   returnToIntro() {
-    this.world?.stop();
-
-    this.getAudioObjects().forEach((audio) => {
-      audio.pause();
-      audio.currentTime = 0;
-    });
     this.audioManager.stopTransientAudio();
+    this.audioManager.pauseAndResetAll();
+    this.world?.stop();
 
     this.display.setGameplayUiVisible(false);
 
