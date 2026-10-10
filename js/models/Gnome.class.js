@@ -39,7 +39,9 @@ class Gnome extends MovableObject {
     this.loadImages(this.IMAGES_IDLE);
     this.loadImages(this.IMAGES_WALKING);
     this.loadImages(this.IMAGES_HURT);
-    this.deathSound = new Audio("./audio/gnome_death.mp3");
+    this.deathSound = this.world.game.audioManager.createAudio(
+      "./audio/gnome_death.mp3",
+    );
   }
 
   /** Initializes patrol bounds and the gnome's instance-specific speed.
@@ -107,9 +109,10 @@ class Gnome extends MovableObject {
     this.speedY += this.acceleration;
   }
 
-  /** Stops patrol and sprite animation timers. */
+  /** Stops runtime activity and releases the death sound from shared management. */
   stop() {
     clearInterval(this.movementInterval);
     this.stopAnimation();
+    this.world.game.audioManager.unregister(this.deathSound);
   }
 }
