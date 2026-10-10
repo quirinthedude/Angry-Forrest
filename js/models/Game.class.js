@@ -396,6 +396,7 @@ class Game {
       audio.pause();
       audio.currentTime = 0;
     });
+    this.audioManager.stopTransientAudio();
 
     this.display.setGameplayUiVisible(false);
 

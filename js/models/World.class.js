@@ -404,6 +404,10 @@ class World {
     this.level.enemies.forEach((enemy) => {
       enemy.stop?.();
     });
+
+    this.bombs.forEach((bomb) => {
+      bomb.stop?.();
+    });
   }
 
   /** Places actors with a ground level back on that level and clears velocity. */

@@ -28,9 +28,9 @@ class Bomb extends MovableObject {
    * @param {number} x Horizontal start position.
    * @param {number} y Vertical start position.
    * @param {number} flightDirection Horizontal direction multiplier.
-   * @param {boolean} isMuted Whether the explosion sound starts muted.
+   * @param {AudioManager} audioManager Audio manager owning the bomb sound.
    */
-  constructor(x, y, flightDirection, isMuted) {
+  constructor(x, y, flightDirection, audioManager) {
     super();
 
     this.loadImage(this.IMAGES_FLYING[0]);
@@ -44,10 +44,11 @@ class Bomb extends MovableObject {
 
     this.createdAt = Date.now();
 
-    this.explodingSound = new Audio("./audio/bomb.mp3");
-    this.explodingSound.muted = isMuted;
+    this.explodingSound = audioManager.createTransientAudio("./audio/bomb.mp3");
     this.explodingSound.currentTime = 0;
-    this.explodingSound.play();
+    this.explodingSound
+      .play()
+      .catch(() => audioManager.unregister(this.explodingSound));
   }
 
   /** Advances the bomb according to its velocity and gravity. */
@@ -73,5 +74,10 @@ class Bomb extends MovableObject {
     const age = Date.now() - this.createdAt;
 
     return age >= this.fuseTime && age < this.fuseTime + this.damageDuration;
+  }
+
+  /** Stops the bomb animation without interrupting its transient sound. */
+  stop() {
+    this.stopAnimation();
   }
 }

@@ -6,6 +6,12 @@ class AudioManager {
   /** @type {Set<HTMLMediaElement>} Audio elements managed by this instance. */
   audioObjects;
 
+  /** @type {Set<HTMLMediaElement>} Short-lived audio awaiting playback completion. */
+  transientAudioObjects;
+
+  /** @type {WeakMap<HTMLMediaElement, EventListener>} Cleanup listener per transient audio. */
+  transientCleanupListeners;
+
   /**
    * Creates an empty audio registry.
    *
@@ -14,6 +20,8 @@ class AudioManager {
   constructor(isMuted = false) {
     this.isMuted = isMuted;
     this.audioObjects = new Set();
+    this.transientAudioObjects = new Set();
+    this.transientCleanupListeners = new WeakMap();
   }
 
   /**
@@ -24,6 +32,31 @@ class AudioManager {
    */
   createAudio(path) {
     return this.register(new Audio(path));
+  }
+
+  /**
+   * Creates audio that remains managed until playback ends or fails.
+   *
+   * @param {string} path Audio source assigned to the new element.
+   * @returns {HTMLAudioElement} Newly created transient audio element.
+   */
+  createTransientAudio(path) {
+    const audio = this.createAudio(path);
+    this.transientAudioObjects.add(audio);
+    this.addTransientCleanupListeners(audio);
+    return audio;
+  }
+
+  /**
+   * Registers one-shot lifecycle listeners for transient audio.
+   *
+   * @param {HTMLMediaElement} audio Transient audio to release automatically.
+   */
+  addTransientCleanupListeners(audio) {
+    const release = () => this.unregister(audio);
+    this.transientCleanupListeners.set(audio, release);
+    audio.addEventListener("ended", release, { once: true });
+    audio.addEventListener("error", release, { once: true });
   }
 
   /**
@@ -45,7 +78,31 @@ class AudioManager {
    * @returns {boolean} Whether the audio element was registered and removed.
    */
   unregister(audio) {
+    this.removeTransientCleanupListeners(audio);
+    this.transientAudioObjects.delete(audio);
     return this.audioObjects.delete(audio);
+  }
+
+  /**
+   * Removes lifecycle listeners associated with transient audio.
+   *
+   * @param {HTMLMediaElement} audio Audio whose listeners should be removed.
+   */
+  removeTransientCleanupListeners(audio) {
+    const release = this.transientCleanupListeners.get(audio);
+    if (!release) return;
+    audio.removeEventListener("ended", release);
+    audio.removeEventListener("error", release);
+    this.transientCleanupListeners.delete(audio);
+  }
+
+  /** Stops, resets and deregisters every unfinished transient audio element. */
+  stopTransientAudio() {
+    [...this.transientAudioObjects].forEach((audio) => {
+      audio.pause();
+      audio.currentTime = 0;
+      this.unregister(audio);
+    });
   }
 
   /**

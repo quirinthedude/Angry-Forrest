@@ -284,7 +284,7 @@ class Robot extends MovableObject {
       this.x + this.width / 2 - 25,
       this.y + 100,
       this.direction * -1,
-      this.world.game.isMuted,
+      this.world.game.audioManager,
     );
 
     this.world.bombs.push(bomb);
