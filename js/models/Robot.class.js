@@ -79,12 +79,20 @@ class Robot extends MovableObject {
     this.loadImages(this.IMAGES_DYING);
   }
 
-  /** Creates the audio elements used by boss actions. */
+  /** Creates and registers the audio elements used by boss actions. */
   createRobotSounds() {
-    this.damageSound = new Audio("/audio/robot_damage.mp3");
-    this.deathSound = new Audio("/audio/robot_death.mp3");
-    this.attackSound = new Audio("/audio/robot_attack.mp3");
-    this.jumpSound = new Audio("/audio/robot_jump.mp3");
+    this.damageSound = this.world.game.audioManager.createAudio(
+      "/audio/robot_damage.mp3",
+    );
+    this.deathSound = this.world.game.audioManager.createAudio(
+      "/audio/robot_death.mp3",
+    );
+    this.attackSound = this.world.game.audioManager.createAudio(
+      "/audio/robot_attack.mp3",
+    );
+    this.jumpSound = this.world.game.audioManager.createAudio(
+      "/audio/robot_jump.mp3",
+    );
   }
 
   /** Starts polling for the player's boss activation distance. */
@@ -294,7 +302,7 @@ class Robot extends MovableObject {
     this.attackSound.play();
   }
 
-  /** Clears activation, entrance and animation timers. */
+  /** Clears boss timers and releases its sounds from shared management. */
   stop() {
     clearInterval(this.activationInterval);
     clearInterval(this.entranceInterval);
@@ -304,5 +312,9 @@ class Robot extends MovableObject {
     clearTimeout(this.victoryTimeout);
 
     this.stopAnimation();
+    this.world.game.audioManager.unregister(this.damageSound);
+    this.world.game.audioManager.unregister(this.deathSound);
+    this.world.game.audioManager.unregister(this.attackSound);
+    this.world.game.audioManager.unregister(this.jumpSound);
   }
 }
