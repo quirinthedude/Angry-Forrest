@@ -39,6 +39,16 @@ class AudioManager {
   }
 
   /**
+   * Removes one audio element from mute-state management without stopping it.
+   *
+   * @param {HTMLMediaElement} audio Audio element to remove from the registry.
+   * @returns {boolean} Whether the audio element was registered and removed.
+   */
+  unregister(audio) {
+    return this.audioObjects.delete(audio);
+  }
+
+  /**
    * Applies a mute state to the manager and every registered audio element.
    *
    * @param {boolean} muted Whether registered audio should be muted.

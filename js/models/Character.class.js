@@ -70,12 +70,13 @@ class Character extends MovableObject {
 
   /** Creates and configures all sounds used by the player. */
   createCharacterSounds() {
-    this.walkingSound = new Audio("/audio/creaking.mp3");
+    const audioManager = this.world.game.audioManager;
+    this.walkingSound = audioManager.createAudio("/audio/creaking.mp3");
     this.walkingSound.loop = true;
-    this.jumpSound = new Audio("/audio/ent_jump.mp3");
-    this.hurtSound = new Audio("/audio/ent_hurt.mp3");
-    this.deathSound = new Audio("./audio/Mourning Brass - 2.mp3");
-    this.fruitSound = new Audio("./audio/fruit_louder.wav");
+    this.jumpSound = audioManager.createAudio("/audio/ent_jump.mp3");
+    this.hurtSound = audioManager.createAudio("/audio/ent_hurt.mp3");
+    this.deathSound = audioManager.createAudio("./audio/Mourning Brass - 2.mp3");
+    this.fruitSound = audioManager.createAudio("./audio/fruit_louder.wav");
   }
 
   /** Runs the player's fixed-rate gameplay update loop. */
@@ -482,12 +483,24 @@ class Character extends MovableObject {
     this.animateOnce(this.IMAGES_BOW, 100);
   }
 
-  /** Clears player movement and animation timers. */
+  /** Clears player activity and releases character audio from shared management. */
   stop() {
     clearInterval(this.movementInterval);
     this.sleep.stop();
     this.stopAnimation();
     this.stopWalkingSound();
+    this.unregisterCharacterSounds();
+  }
+
+  /** Removes all character-owned sounds from the shared audio registry. */
+  unregisterCharacterSounds() {
+    [
+      this.walkingSound,
+      this.jumpSound,
+      this.hurtSound,
+      this.deathSound,
+      this.fruitSound,
+    ].forEach((audio) => this.world.game.audioManager.unregister(audio));
   }
 
   /**
