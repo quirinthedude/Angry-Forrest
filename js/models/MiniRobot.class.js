@@ -145,12 +145,17 @@ class MiniRobot extends MovableObject {
     return screenX + this.width > 0 && screenX < this.world.canvas.width;
   }
 
-  /** Stops runtime activity and releases both sounds from shared management. */
+  /** Stops runtime activity and releases both sounds during final cleanup. */
   stop() {
-    clearInterval(this.movementInterval);
-    this.stopAnimation();
+    this.stopRuntime();
     this.world.game.audioManager.unregister(this.jumpingSound);
     this.world.game.audioManager.unregister(this.deathSound);
+  }
+
+  /** Stops movement and animation timers without changing audio playback. */
+  stopRuntime() {
+    clearInterval(this.movementInterval);
+    this.stopAnimation();
   }
 
   /**
@@ -201,8 +206,12 @@ class MiniRobot extends MovableObject {
     this.stopAnimation();
     this.animateOnce(this.IMAGES_HURT, 50);
 
+    const audioManager = this.world.game.audioManager;
+    audioManager.trackTransientAudio(this.deathSound);
     this.deathSound.currentTime = 0;
-    this.deathSound.play();
+    this.deathSound
+      .play()
+      .catch(() => audioManager.unregister(this.deathSound));
     this.speedY = 4;
     this.acceleration = 0.6;
   }
@@ -217,13 +226,14 @@ class MiniRobot extends MovableObject {
     }
   }
 
-  /** Removes this robot and releases its timers and registered sounds. */
+  /** Removes this robot while its transient death sound finishes playback. */
   removeFromLevel() {
     const index = this.world.level.enemies.indexOf(this);
 
     if (index !== -1) {
       this.world.level.enemies.splice(index, 1);
-      this.stop();
+      this.stopRuntime();
+      this.world.game.audioManager.unregister(this.jumpingSound);
     }
   }
 }

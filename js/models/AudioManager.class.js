@@ -41,7 +41,18 @@ class AudioManager {
    * @returns {HTMLAudioElement} Newly created transient audio element.
    */
   createTransientAudio(path) {
-    const audio = this.createAudio(path);
+    return this.trackTransientAudio(new Audio(path));
+  }
+
+  /**
+   * Registers an existing audio element until playback ends or fails.
+   *
+   * @param {HTMLMediaElement} audio Audio element to manage as transient.
+   * @returns {HTMLMediaElement} The same transient audio element.
+   */
+  trackTransientAudio(audio) {
+    this.register(audio);
+    if (this.transientAudioObjects.has(audio)) return audio;
     this.transientAudioObjects.add(audio);
     this.addTransientCleanupListeners(audio);
     return audio;
