@@ -38,7 +38,7 @@ class MiniRobot extends MovableObject {
     this.startMiniRobotBehavior();
   }
 
-  /** Loads mini-robot images and creates its jump and death sounds.
+  /** Loads mini-robot images and registers its jump and death sounds.
    * @param {World} world World owning the mini-robot.
    */
   initializeMiniRobotAssets(world) {
@@ -47,8 +47,12 @@ class MiniRobot extends MovableObject {
     this.loadImages(this.IMAGES_JUMPING);
     this.loadImages(this.IMAGES_RUNNING);
     this.loadImages(this.IMAGES_HURT);
-    this.jumpingSound = new Audio("./audio/mini_robot_jump.mp3");
-    this.deathSound = new Audio("./audio/mini_robot_hurt.mp3");
+    this.jumpingSound = this.world.game.audioManager.createAudio(
+      "./audio/mini_robot_jump.mp3",
+    );
+    this.deathSound = this.world.game.audioManager.createAudio(
+      "./audio/mini_robot_hurt.mp3",
+    );
   }
 
   /** Initializes patrol bounds and the first jump timestamp.
@@ -141,10 +145,12 @@ class MiniRobot extends MovableObject {
     return screenX + this.width > 0 && screenX < this.world.canvas.width;
   }
 
-  /** Stops patrol and sprite animation timers. */
+  /** Stops runtime activity and releases both sounds from shared management. */
   stop() {
     clearInterval(this.movementInterval);
     this.stopAnimation();
+    this.world.game.audioManager.unregister(this.jumpingSound);
+    this.world.game.audioManager.unregister(this.deathSound);
   }
 
   /**
@@ -211,12 +217,13 @@ class MiniRobot extends MovableObject {
     }
   }
 
-  /** Removes this robot from the active level enemy collection. */
+  /** Removes this robot and releases its timers and registered sounds. */
   removeFromLevel() {
     const index = this.world.level.enemies.indexOf(this);
 
     if (index !== -1) {
       this.world.level.enemies.splice(index, 1);
+      this.stop();
     }
   }
 }
