@@ -44,9 +44,6 @@ class Game {
    */
   victoryScene = null;
 
-  /** @type {boolean} Whether game audio is currently muted. */
-  isMuted = false;
-
   /**
    * Creates the lifecycle coordinator for the supplied game canvas.
    *
@@ -62,15 +59,14 @@ class Game {
     this.intro = new IntroScene(canvas, display);
     this.display.setGameplayUiVisible(false);
 
-    this.audioManager = new AudioManager();
+    const isMuted = JSON.parse(localStorage.getItem("isMuted")) ?? false;
+    this.audioManager = new AudioManager(isMuted);
     this.titleSong = this.audioManager.createAudio("/audio/title_song.mp3");
     this.gameSong = this.audioManager.createAudio("./audio/game_song.mp3");
     this.funeralSong = this.audioManager.createAudio("./audio/Mourning Brass - 2.mp3");
     this.endOfGameSong = this.audioManager.createAudio("./audio/end_of_game.mp3");
 
-    this.isMuted = JSON.parse(localStorage.getItem("isMuted")) ?? false;
-    this.audioManager.setMuted(this.isMuted);
-    this.display.updateMuteUI(this.isMuted);
+    this.display.updateMuteUI(this.audioManager.isMuted);
 
     this.display.setGameplayUiVisible(false);
     this.display.setOptionControlsVisible(true);
@@ -83,7 +79,6 @@ class Game {
   start() {
     this.intro.start();
     this.titleSong.currentTime = 0;
-    this.applyMutedState();
     this.playTitleSong();
   }
 
@@ -142,7 +137,6 @@ class Game {
   initializeWorld() {
     this.startGameSong();
     this.world = new World(this.canvas, this);
-    this.applyMutedState();
   }
 
   /** Waits for world assets and restores audio when loading fails.
@@ -175,22 +169,14 @@ class Game {
   }
 
   /**
-   * Applies the selected mute state to every registered audio element.
-   */
-  applyMutedState() {
-    this.audioManager.setMuted(this.isMuted);
-  }
-
-  /**
    * Sets the mute state used by the sound control.
    *
    * @param {boolean} muted Whether game audio should be muted.
    */
   setMuted(muted) {
-    this.isMuted = muted;
-    localStorage.setItem("isMuted", JSON.stringify(this.isMuted));
-    this.applyMutedState();
-    this.display.updateMuteUI(this.isMuted);
+    this.audioManager.setMuted(muted);
+    localStorage.setItem("isMuted", JSON.stringify(this.audioManager.isMuted));
+    this.display.updateMuteUI(this.audioManager.isMuted);
   }
 
   /**
