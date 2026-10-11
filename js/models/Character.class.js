@@ -31,12 +31,10 @@ class Character extends MovableObject {
   walkSpeed = 3.5;
   airSpeed = 4.5;
   isDead = false;
-  maxFruitInventory = 3;
-  fruitInventory = 0;
   inInvulnerable = false;
 
-  /** @type {Set<Fruit>} Fruits touching the character in the previous update. */
-  activeFruitCollision = new Set();
+  /** @type {FruitController} Controller for player fruit interactions. */
+  fruitController;
 
   /** Creates the player and starts its movement update interval.
    * @param {World} world World containing the player.
@@ -50,12 +48,13 @@ class Character extends MovableObject {
     this.x = 240;
     this.y = 305;
     this.animate(this.IMAGES_IDLE);
-    this.moveCharacter();
     this.createCharacterSounds();
+    this.fruitController = new FruitController(this);
     this.currentAnimation = this.IMAGES_IDLE;
     this.collisionDebug = true;
     this.updateCharacterEnergyBar();
-    this.updateFruitInventory();
+    this.fruitController.updateFruitInventory();
+    this.moveCharacter();
   }
 
   /** Loads the player's initial sprite and animation frame collections. */
@@ -87,13 +86,13 @@ class Character extends MovableObject {
 
       this.handleHorizontalMovement();
       this.handleJump();
-      this.throwFruit();
+      this.fruitController.throwFruit();
       this.updateVerticalMovement();
       this.updateCamera();
       this.handleCollision();
-      this.updateFruitCollection();
+      this.fruitController.updateFruitCollection();
       this.world.updateWorldObjects();
-      this.collectLandedFruitIfColliding();
+      this.fruitController.collectLandedFruitIfColliding();
       this.updateAnimation(wantsToWalk);
     }, 1000 / 60);
   }
@@ -105,21 +104,6 @@ class Character extends MovableObject {
     return (
       this.world.ready && !this.isDead && this.world.game.state === "playing"
     );
-  }
-
-  /** Collects newly touched level fruits and records current collisions. */
-  updateFruitCollection() {
-    const fruits = this.checkFruitCollision();
-    for (const fruit of fruits) {
-      if (!this.activeFruitCollision.has(fruit)) this.collectFruit(fruit);
-    }
-    this.activeFruitCollision = new Set(fruits);
-  }
-
-  /** Collects a landed thrown fruit when the player is touching it. */
-  collectLandedFruitIfColliding() {
-    const landedFruit = this.checkLandedFruitCollision();
-    if (landedFruit) this.collectLandedFruit(landedFruit);
   }
 
   /** Applies horizontal input while respecting bounds and air speed. */
@@ -170,56 +154,6 @@ class Character extends MovableObject {
     if (enemy && now - this.lastHit > 1000) {
       this.takeDamage(10);
     }
-  }
-
-  /** Finds level fruits whose adjusted bounds overlap the player.
-   * @returns {Fruit[]} Fruits currently colliding with the player.
-   */
-  checkFruitCollision() {
-    const collisions = [];
-    const characterBounds = this.getCharacterFruitBounds();
-
-    for (const fruit of this.world.level.fruits) {
-      if (this.isFruitColliding(fruit, characterBounds)) collisions.push(fruit);
-    }
-
-    return collisions;
-  }
-
-  /** Calculates the player's adjusted bounds in the fruit collision space.
-   * @returns {{left: number, right: number, top: number, bottom: number}} Character collision bounds.
-   */
-  getCharacterFruitBounds() {
-    const offsets = this.getCollisionOffsets();
-    const screenX = this.x + this.world.cameraX;
-
-    return {
-      left: screenX + offsets.left,
-      right: screenX + this.width - offsets.right,
-      top: this.y + offsets.top,
-      bottom: this.y + this.height - offsets.bottom,
-    };
-  }
-
-  /** Checks one fruit against the player's adjusted collision bounds.
-   * @param {Fruit} fruit Fruit to test.
-   * @param {{left: number, right: number, top: number, bottom: number}} characterBounds Player collision bounds.
-   * @returns {boolean} Whether the fruit overlaps the player.
-   */
-  isFruitColliding(fruit, characterBounds) {
-    const offsets = fruit.getCollisionOffsets();
-    const screenX = fruit.x + this.world.cameraX * fruit.parallaxFactor;
-    const fruitLeft = screenX + offsets.left;
-    const fruitRight = screenX + fruit.width - offsets.right;
-    const fruitTop = fruit.y + offsets.top;
-    const fruitBottom = fruit.y + fruit.height - offsets.bottom;
-
-    return (
-      characterBounds.right > fruitLeft &&
-      characterBounds.left < fruitRight &&
-      characterBounds.bottom > fruitTop &&
-      characterBounds.top < fruitBottom
-    );
   }
 
   /** Stops player activity, switches to the death sprite and notifies the world. */
@@ -349,114 +283,6 @@ class Character extends MovableObject {
    */
   isHurt() {
     return Date.now() - this.lastHit < 1000;
-  }
-
-  /** Removes a level fruit, adds it to inventory and updates UI/audio.
-   * @param {Fruit} fruit Fruit collected by the player.
-   */
-  collectFruit(fruit) {
-    if (this.fruitInventory >= this.maxFruitInventory) return;
-
-    const index = this.world.level.fruits.indexOf(fruit);
-
-    if (index === -1) return;
-
-    this.world.level.fruits.splice(index, 1);
-
-    this.fruitInventory++;
-
-    this.fruitSound.currentTime = 0;
-    this.fruitSound.play();
-
-    this.updateFruitInventory();
-  }
-
-  /** Synchronizes inventory slot images with the collected fruit count. */
-  updateFruitInventory() {
-    const slots = document.querySelectorAll(".fruit-slot");
-
-    slots.forEach((slot, index) => {
-      slot.src =
-        index < this.fruitInventory
-          ? "./img/objects/fruit.png"
-          : "./img/objects/fruit_bw.png";
-    });
-  }
-
-  /** Creates a thrown fruit when requested and inventory is available. */
-  throwFruit() {
-    if (!this.world.keyboard.throw) return;
-    this.sleep.reset();
-    if (this.fruitInventory <= 0) return;
-    this.fruitInventory--;
-    this.updateFruitInventory();
-
-    const fruit = new ThrownFruit(
-      this.x + this.width / 2,
-      this.y + 50,
-      this.direction,
-    );
-
-    this.world.thrownFruits.push(fruit);
-
-    this.world.keyboard.throw = false;
-  }
-
-  /** Finds a landed thrown fruit colliding with the player.
-   * @returns {ThrownFruit|null} Collectible landed fruit or null.
-   */
-  checkLandedFruitCollision() {
-    for (const fruit of this.world.thrownFruits) {
-      if (fruit.state === "landed" && this.isCollidingWithLandedFruit(fruit)) {
-        return fruit;
-      }
-    }
-
-    return null;
-  }
-
-  /**
-   * Tests collision against a landed fruit in its parallax coordinate space.
-   *
-   * @param {ThrownFruit} fruit Landed thrown fruit to test.
-   * @returns {boolean} Whether the player and fruit bounds overlap.
-   */
-  isCollidingWithLandedFruit(fruit) {
-    const characterOffsets = this.getCollisionOffsets();
-    const fruitOffsets = fruit.getCollisionOffsets();
-
-    const characterX = this.x + this.world.cameraX;
-    const fruitX = fruit.x + this.world.cameraX * (fruit.parallaxFactor ?? 1);
-
-    return (
-      characterX + this.width - characterOffsets.right >
-        fruitX + fruitOffsets.left &&
-      characterX + characterOffsets.left <
-        fruitX + fruit.width - fruitOffsets.right &&
-      this.y + this.height - characterOffsets.bottom >
-        fruit.y + fruitOffsets.top &&
-      this.y + characterOffsets.top <
-        fruit.y + fruit.height - fruitOffsets.bottom
-    );
-  }
-
-  /** Collects a landed thrown fruit and removes it from the world.
-   * @param {ThrownFruit} fruit Landed fruit to collect.
-   */
-  collectLandedFruit(fruit) {
-    if (this.fruitInventory >= this.maxFruitInventory) return;
-
-    const index = this.world.thrownFruits.indexOf(fruit);
-
-    if (index === -1) return;
-
-    this.world.thrownFruits.splice(index, 1);
-
-    this.fruitInventory++;
-    this.updateFruitInventory();
-
-    this.fruitSound.currentTime = 0;
-    this.fruitSound.play();
   }
 
   /** Reduces energy, triggers hurt feedback and handles death if needed.
