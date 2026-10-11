@@ -67,7 +67,7 @@ class VictoryScene {
   /** Draws the growing tree and optional scrolling ending text. */
   draw() {
     if (this.tree) {
-      this.world.drawObject(this.tree);
+      this.world.renderer.drawObject(this.tree);
     }
 
     if (this.endingText) {
