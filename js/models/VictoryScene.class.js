@@ -1,6 +1,11 @@
 /** Coordinates the post-victory bow, sinking character and growing-tree scene. */
 class VictoryScene {
   state = "bow";
+  /** @type {boolean} Whether this scene may continue its lifecycle. */
+  isActive = true;
+
+  /** @type {number|null} Pending timeout that starts the sinking phase. */
+  bowTimeout = null;
 
   /** Creates the victory scene for the completed world.
    * @param {World} world Completed game world.
@@ -34,13 +39,16 @@ class VictoryScene {
 
     const bowDuration = this.character.IMAGES_BOW.length * 100;
 
-    setTimeout(() => {
+    this.bowTimeout = setTimeout(() => {
+      this.bowTimeout = null;
+      if (!this.isActive) return;
       this.state = "sink";
     }, bowDuration);
   }
 
   /** Advances scene timing, character movement and ending text. */
   update() {
+    if (!this.isActive) return;
     const now = performance.now();
     const deltaTime = now - this.lastUpdatedAt;
     this.lastUpdatedAt = now;
@@ -56,6 +64,7 @@ class VictoryScene {
 
   /** Moves the character below the canvas and starts tree growth afterwards. */
   sinkCharacter() {
+    if (!this.isActive) return;
     this.character.y += 2;
 
     if (this.character.y >= this.world.canvas.height) {
@@ -66,6 +75,7 @@ class VictoryScene {
 
   /** Draws the growing tree and optional scrolling ending text. */
   draw() {
+    if (!this.isActive) return;
     if (this.tree) {
       this.world.renderer.drawObject(this.tree);
     }
@@ -81,9 +91,12 @@ class VictoryScene {
    * @returns {Promise<void>} Resolves after the tree images have loaded.
    */
   async startTreeGrowing() {
+    if (!this.isActive) return;
     this.tree = new GrowingTree(this.treeX, this.treeY);
 
     await this.tree.waitForImages();
+
+    if (!this.isActive) return;
 
     this.endingText = new ScrollingText(
       this.world.ctx,
@@ -99,5 +112,14 @@ class VictoryScene {
 
     this.state = "treeGrowing";
     this.tree.grow();
+  }
+
+  /** Stops pending scene timers and any active tree animation safely. */
+  stop() {
+    if (!this.isActive) return;
+    this.isActive = false;
+    clearTimeout(this.bowTimeout);
+    this.bowTimeout = null;
+    this.tree?.stopAnimation();
   }
 }

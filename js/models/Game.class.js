@@ -319,6 +319,7 @@ class Game {
   returnToIntro() {
     this.audioManager.stopTransientAudio();
     this.audioManager.pauseAndResetAll();
+    this.victoryScene?.stop();
     this.world?.stop();
 
     this.display.setGameplayUiVisible(false);
