@@ -31,7 +31,7 @@ class Character extends MovableObject {
   walkSpeed = 3.5;
   airSpeed = 4.5;
   isDead = false;
-  inInvulnerable = false;
+  isInvulnerable = false;
 
   /** @type {FruitController} Controller for player fruit interactions. */
   fruitController;
@@ -74,7 +74,9 @@ class Character extends MovableObject {
     this.walkingSound.loop = true;
     this.jumpSound = audioManager.createAudio("/audio/ent_jump.mp3");
     this.hurtSound = audioManager.createAudio("/audio/ent_hurt.mp3");
-    this.deathSound = audioManager.createAudio("./audio/Mourning Brass - 2.mp3");
+    this.deathSound = audioManager.createAudio(
+      "./audio/Mourning Brass - 2.mp3",
+    );
     this.fruitSound = audioManager.createAudio("./audio/fruit_louder.wav");
   }
 
