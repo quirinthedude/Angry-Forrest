@@ -63,8 +63,12 @@ class Game {
     this.audioManager = new AudioManager(isMuted);
     this.titleSong = this.audioManager.createAudio("/audio/title_song.mp3");
     this.gameSong = this.audioManager.createAudio("./audio/game_song.mp3");
-    this.funeralSong = this.audioManager.createAudio("./audio/Mourning Brass - 2.mp3");
-    this.endOfGameSong = this.audioManager.createAudio("./audio/end_of_game.mp3");
+    this.funeralSong = this.audioManager.createAudio(
+      "./audio/Mourning Brass - 2.mp3",
+    );
+    this.endOfGameSong = this.audioManager.createAudio(
+      "./audio/end_of_game.mp3",
+    );
 
     this.display.updateMuteUI(this.audioManager.isMuted);
 
@@ -212,8 +216,9 @@ class Game {
       (event.key === "ArrowLeft" || event.key === "ArrowRight")
     ) {
       event.preventDefault();
-      const speedChange = event.key === "ArrowRight" ? 20 : -20;
-      this.victoryScene?.endingText?.changeSpeed(speedChange);
+      this.adjustVictoryTextSpeed(
+        event.key === "ArrowRight" ? "right" : "left",
+      );
       return;
     }
 
@@ -361,5 +366,20 @@ class Game {
 
     this.returnToIntro();
     this.startWorld();
+  }
+
+  /**
+   * Adjusts the victory-scene scrolling text speed using directional input.
+   *
+   * Accepts input from both keyboard and touch controls.
+   * Changes speed only while the game is in the "gameWon" state.
+   *
+   * @param {"left"|"right"} direction Direction controlling the speed change.
+   */
+  adjustVictoryTextSpeed(direction) {
+    if (this.state !== "gameWon") return;
+
+    const speedChange = direction === "right" ? 20 : -20;
+    this.victoryScene?.endingText?.changeSpeed(speedChange);
   }
 }

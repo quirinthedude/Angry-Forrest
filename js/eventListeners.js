@@ -36,7 +36,13 @@ function bindTouchControls() {
 function bindTouchButton(button, activePointers, activeControlCounts) {
   const control = button.dataset.control;
   const pressPointer = (event) =>
-    activateTouchControl(event, button, control, activePointers, activeControlCounts);
+    activateTouchControl(
+      event,
+      button,
+      control,
+      activePointers,
+      activeControlCounts,
+    );
   const releasePointer = (event) =>
     releaseTouchControl(event, activePointers, activeControlCounts);
 
@@ -46,7 +52,10 @@ function bindTouchButton(button, activePointers, activeControlCounts) {
 }
 
 /**
- * Activates a control and records the pointer holding it.
+ * Handles touch input based on the current game state.
+ *
+ * During gameplay, activates the corresponding keyboard control.
+ * During victory, left and right adjust the scrolling text speed.
  *
  * @param {PointerEvent} event Pointer press on the control.
  * @param {HTMLElement} button Pressed control button.
@@ -61,6 +70,16 @@ function activateTouchControl(
   activePointers,
   activeControlCounts,
 ) {
+  const game = window.game;
+
+  if (game?.state === "gameWon") {
+    if (control === "left" || control === "right") {
+      event.preventDefault();
+      game.adjustVictoryTextSpeed(control);
+    }
+    return;
+  }
+
   if (window.game?.state !== "playing") return;
 
   event.preventDefault();
