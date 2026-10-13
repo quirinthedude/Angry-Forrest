@@ -137,7 +137,7 @@ class Character extends MovableObject {
 
   /** Positions the camera relative to the player's horizontal position. */
   updateCamera() {
-    this.world.cameraX = -this.x + 240; // Update the camera position based on the character's position
+    this.world.cameraX = Math.min(0, -this.x + 240); // Update the camera position based on the character's position
   }
 
   /** Resolves simultaneous mini-robot stomps before applying contact damage. */
