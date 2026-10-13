@@ -140,22 +140,63 @@ class Character extends MovableObject {
     this.world.cameraX = -this.x + 240; // Update the camera position based on the character's position
   }
 
-  /** Applies damage when the player contacts an enemy after the hit cooldown. */
+  /** Resolves simultaneous mini-robot stomps before applying contact damage. */
   handleCollision() {
-    const enemy = this.checkCollisions();
+    const enemies = this.checkCollisions();
+    if (enemies.length === 0) return;
 
-    if (!enemy) return;
+    // Classify every contact before a stomp changes the character's speedY.
+    const stompedRobots = enemies.filter(
+      (enemy) =>
+        enemy instanceof MiniRobot &&
+        !enemy.isKnockedOut &&
+        enemy.isStompedBy(this),
+    );
 
-    if (enemy instanceof MiniRobot) {
-      const collisionHandled = enemy.handleCharacterCollision(this);
-      if (collisionHandled) return;
+    if (stompedRobots.length > 0) {
+      const stompGroup = this.collectOverlappingMiniRobots(stompedRobots);
+
+      for (const robot of stompGroup) {
+        robot.knockOut();
+      }
+
+      // One rebound for the whole group; do not change the jump physics.
+      this.speedY = -12;
     }
 
-    const now = Date.now();
-
-    if (enemy && now - this.lastHit > 1000) {
+    // Knocked-out mini-robots are harmless. Other enemy types keep their
+    // existing contact-damage rule, including the shared hit cooldown.
+    const hasDamagingCollision = enemies.some(
+      (enemy) => !(enemy instanceof MiniRobot && enemy.isKnockedOut),
+    );
+    if (hasDamagingCollision && Date.now() - this.lastHit > 1000) {
       this.takeDamage(10);
     }
+  }
+
+  /**
+   * Finds active mini-robots linked to a valid stomp by overlapping hitboxes.
+   * @param {MiniRobot[]} stompedRobots Mini-robots stomped in this update.
+   * @returns {Set<MiniRobot>} Connected mini-robots defeated together.
+   */
+  collectOverlappingMiniRobots(stompedRobots) {
+    const activeRobots = this.world.level.enemies.filter(
+      (enemy) => enemy instanceof MiniRobot && !enemy.isKnockedOut,
+    );
+    const group = new Set(stompedRobots);
+    const queue = [...stompedRobots];
+
+    for (let index = 0; index < queue.length; index++) {
+      const robot = queue[index];
+
+      for (const candidate of activeRobots) {
+        if (group.has(candidate) || !robot.isColliding(candidate)) continue;
+        group.add(candidate);
+        queue.push(candidate);
+      }
+    }
+
+    return group;
   }
 
   /** Stops player activity, switches to the death sprite and notifies the world. */

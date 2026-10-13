@@ -143,17 +143,18 @@ class MovableObject extends DrawableObject {
     };
   }
 
-  /** Finds the first level enemy colliding with this object.
-   * @returns {MovableObject|null} Colliding enemy or null.
+  /** Finds all level enemies colliding with this object.
+   * @returns {MovableObject[]} Colliding enemies in level order.
    */
   checkCollisions() {
+    const collisions = [];
+
     for (const enemy of this.world.level.enemies) {
-      if (enemy instanceof Robot && !enemy.isActivated) continue; // to delete, when ready
-      if (this.isColliding(enemy)) {
-        return enemy;
-      }
+      if (enemy instanceof Robot && !enemy.isActivated) continue;
+      if (this.isColliding(enemy)) collisions.push(enemy);
     }
-    return null;
+
+    return collisions;
   }
 
   /** Returns collision offsets in the object's current orientation.
