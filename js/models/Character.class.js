@@ -216,12 +216,13 @@ class Character extends MovableObject {
     this.world.characterDied();
   }
 
-  /** Updates the DOM energy-bar image to match current energy. */
+  /** Clips the energy fill from the top while keeping its image size fixed. */
   updateCharacterEnergyBar() {
-    const index = Math.max(0, Math.ceil(this.energy / 10) - 1);
+    const energy = Math.max(0, Math.min(100, this.energy));
+    const bar = document.getElementById("character-energy-bar");
+    if (!bar) return;
 
-    document.getElementById("character-energy-bar").src =
-      `./img/char_energy/char_energy${index}.png`;
+    bar.style.clipPath = `inset(${100 - energy}% 0 0 0)`;
   }
 
   /** Plays the hurt sound and records the visible hurt feedback. */
