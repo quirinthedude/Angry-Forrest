@@ -218,11 +218,18 @@ class World {
   updateThrownFruits() {
     const grassFactor = this.level.landscape.grass[0]?.parallaxFactor ?? 1;
 
+    const bounds = {
+      minX: this.character.minX,
+      maxX: this.character.maxX,
+    };
+
     this.thrownFruits.forEach((fruit) => {
       const wasAirborne =
-        fruit.state === "flying" || fruit.state === "deflected";
+        fruit.state === "flying" ||
+        fruit.state === "deflected" ||
+        fruit.state === "falling";
 
-      fruit.update();
+      fruit.update(bounds);
 
       if (wasAirborne && fruit.state === "landed") {
         fruit.x += this.cameraX * (1 - grassFactor);

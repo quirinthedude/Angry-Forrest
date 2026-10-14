@@ -36,11 +36,13 @@ class ThrownFruit extends MovableObject {
     this.direction = direction;
   }
 
-  /** Advances flight and changes the state when the fruit lands. */
-  update() {
-    if (this.state !== "flying" && this.state !== "deflected") return;
+  /** Advances fruit movement within the reachable play area */
+  update(bounds) {
+    if (!["flying", "deflected", "falling"].includes(this.state)) return;
 
     this.x += this.speedX * this.direction;
+    this.stopAtBoundary(bounds);
+
     this.y += this.speedY;
     this.speedY += this.acceleration;
 
@@ -76,5 +78,15 @@ class ThrownFruit extends MovableObject {
     this.direction *= -1;
     this.speedX = 2;
     this.speedY = -5;
+  }
+
+  /** Stops horizintal flight at the reachable play-area boundaries */
+  stopAtBoundary({ minX, maxX }) {
+    if (this.x > minX && this.x < maxX) return;
+
+    this.x = Math.max(minX, Math.min(maxX, this.x));
+    this.state = "falling";
+    this.speedX = 0;
+    this.speedY = Math.max(0, this.speedY);
   }
 }

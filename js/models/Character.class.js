@@ -7,6 +7,11 @@ class Character extends MovableObject {
   topOffset = 10;
   bottomOffset = 55;
 
+  minX = 230;
+  get maxX() {
+    return this.world.level.landscape.levelLength - 2200;
+  }
+
   IMAGES_IDLE = createAnimationImages(
     "./img/character/idle/animation_idle_",
     20,
@@ -114,15 +119,12 @@ class Character extends MovableObject {
 
     if (this.world.keyboard.left && this.world.keyboard.right) return;
 
-    if (this.world.keyboard.left && this.x > 230) {
+    if (this.world.keyboard.left && this.x > this.minX) {
       this.direction = -1;
       this.move(movementSpeed);
     }
 
-    if (
-      this.world.keyboard.right &&
-      this.x < this.world.level.landscape.levelLength - 2200
-    ) {
+    if (this.world.keyboard.right && this.x < this.maxX) {
       this.direction = 1;
       this.move(movementSpeed);
     }
