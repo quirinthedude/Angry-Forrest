@@ -128,6 +128,7 @@ class World {
     if (enemy instanceof MiniRobot) {
       if (enemy.isKnockedOut) return false;
       fruit.deflect();
+      enemy.reactToFruit();
       return true;
     }
 

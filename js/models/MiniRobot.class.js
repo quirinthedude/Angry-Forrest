@@ -8,6 +8,9 @@ class MiniRobot extends MovableObject {
   bottomOffset = 0;
   nativeDirection = 1;
   isKnockedOut = false;
+  isStunned = false;
+  hurtTimeout = null;
+  hurtFrameDuration = 50;
 
   groundY = 360;
   speed = 1.5; // schneller als Gnome
@@ -78,7 +81,7 @@ class MiniRobot extends MovableObject {
   /** Starts the mini-robot patrol interval. */
   moveMiniRobot() {
     this.movementInterval = setInterval(() => {
-      if (!this.world.ready || this.isKnockedOut) return;
+      if (!this.world.ready || this.isKnockedOut || this.isStunned) return;
 
       if (this.x < this.minX) {
         this.direction = 1;
@@ -101,6 +104,7 @@ class MiniRobot extends MovableObject {
 
     const now = Date.now();
     if (
+      !this.isStunned &&
       !this.isInTheAir() &&
       this.speedY === 0 &&
       now - this.lastJumpTime >= this.jumpInterval
@@ -131,7 +135,9 @@ class MiniRobot extends MovableObject {
       if (this.y >= this.groundY) {
         this.y = this.groundY;
         this.speedY = 0;
-        this.setAnimation(this.IMAGES_RUNNING, 50);
+        if (!this.isStunned) {
+          this.setAnimation(this.IMAGES_RUNNING, 50);
+        }
       }
     }
   }
@@ -154,6 +160,7 @@ class MiniRobot extends MovableObject {
 
   /** Stops movement and animation timers without changing audio playback. */
   stopRuntime() {
+    clearTimeout(this.hurtTimeout);
     clearInterval(this.movementInterval);
     this.stopAnimation();
   }
@@ -201,17 +208,15 @@ class MiniRobot extends MovableObject {
   knockOut() {
     if (this.isKnockedOut) return;
 
+    clearTimeout(this.hurtTimeout);
+    this.hurtTimeout = null;
+    this.isStunned = false;
     this.isKnockedOut = true;
 
     this.stopAnimation();
     this.animateOnce(this.IMAGES_HURT, 50);
+    this.playKnockoutSound();
 
-    const audioManager = this.world.game.audioManager;
-    audioManager.trackTransientAudio(this.deathSound);
-    this.deathSound.currentTime = 0;
-    this.deathSound
-      .play()
-      .catch(() => audioManager.unregister(this.deathSound));
     this.speedY = 4;
     this.acceleration = 0.6;
   }
@@ -235,5 +240,42 @@ class MiniRobot extends MovableObject {
       this.stopRuntime();
       this.world.game.audioManager.unregister(this.jumpingSound);
     }
+  }
+  /** Reacts to a fruit impact without taking damage. */
+  reactToFruit() {
+    if (this.isKnockedOut || this.isStunned) return;
+
+    this.isStunned = true;
+    this.direction *= -1;
+
+    this.currentAnimation = this.IMAGES_HURT;
+    this.animateOnce(this.IMAGES_HURT, this.hurtFrameDuration);
+
+    const duration = this.IMAGES_HURT.length * this.hurtFrameDuration;
+
+    this.hurtTimeout = setTimeout(() => {
+      this.finishFruitReaction();
+    }, duration);
+  }
+
+  /** Resumes normal behaviour after the fruit impact animation. */
+  finishFruitReaction() {
+    this.hurtTimeout = null;
+    if (this.isKnockedOut) return;
+
+    this.isStunned = false;
+    this.lastJumpTime = Date.now();
+    this.setAnimation(this.IMAGES_RUNNING, 50);
+  }
+
+  /** Plays and tracks the MiniRobot's knockout sound. */
+  playKnockoutSound() {
+    const audioManager = this.world.game.audioManager;
+
+    audioManager.trackTransientAudio(this.deathSound);
+    this.deathSound.currentTime = 0;
+    this.deathSound
+      .play()
+      .catch(() => audioManager.unregister(this.deathSound));
   }
 }
