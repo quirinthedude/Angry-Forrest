@@ -50,9 +50,9 @@
 
 .character-energy-fill {
   position: absolute;
-  left: 26px;
-  bottom: 32px;
-  width: 20px;
+  left: 22px;
+  bottom: 20px;
+  width: 26px;
   height: auto;
   display: block;
   z-index: 1;
