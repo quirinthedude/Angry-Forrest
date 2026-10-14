@@ -38,7 +38,7 @@ class ThrownFruit extends MovableObject {
 
   /** Advances flight and changes the state when the fruit lands. */
   update() {
-    if (this.state !== "flying") return;
+    if (this.state !== "flying" && this.state !== "deflected") return;
 
     this.x += this.speedX * this.direction;
     this.y += this.speedY;
@@ -63,5 +63,18 @@ class ThrownFruit extends MovableObject {
 
     this.state = "hit";
     this.animateOnce(this.IMAGES_HIT, 80);
+  }
+
+  /**
+   * Deflects the fruit after hitting a MiniRobot.
+   * Reverses horizontal direction and applies a small upward impulse.
+   */
+  deflect() {
+    if (this.state !== "flying") return;
+
+    this.state = "deflected";
+    this.direction *= -1;
+    this.speedX = 2;
+    this.speedY = -5;
   }
 }

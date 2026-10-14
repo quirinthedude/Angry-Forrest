@@ -91,7 +91,6 @@ class World {
     }
   }
 
-
   /**
    * Notifies the game lifecycle when the character has died.
    *
@@ -125,6 +124,13 @@ class World {
    */
   handleThrownFruitCollision(fruit, enemy) {
     if (!fruit.isColliding(enemy)) return false;
+
+    if (enemy instanceof MiniRobot) {
+      if (enemy.isKnockedOut) return false;
+      fruit.deflect();
+      return true;
+    }
+
     if (enemy instanceof Robot && !enemy.isActivated) return false;
     fruit.hit();
     if (enemy instanceof Gnome) enemy.hitByFruit(fruit.direction);
@@ -212,11 +218,12 @@ class World {
     const grassFactor = this.level.landscape.grass[0]?.parallaxFactor ?? 1;
 
     this.thrownFruits.forEach((fruit) => {
-      const wasFlying = fruit.state === "flying";
+      const wasAirborne =
+        fruit.state === "flying" || fruit.state === "deflected";
 
       fruit.update();
 
-      if (wasFlying && fruit.state === "landed") {
+      if (wasAirborne && fruit.state === "landed") {
         fruit.x += this.cameraX * (1 - grassFactor);
         fruit.parallaxFactor = grassFactor;
       }
