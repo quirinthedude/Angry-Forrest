@@ -75,7 +75,8 @@ canvas {
 
 .canvas-frame {
   position: absolute;
-  inset: 0;
+  top: 10px;
+  left: 0;
 
   width: 866px;
   height: 618px;
