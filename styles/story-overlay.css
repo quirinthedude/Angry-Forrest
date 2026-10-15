@@ -1,4 +1,4 @@
-/* Stationary, accessible reading surface above the canvas, below option controls. */
+/* Readable story overlay: pre-intro palette and ellipse, adapted to the canvas. */
 .story-overlay {
   position: absolute;
   left: 73px;
@@ -7,29 +7,101 @@
   height: 480px;
   z-index: 20;
   box-sizing: border-box;
-  padding: 34px 42px;
+  display: grid;
+  place-items: center;
+  overflow: hidden;
+  isolation: isolate;
   background: #07120a;
   color: #f3e5b5;
-  font-family: Georgia, serif;
-  overflow: hidden;
+  font-family: "Grenze Gotisch", "Comic Sans MS", cursive;
   user-select: text;
   -webkit-user-select: text;
   touch-action: pan-y;
 }
-.story-overlay[hidden], .story-toggle-button[hidden] { display: none; }
-.story-overlay-content {
-  max-height: 100%;
-  overflow: auto;
-  overscroll-behavior: contain;
-  outline-offset: 3px;
-  scrollbar-color: #9b7a45 #07120a;
-  line-height: 1.6;
-  font-size: 19px;
+
+.story-overlay::before {
+  content: "";
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  width: 94%;
+  height: 94%;
+  box-sizing: border-box;
+  border: 3px solid #9b7a45;
+  border-radius: 50%;
+  background: radial-gradient(
+    ellipse at center,
+    #000 0%,
+    #000 38%,
+    #063b13 63%,
+    #018d21 86%,
+    #01f92e 100%
+  );
+  transform: translate(-50%, -50%);
+  pointer-events: none;
 }
-.story-overlay h2 { margin: 0 0 16px; font-size: 26px; color: #d3b877; }
-.story-overlay p { margin: 0 0 1em; }
-.story-overlay-hint { font-size: 15px; color: #bacaaa; }
-.story-toggle-button { width: 42px; height: 42px; font-size: 30px; line-height: 1; }
+
+.story-overlay[hidden],
+.story-toggle-button[hidden] {
+  display: none;
+}
+
+.story-overlay-content {
+  position: relative;
+  z-index: 1;
+  box-sizing: border-box;
+  width: 76%;
+  max-height: 85%;
+  padding: 8px 15px;
+  overflow-y: auto;
+  overscroll-behavior: contain;
+  text-align: center;
+  font-size: 19px;
+  line-height: 1.45;
+  scrollbar-width: thin;
+  scrollbar-color: #9b7a45 rgba(0, 0, 0, 0.35);
+}
+
+.story-overlay-content::-webkit-scrollbar {
+  width: 10px;
+}
+
+.story-overlay-content::-webkit-scrollbar-track {
+  border-radius: 999px;
+  background: rgba(0, 0, 0, 0.35);
+}
+
+.story-overlay-content::-webkit-scrollbar-thumb {
+  border: 2px solid rgba(0, 0, 0, 0.35);
+  border-radius: 999px;
+  background: #9b7a45;
+}
+
+.story-overlay h2 {
+  margin: 0 0 16px;
+  font-size: 26px;
+  color: #f3e5b5;
+}
+
+.story-overlay p {
+  margin: 0 0 1em;
+}
+
+.story-overlay-hint {
+  font-size: 15px;
+  color: #f3e5b5;
+}
+
+.story-toggle-button {
+  width: 42px;
+  height: 42px;
+  font-size: 30px;
+  line-height: 1;
+}
+
 .game-wrapper:fullscreen.mobile-fullscreen-stretch .story-overlay {
-  left: 0; top: 0; width: 100%; height: 100%;
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 100%;
 }
