@@ -108,6 +108,7 @@ class VictoryScene {
       },
     );
 
+    this.world.game.syncStoryButton();
     this.world.game.endScreen = new EndGame(this.world.canvas, null, true);
 
     this.state = "treeGrowing";
