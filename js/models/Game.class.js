@@ -396,7 +396,7 @@ class Game {
   syncStoryButton() {
     const button = document.querySelector(".story-toggle-button");
     if (!button) return;
-    button.hidden = this.state !== "intro" && this.state !== "gameWon";
+    button.hidden = this.state !== "intro" && !(this.state === "gameWon" && this.victoryScene?.endingText);
   }
 
   /** Opens or closes the HTML reading mode without pausing canvas animations. */
