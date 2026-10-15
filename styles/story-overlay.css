@@ -11,7 +11,7 @@
   place-items: center;
   overflow: hidden;
   isolation: isolate;
-  background: transparent;
+  background: rgba(0, 0, 0, 0.55);
   color: #f3e5b5;
   font-family: "Grenze Gotisch", "Comic Sans MS", cursive;
   user-select: text;
@@ -52,10 +52,7 @@
   box-sizing: border-box;
   width: 76%;
   max-height: 85%;
-  padding: 14px 20px;
-  background: rgba(7, 18, 10, 0.68);
-  border: 1px solid rgba(155, 122, 69, 0.65);
-  border-radius: 12px;
+  padding: 8px 15px;
   overflow-y: auto;
   overscroll-behavior: contain;
   text-align: center;
