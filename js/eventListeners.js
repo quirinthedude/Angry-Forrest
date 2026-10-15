@@ -122,6 +122,9 @@ function bindOptionControls() {
   const soundToggle = document.querySelector(".sound-toggle-input");
   const resizeButton = document.querySelector(".resize-button");
   const homeButton = document.querySelector(".home-button");
+  const storyToggle = document.querySelector(".story-toggle-button");
+
+  storyToggle?.addEventListener("click", () => window.game?.toggleStoryOverlay());
 
   /** Returns from the active game to the pre-intro screen. */
   homeButton?.addEventListener("click", () => {
