@@ -86,7 +86,7 @@ class VictoryScene {
   }
 
   /**
-   * Loads the tree, creates the ending overlay and starts tree animation.
+   * Loads the tree and starts the victory sequence.
    *
    * @returns {Promise<void>} Resolves after the tree images have loaded.
    */
@@ -98,21 +98,21 @@ class VictoryScene {
 
     if (!this.isActive) return;
 
+    this.setupVictoryPresentation();
+    this.state = "treeGrowing";
+    this.tree.grow();
+  }
+
+  /** Prepares the victory text and restart prompt. */
+  setupVictoryPresentation() {
     this.endingText = new ScrollingText(
       this.world.ctx,
       "CONGRATULATIONS! PEACE HAS RETURNED TO THE FOREST. ENTIE HAS FOUND PEACE AT LAST AND RETURNS TO HIS COMMUNITY IN THE WOODS.",
-      {
-        height: 32,
-        speed: 156,
-        y: this.world.canvas.height - 26,
-      },
+      { height: 32, speed: 156, y: this.world.canvas.height - 26 },
     );
 
     this.world.game.syncStoryButton();
     this.world.game.endScreen = new EndGame(this.world.canvas, null, true);
-
-    this.state = "treeGrowing";
-    this.tree.grow();
   }
 
   /** Stops pending scene timers and any active tree animation safely. */
