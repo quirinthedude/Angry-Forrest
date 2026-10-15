@@ -425,20 +425,31 @@ class Game {
     if (visible) {
       const title = document.getElementById("story-overlay-title");
       const body = document.getElementById("story-overlay-body");
-      title.textContent = this.state === "intro" ? "The story of Entie" : "Peace returns to the forest";
+      title.textContent = this.state === "intro" ? "The Grumpy Spirit of the Woods" : "Peace returns to the forest";
       body.replaceChildren();
-      // Text comes directly from the active scrolling glyph source:
-      // no second, potentially divergent copy of the game narrative.
-      const sentences = source.text.match(/[^.!?]+[.!?]+|[^.!?]+$/g) ?? [source.text];
-      for (let i = 0; i < sentences.length; i += 3) {
-        const paragraph = document.createElement("p");
-        paragraph.textContent = sentences.slice(i, i + 3).join(" ").trim();
-        body.appendChild(paragraph);
+      if (this.state === "intro") {
+        const message = [
+          "This is the spell of the grumpy spirit of the woods!",
+          "It brings you deeper insights when life gets complicated.",
+          "Press it again to return to normal life.",
+        ];
+        message.forEach((line) => {
+          const paragraph = document.createElement("p");
+          paragraph.textContent = line;
+          body.appendChild(paragraph);
+        });
+      } else {
+        const sentences = source.text.match(/[^.!?]+[.!?]+|[^.!?]+$/g) ?? [source.text];
+        for (let i = 0; i < sentences.length; i += 3) {
+          const paragraph = document.createElement("p");
+          paragraph.textContent = sentences.slice(i, i + 3).join(" ").trim();
+          body.appendChild(paragraph);
+        }
       }
       const hint = overlay.querySelector(".story-overlay-hint");
       if (hint) hint.textContent = this.state === "intro"
-        ? "Press Enter to start. Tap the grumpy face to return to the animated text."
-        : "Press Enter to restart. Tap the grumpy face to return to the animated text.";
+        ? "Press Enter to start the game."
+        : "Press Enter to restart.";
     }
     overlay.hidden = !visible;
     button?.setAttribute("aria-expanded", String(visible));
