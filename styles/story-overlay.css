@@ -11,7 +11,7 @@
   place-items: center;
   overflow: hidden;
   isolation: isolate;
-  background: #07120a;
+  background: transparent;
   color: #f3e5b5;
   font-family: "Grenze Gotisch", "Comic Sans MS", cursive;
   user-select: text;
@@ -31,11 +31,11 @@
   border-radius: 50%;
   background: radial-gradient(
     ellipse at center,
-    #000 0%,
-    #000 38%,
-    #063b13 63%,
-    #018d21 86%,
-    #01f92e 100%
+    rgba(0, 0, 0, 0.88) 0%,
+    rgba(0, 0, 0, 0.8) 38%,
+    rgba(6, 59, 19, 0.75) 63%,
+    rgba(1, 141, 33, 0.7) 86%,
+    rgba(1, 249, 46, 0.62) 100%
   );
   transform: translate(-50%, -50%);
   pointer-events: none;
