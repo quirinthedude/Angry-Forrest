@@ -74,6 +74,7 @@ class Game {
 
     this.display.setGameplayUiVisible(false);
     this.display.setOptionControlsVisible(true);
+    this.syncStoryButton();
   }
 
   /**
@@ -132,6 +133,8 @@ class Game {
   /** Enters loading state, stops the intro and starts the loading scene. */
   startLoadingPhase() {
     this.state = "loading";
+    this.setStoryOverlayVisible(false);
+    this.syncStoryButton();
     this.intro.stop();
     this.loadingScene = new LoadingScene(this.canvas);
     this.loadingScene.start();
@@ -276,6 +279,8 @@ class Game {
     if (this.state === "gameOver") return;
 
     this.state = "gameOver";
+    this.setStoryOverlayVisible(false);
+    this.syncStoryButton();
     this.world.resetActorsToGround();
 
     this.gameSong.pause();
@@ -309,6 +314,8 @@ class Game {
     if (this.state !== "playing") return;
 
     this.state = "gameWon";
+    this.setStoryOverlayVisible(false);
+    this.syncStoryButton();
     this.world.resetActorsToGround();
 
     this.gameSong.pause();
@@ -336,6 +343,8 @@ class Game {
 
     this.intro = new IntroScene(this.canvas, this.display);
     this.state = "intro";
+    this.setStoryOverlayVisible(false);
+    this.syncStoryButton();
 
     this.start();
   }
@@ -382,4 +391,72 @@ class Game {
     const speedChange = direction === "right" ? 20 : -20;
     this.victoryScene?.endingText?.changeSpeed(speedChange);
   }
+
+  /** Makes the readable story button available only when a scrolling story exists. */
+  syncStoryButton() {
+    const button = document.querySelector(".story-toggle-button");
+    if (!button) return;
+    button.hidden = this.state !== "intro" && !(this.state === "gameWon" && this.victoryScene?.endingText);
+  }
+
+  /** Opens or closes the HTML reading mode without pausing canvas animations. */
+  toggleStoryOverlay() {
+    if (this.state !== "intro" && this.state !== "gameWon") return;
+    const overlay = document.getElementById("story-overlay");
+    if (!overlay) return;
+    this.setStoryOverlayVisible(overlay.hidden);
+  }
+
+  /**
+   * Updates only the view; game lifecycle, animation frames and audio continue.
+   * @param {boolean} visible Whether the readable text is displayed.
+   */
+  setStoryOverlayVisible(visible) {
+    const overlay = document.getElementById("story-overlay");
+    const button = document.querySelector(".story-toggle-button");
+    if (!overlay) return;
+    const source = this.state === "intro"
+      ? this.intro?.scrollingText
+      : this.state === "gameWon"
+        ? this.victoryScene?.endingText
+        : null;
+    if (visible && !source) return;
+
+    if (visible) {
+      const title = document.getElementById("story-overlay-title");
+      const body = document.getElementById("story-overlay-body");
+      title.textContent = this.state === "intro" ? "The Grumpy Spirit of the Woods" : "Peace returns to the forest";
+      body.replaceChildren();
+      if (this.state === "intro") {
+        const message = [
+          "This is the spell of the grumpy spirit of the woods!",
+          "It brings you deeper insights when life gets complicated.",
+          "Press it again to return to normal life.",
+        ];
+        message.forEach((line) => {
+          const paragraph = document.createElement("p");
+          paragraph.textContent = line;
+          body.appendChild(paragraph);
+        });
+      } else {
+        const sentences = source.text.match(/[^.!?]+[.!?]+|[^.!?]+$/g) ?? [source.text];
+        for (let i = 0; i < sentences.length; i += 3) {
+          const paragraph = document.createElement("p");
+          paragraph.textContent = sentences.slice(i, i + 3).join(" ").trim();
+          body.appendChild(paragraph);
+        }
+      }
+      const hint = overlay.querySelector(".story-overlay-hint");
+      if (hint) hint.textContent = this.state === "intro"
+        ? "Press Enter to start the game."
+        : "Press Enter to restart.";
+    }
+    overlay.hidden = !visible;
+    button?.setAttribute("aria-expanded", String(visible));
+    button?.setAttribute("aria-label", visible ? "Return to animated scrolling text" : "Read story without scrolling");
+    if (visible) {
+      overlay.querySelector(".story-overlay-content")?.focus({ preventScroll: true });
+    }
+  }
+
 }

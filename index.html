@@ -27,6 +27,7 @@
     <link rel="stylesheet" href="styles/intro.css" />
     <link rel="stylesheet" href="styles/game-shell.css" />
     <link rel="stylesheet" href="styles/game-controls.css" />
+    <link rel="stylesheet" href="styles/story-overlay.css" />
     <link rel="stylesheet" href="styles/game-hud.css" />
   </head>
 
@@ -111,6 +112,13 @@
             enough to finish the End-Boss!
           </p>
 
+          <h3>READABLE STORY</h3>
+          <p>The grumpy face
+            <div class="inline-control-icon"> 
+            <img src="/img/icons/grumpy.png" alt="imageof a grumpy">
+            </div>
+            in the game options switches between the animated scrolling text and a stationary, readable HTML story. Tap it again to return to the original animation. The ending story has the same option.</p>
+
           <h3>YOUR GOAL</h3>
 
           <p>
@@ -163,6 +171,17 @@
               alt="Ton ausgeschaltet"
             />
           </label>
+          <button
+            class="ui-button story-toggle-button"
+            type="button"
+            aria-label="Read story without scrolling"
+            aria-controls="story-overlay"
+            aria-expanded="false"
+            title="Toggle readable story"
+            hidden
+          >
+            <img src="./img/icons/grumpy.png" alt="" />
+          </button>
           <button
             class="ui-button resize-button"
             type="button"
@@ -245,6 +264,13 @@
         </div>
 
         <canvas width="720" height="480" id="canvas"></canvas>
+        <section id="story-overlay" class="story-overlay" aria-label="Story and instructions" hidden>
+          <div class="story-overlay-content" tabindex="0">
+            <h2 id="story-overlay-title">The story</h2>
+            <div id="story-overlay-body"></div>
+            <p class="story-overlay-hint">Press Enter or tap the button to continue the game.</p>
+          </div>
+        </section>
         <img
           src="./img/landscape/canvas-frame.png"
           alt=""

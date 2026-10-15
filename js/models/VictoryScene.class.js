@@ -100,7 +100,7 @@ class VictoryScene {
 
     this.endingText = new ScrollingText(
       this.world.ctx,
-      "USE ← TO SLOW DOWN AND → TO SPEED UP. CONGRATULATIONS! PEACE HAS RETURNED TO THE FOREST. ENTIE HAS FOUND PEACE AT LAST AND RETURNS TO HIS COMMUNITY IN THE WOODS.",
+      "CONGRATULATIONS! PEACE HAS RETURNED TO THE FOREST. ENTIE HAS FOUND PEACE AT LAST AND RETURNS TO HIS COMMUNITY IN THE WOODS.",
       {
         height: 32,
         speed: 156,
@@ -108,6 +108,7 @@ class VictoryScene {
       },
     );
 
+    this.world.game.syncStoryButton();
     this.world.game.endScreen = new EndGame(this.world.canvas, null, true);
 
     this.state = "treeGrowing";
