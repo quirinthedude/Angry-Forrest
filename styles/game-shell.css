@@ -82,7 +82,7 @@ canvas {
   height: 618px;
 
   pointer-events: none;
-  z-index: 10;
+  z-index: 25;
 }
 
 .game-wrapper:fullscreen.mobile-fullscreen-stretch .canvas-frame {
