@@ -73,7 +73,6 @@ class Game {
 
     this.display.updateMuteUI(this.audioManager.isMuted);
 
-    this.display.setGameplayUiVisible(false);
     this.display.setOptionControlsVisible(true);
     this.syncStoryButton();
   }
@@ -404,7 +403,9 @@ class Game {
 
   /** Delegates readable story toggling without pausing canvas animations. */
   toggleStoryOverlay() {
-    this.storyOverlayController.toggleStoryOverlay(this.getStoryOverlayContext());
+    this.storyOverlayController.toggleStoryOverlay(
+      this.getStoryOverlayContext(),
+    );
   }
 
   /** Delegates overlay visibility without changing game lifecycle or audio. */
@@ -414,5 +415,4 @@ class Game {
       visible,
     });
   }
-
 }
