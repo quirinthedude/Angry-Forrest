@@ -130,6 +130,7 @@ class Game {
   /** Enters loading state, stops the intro and starts the loading scene. */
   startLoadingPhase() {
     this.state = "loading";
+    this.world?.keyboard.reset();
     this.setStoryOverlayVisible(false);
     this.syncStoryButton();
     this.intro.stop();
@@ -231,13 +232,12 @@ class Game {
    * @param {KeyboardEvent} event Keyboard event received from the window.
    */
   handlePlayingKeyDown(event) {
-    if (event.key === "ArrowLeft") this.world.keyboard.left = true;
-    if (event.key === "ArrowRight") this.world.keyboard.right = true;
-    if (event.key === "ArrowUp") this.world.keyboard.jump = true;
-    if (event.code === "Space") {
+    const control = this.world.keyboard.getControl(event);
+    if (!control) return;
+    if (control === "throw") {
       event.preventDefault();
-      this.world.keyboard.throw = true;
     }
+    this.world.keyboard.setKeyboardControl(control, true);
   }
 
   /**
@@ -258,10 +258,8 @@ class Game {
    * @param {boolean} pressed Whether the control should be active.
    */
   updateGameplayKey(event, pressed) {
-    if (event.key === "ArrowLeft") this.world.keyboard.left = pressed;
-    if (event.key === "ArrowRight") this.world.keyboard.right = pressed;
-    if (event.key === "ArrowUp") this.world.keyboard.jump = pressed;
-    if (event.code === "Space") this.world.keyboard.throw = pressed;
+    const control = this.world.keyboard.getControl(event);
+    if (control) this.world.keyboard.setKeyboardControl(control, pressed);
   }
 
   /**
@@ -276,6 +274,7 @@ class Game {
     if (this.state === "gameOver") return;
 
     this.state = "gameOver";
+    this.world.keyboard.reset();
     this.setStoryOverlayVisible(false);
     this.syncStoryButton();
     this.world.resetActorsToGround();
@@ -309,6 +308,7 @@ class Game {
     if (this.state !== "playing") return;
 
     this.state = "gameWon";
+    this.world.keyboard.reset();
     this.setStoryOverlayVisible(false);
     this.syncStoryButton();
     this.world.resetActorsToGround();
@@ -324,6 +324,7 @@ class Game {
 
   /** Stops active gameplay and recreates the intro scene. */
   returnToIntro() {
+    this.world?.keyboard.reset();
     this.audioManager.stopTransientAudio();
     this.audioManager.pauseAndResetAll();
     this.victoryScene?.stop();
