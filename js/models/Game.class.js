@@ -95,9 +95,7 @@ class Game {
    *
    */
   playTitleSong() {
-    this.titleSong.play().catch(() => {
-      // Autoplay is blocked until the user interacts with the document.
-    });
+    this.titleSong.play().catch(() => {});
   }
 
   /**
@@ -300,9 +298,7 @@ class Game {
     this.titleSong.currentTime = 0;
 
     this.gameSong.loop = true;
-    this.gameSong.play().catch(() => {
-      // Playback can still be blocked when startGameSong is called outside a user gesture.
-    });
+    this.gameSong.play().catch(() => {});
   }
 
   /**
