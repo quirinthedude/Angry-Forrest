@@ -1,8 +1,5 @@
 /** Coordinates the character entrance and get-ready banner before gameplay. */
 class StartScene {
-  state = "starting";
-  duration = 2000;
-  startedAt = performance.now();
   state = "rise";
 
   /**
@@ -27,16 +24,11 @@ class StartScene {
     if (this.state === "rise") {
       this.raiseCharacter();
     } else if (this.state === "bannerIn") {
-      if (this.getReady.moveIn()) {
-        this.state = "wait";
-        this.waitStartedAt = performance.now();
-      }
+      this.moveBannerIn();
     } else if (this.state === "wait") {
       this.wait();
     } else if (this.state === "bannerOut") {
-      if (this.getReady.moveOut()) {
-        this.world.game.finishWorldActivation();
-      }
+      this.moveBannerOut();
     }
   }
 
@@ -60,6 +52,22 @@ class StartScene {
   wait() {
     if (performance.now() - this.waitStartedAt >= 1000) {
       this.state = "bannerOut";
+    }
+  }
+
+  /** Moves the banner into view and starts the waiting phase. */
+  moveBannerIn() {
+    if (this.getReady.moveIn()) {
+      this.state = "wait";
+      this.waitStartedAt = performance.now();
+    }
+  }
+
+  /** Completes the start scene once the banner leaves the canvas.
+   */
+  moveBannerOut() {
+    if (this.getReady.moveOut()) {
+      this.world.game.finishWorldActivation();
     }
   }
 }
