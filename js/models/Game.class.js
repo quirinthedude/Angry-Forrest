@@ -56,6 +56,7 @@ class Game {
   constructor(canvas, display) {
     this.canvas = canvas;
     this.display = display;
+    this.storyOverlayController = new StoryOverlayController();
     this.intro = new IntroScene(canvas, display);
     this.display.setGameplayUiVisible(false);
 
@@ -391,71 +392,31 @@ class Game {
     this.victoryScene?.endingText?.changeSpeed(speedChange);
   }
 
-  /** Makes the readable story button available only when a scrolling story exists. */
+  /** Passes the current lifecycle and story sources to the overlay controller. */
+  getStoryOverlayContext() {
+    return {
+      state: this.state,
+      introStory: this.intro?.scrollingText,
+      victoryStory: this.victoryScene?.endingText,
+    };
+  }
+
+  /** Delegates story-button visibility to the overlay controller. */
   syncStoryButton() {
-    const button = document.querySelector(".story-toggle-button");
-    if (!button) return;
-    button.hidden = this.state !== "intro" && !(this.state === "gameWon" && this.victoryScene?.endingText);
+    this.storyOverlayController.syncStoryButton(this.getStoryOverlayContext());
   }
 
-  /** Opens or closes the HTML reading mode without pausing canvas animations. */
+  /** Delegates readable story toggling without pausing canvas animations. */
   toggleStoryOverlay() {
-    if (this.state !== "intro" && this.state !== "gameWon") return;
-    const overlay = document.getElementById("story-overlay");
-    if (!overlay) return;
-    this.setStoryOverlayVisible(overlay.hidden);
+    this.storyOverlayController.toggleStoryOverlay(this.getStoryOverlayContext());
   }
 
-  /**
-   * Updates only the view; game lifecycle, animation frames and audio continue.
-   * @param {boolean} visible Whether the readable text is displayed.
-   */
+  /** Delegates overlay visibility without changing game lifecycle or audio. */
   setStoryOverlayVisible(visible) {
-    const overlay = document.getElementById("story-overlay");
-    const button = document.querySelector(".story-toggle-button");
-    if (!overlay) return;
-    const source = this.state === "intro"
-      ? this.intro?.scrollingText
-      : this.state === "gameWon"
-        ? this.victoryScene?.endingText
-        : null;
-    if (visible && !source) return;
-
-    if (visible) {
-      const title = document.getElementById("story-overlay-title");
-      const body = document.getElementById("story-overlay-body");
-      title.textContent = this.state === "intro" ? "The Grumpy Spirit of the Woods" : "Peace returns to the forest";
-      body.replaceChildren();
-      if (this.state === "intro") {
-        const message = [
-          "This is the spell of the grumpy spirit of the woods!",
-          "It brings you deeper insights when life gets complicated.",
-          "Press it again to return to normal life.",
-        ];
-        message.forEach((line) => {
-          const paragraph = document.createElement("p");
-          paragraph.textContent = line;
-          body.appendChild(paragraph);
-        });
-      } else {
-        const sentences = source.text.match(/[^.!?]+[.!?]+|[^.!?]+$/g) ?? [source.text];
-        for (let i = 0; i < sentences.length; i += 3) {
-          const paragraph = document.createElement("p");
-          paragraph.textContent = sentences.slice(i, i + 3).join(" ").trim();
-          body.appendChild(paragraph);
-        }
-      }
-      const hint = overlay.querySelector(".story-overlay-hint");
-      if (hint) hint.textContent = this.state === "intro"
-        ? "Press Enter to start the game."
-        : "Press Enter to restart.";
-    }
-    overlay.hidden = !visible;
-    button?.setAttribute("aria-expanded", String(visible));
-    button?.setAttribute("aria-label", visible ? "Return to animated scrolling text" : "Read story without scrolling");
-    if (visible) {
-      overlay.querySelector(".story-overlay-content")?.focus({ preventScroll: true });
-    }
+    this.storyOverlayController.setStoryOverlayVisible({
+      ...this.getStoryOverlayContext(),
+      visible,
+    });
   }
 
 }
