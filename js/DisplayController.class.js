@@ -45,7 +45,7 @@ class DisplayController {
     const isFullscreen = this.isFullscreen();
 
     const scale = isFullscreen && !this.mobileFullscreenStretched
-      ? Math.min(wrapper.clientWidth / 866, wrapper.clientHeight / 618)
+      ? Math.min(wrapper.clientWidth / 866, wrapper.clientHeight / 618, 2)
       : Math.min(wrapper.clientWidth / 866, wrapper.clientHeight / 618, 1);
 
     stage.style.setProperty("--game-scale", scale);
