@@ -16,6 +16,6 @@ class BackgroundObject extends MovableObject {
     this.y = 0;
     this.width = 866;
     this.height = 618;
-    this.parallaxFactor = parallaxFactor; // Set the initial speed of the background object
+    this.parallaxFactor = parallaxFactor;
   }
 }

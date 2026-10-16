@@ -55,13 +55,12 @@ class Gnome extends MovableObject {
     this.y = y;
     this.minX = minX;
     this.maxX = maxX;
-    // Jede Gnome-Instanz erhält beim Erzeugen eine eigene, konstante Laufgeschwindigkeit.
     this.speed = 0.6 + Math.random() * 0.3;
   }
 
   /** Starts the walking animation, patrol interval and collision debugging. */
   startGnomeBehavior() {
-    this.animate(this.IMAGES_WALKING, 25); // Start
+    this.animate(this.IMAGES_WALKING, 25);
     this.moveGnome();
     this.collisionDebug = true;
   }
@@ -77,7 +76,7 @@ class Gnome extends MovableObject {
         this.direction = -1;
       }
       this.move(this.speed);
-    }, 20); // Move every 20 milliseconds.
+    }, 20);
   }
 
   /** Starts the gnome knockout reaction after a fruit hit.

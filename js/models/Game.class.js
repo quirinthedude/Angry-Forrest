@@ -126,7 +126,6 @@ class Game {
     this.loadingScene.stop();
     this.loadingScene = null;
 
-    // this.intro.stop();
     this.activateWorld();
   }
 

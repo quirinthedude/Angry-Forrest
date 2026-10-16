@@ -185,7 +185,6 @@ class DisplayController {
     const selectors = [
       ".character-energy",
       ".robot-energy",
-      // ".top-controls",
       ".bottom-controls",
     ];
 
@@ -194,10 +193,6 @@ class DisplayController {
       if (element) element.hidden = !visible;
     });
 
-    // const energyBar = document.querySelector(".character-energy");
-    // if (energyBar) energyBar.hidden = !visible;
-    // const energyBarR = document.querySelector(".robot-energy");
-    // if (energyBarR) energyBarR.hidden = !visible;
   }
 
   /** Synchronizes the mute checkbox with the current audio state.

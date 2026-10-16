@@ -21,7 +21,7 @@ class MovableObject extends DrawableObject {
   x;
   y;
   img;
-  speed = 0.32; // default speed
+  speed = 0.32;
   walkingSound;
   speedY = 0;
   acceleration = 0.8;
@@ -92,7 +92,7 @@ class MovableObject extends DrawableObject {
 
   /** Applies the legacy instant upward movement used by this object. */
   jump() {
-    this.y -= 10; // Move the character up by 10 pixels
+    this.y -= 10;
   }
 
   /** Applies vertical velocity and acceleration to the object. */

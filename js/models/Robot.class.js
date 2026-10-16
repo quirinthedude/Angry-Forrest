@@ -136,8 +136,6 @@ class Robot extends MovableObject {
     this.jumpSound.currentTime = 0;
     this.jumpSound.play();
 
-    // TODO: Boss polish — create a "Matrix effect" near the jump apex by
-    // temporarily lowering acceleration, as if the robot manipulates gravity.
     this.speedY = -12;
 
     this.entranceInterval = setInterval(() => {

@@ -39,7 +39,6 @@ class StartScene {
     if (this.character.y <= this.character.groundY) {
       this.character.y = this.character.groundY;
       this.state = "bannerIn";
-      // this.world.game.finishWorldActivation();
     }
   }
 

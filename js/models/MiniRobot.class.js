@@ -13,7 +13,7 @@ class MiniRobot extends MovableObject {
   hurtFrameDuration = 50;
 
   groundY = 360;
-  speed = 1.5; // schneller als Gnome
+  speed = 1.5;
   jumpInterval = 2000;
   lastJumpTime = 0;
 
